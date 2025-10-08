@@ -19,16 +19,19 @@ public class MainController {
     @FXML
     public void initialize() {
         // Set up the navigation bar
-        navBar = new NavBar();
-        navBarContainer.getChildren().add(navBar);
+
 
         // Register this controller with the ViewNavigator
         NavigationHandler.setMainController(this);
 
-        // Load the home view by default
-        NavigationHandler.navigateToHome();
+        // Load the Login view by default
+        NavigationHandler.navigateToLogin();
     }
-
+    private void setNavBar(NavBar navBar)
+    {
+        navBar = new NavBar();
+        navBarContainer.getChildren().add(navBar);
+    }
     /**
      * Set the content of the main area
      */

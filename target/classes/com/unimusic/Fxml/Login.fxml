@@ -33,6 +33,7 @@
             <TextField id="usernameField" fx:id="usernameField" alignment="CENTER" layoutX="283.0" layoutY="114.0" promptText="username" />
             <PasswordField id="passwordField" fx:id="passwordField" alignment="CENTER" layoutX="283.0" layoutY="168.0" promptText="password" />
             <Button id="loginButton" fx:id="loginButton" alignment="CENTER" layoutX="254.0" layoutY="236.0" mnemonicParsing="false" onAction="#login" prefHeight="55.0" prefWidth="90.0" text="Login" />
+            <Label fx:id="statusLabel" layoutX="285.0" layoutY="300.0" text="Status Label" />
          </children></AnchorPane>
   </items>
 </SplitPane>

@@ -1,6 +1,6 @@
 package com.unimusic.Nav;
 
-import com.unimusic.UniMusicApp;
+import com.unimusic.Main;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -22,7 +22,7 @@ public final class SceneManager {
     }
     public static void changeScene(String fxmlName, double width, double height) throws IOException
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(UniMusicApp.class.getResource(fxmlName));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlName));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
         changeScene(scene);
     }

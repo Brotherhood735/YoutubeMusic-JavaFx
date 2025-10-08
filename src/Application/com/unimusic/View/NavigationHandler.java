@@ -33,7 +33,7 @@ public class NavigationHandler {
      */
     public static void loadView(String fxml) {
         try {
-            URL fxmlUrl = Main.class.getResource("/resources/fxml/" + fxml);
+            URL fxmlUrl = Main.class.getResource("Fxml/" + fxml);
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
             Node view = loader.load();
             mainController.setContent(view);
@@ -47,14 +47,14 @@ public class NavigationHandler {
      * Navigate to the home view
      */
     public static void navigateToHome() {
-        loadView("HomeView.fxml");
+        loadView("WelcomePage.fxml ");
     }
 
     /**
      * Navigate to the login view
      */
     public static void navigateToLogin() {
-        loadView("LoginView.fxml");
+        loadView("Login.fxml");
     }
 
     /**

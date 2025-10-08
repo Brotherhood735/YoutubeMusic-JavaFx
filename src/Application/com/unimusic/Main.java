@@ -9,15 +9,35 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 
-public class Main {
-    private static JsonManager userRepository = new JsonManager();
+public class Main extends Application {
+    private static JsonManager jsonManager = new JsonManager();
     /**
      * Get the application-wide user repository
      */
     public static JsonManager getJsonManager() {
-        return userRepository;
+        return jsonManager;
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        // Load the main application view
+
+        URL mainViewUrl = getClass().getResource("Fxml/Main.fxml");
+        FXMLLoader loader = new FXMLLoader(mainViewUrl);
+
+        Parent root = loader.load();
+
+        // Set up the scene
+        Scene scene = new Scene(root, 800, 600);
+        URL cssUrl = getClass().getResource("Css/Styles.css");
+        scene.getStylesheets().add(cssUrl.toExternalForm());
+
+        // Configure and show the stage
+        primaryStage.setTitle("Dash App - JavaFX Version");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
     public static void main(String[] args) {
-        Application.launch(UniMusicApp.class, args);
+        launch(args);
     }
 }
