@@ -1,6 +1,6 @@
 package com.unimusic;
 
-import com.unimusic.Model.JsonManager;
+import com.unimusic.Model.csvManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,12 +10,12 @@ import javafx.stage.Stage;
 import java.net.URL;
 
 public class Main extends Application {
-    private static JsonManager jsonManager = new JsonManager();
+    private static csvManager csvManager = new csvManager();
     /**
      * Get the application-wide user repository
      */
-    public static JsonManager getJsonManager() {
-        return jsonManager;
+    public static csvManager getJsonManager() {
+        return csvManager;
     }
 
     @Override

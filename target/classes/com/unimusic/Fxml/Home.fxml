@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.unimusic.Controller.HomeController" styleClass="root">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox styleClass="sidebar" spacing="20" prefWidth="200">
+            <padding>
+                <Insets top="20" right="15" bottom="20" left="15"/>
+            </padding>
+
+            <!-- Logo -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="▶" styleClass="logo-icon"/>
+                <Label text="Music" styleClass="logo-text"/>
+            </HBox>
+
+            <Separator/>
+
+            <!-- Menu -->
+            <VBox spacing="5" fx:id="menuContainer">
+                <HBox styleClass="menu-item, menu-item-active" onMouseClicked="#onHomeClick">
+                    <padding><Insets top="12" right="15" bottom="12" left="15"/></padding>
+                    <Label text="🏠 Home" styleClass="menu-label"/>
+                </HBox>
+                <HBox styleClass="menu-item" onMouseClicked="#onExploreClick">
+                    <padding><Insets top="12" right="15" bottom="12" left="15"/></padding>
+                    <Label text="🔍 Explore" styleClass="menu-label"/>
+                </HBox>
+                <HBox styleClass="menu-item" onMouseClicked="#onLibraryClick">
+                    <padding><Insets top="12" right="15" bottom="12" left="15"/></padding>
+                    <Label text="📚 Library" styleClass="menu-label"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- Main Content -->
+    <center>
+        <ScrollPane styleClass="scroll-pane" fitToWidth="true" hbarPolicy="NEVER">
+            <VBox fx:id="mainContent" spacing="30" styleClass="main-content">
+                <padding>
+                    <Insets top="30" right="40" bottom="30" left="40"/>
+                </padding>
+
+                <!-- Filters -->
+                <HBox fx:id="filtersContainer" spacing="10" alignment="CENTER_LEFT"/>
+
+                <!-- Music sections will be added dynamically -->
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Bottom Player Bar -->
+    <bottom>
+        <HBox styleClass="player-bar" spacing="20" alignment="CENTER" prefHeight="90">
+            <padding>
+                <Insets topRightBottomLeft="20"/>
+            </padding>
+
+            <!-- Now Playing -->
+            <HBox spacing="15" alignment="CENTER_LEFT" prefWidth="300">
+                <Region styleClass="player-thumbnail" prefWidth="56" prefHeight="56"/>
+                <VBox spacing="5">
+                    <Label fx:id="nowPlayingTitle" text="Ask Them" styleClass="now-playing-title"/>
+                    <Label fx:id="nowPlayingArtist" text="Jxggi and Dishant • 3.4M views" styleClass="now-playing-artist"/>
+                </VBox>
+            </HBox>
+
+            <!-- Player Controls -->
+            <VBox spacing="10" alignment="CENTER">
+                <HBox spacing="20" alignment="CENTER">
+                    <Button text="⏮" styleClass="control-btn" onAction="#onPrevious"/>
+                    <Button fx:id="playPauseBtn" text="▶" styleClass="control-btn" onAction="#onPlayPause"/>
+                    <Button text="⏭" styleClass="control-btn" onAction="#onNext"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER">
+                    <Label fx:id="timeStart" text="1:09" styleClass="time-label"/>
+                    <Slider fx:id="progressBar" prefWidth="500" min="0" max="100" value="48"/>
+                    <Label fx:id="timeEnd" text="2:25" styleClass="time-label"/>
+                </HBox>
+            </VBox>
+
+            <!-- Volume Controls -->
+            <HBox spacing="10" alignment="CENTER_RIGHT" prefWidth="300">
+                <Button text="🔊" styleClass="small-btn"/>
+                <Slider fx:id="volumeSlider" prefWidth="100" min="0" max="100" value="70"/>
+            </HBox>
+        </HBox>
+    </bottom>
+
+</BorderPane>

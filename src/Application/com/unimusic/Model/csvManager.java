@@ -4,29 +4,27 @@ import com.unimusic.Config.AppConfig;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class JsonManager {
+public class csvManager {
 
         private Map<String, User> users = new HashMap<>();
-        private final String csvFilePath;
 
-        public JsonManager() {
-            this(AppConfig.USERS_CSV_PATH);
-        }
 
-        public JsonManager(String csvFilePath) {
-            this.csvFilePath = csvFilePath;
-            ensureCsvExists();
+        public csvManager() {
+            ensureUsersCsvExists();
             loadUsers();
         }
 
         /**
          * Make sure the CSV file exists, create it if needed
          */
-        private void ensureCsvExists() {
-            File csvFile = new File(csvFilePath);
+        private void ensureUsersCsvExists() {
+            ensureCsvExists(AppConfig.USERS_CSV_PATH, "username,password,is_admin\n", "admin,admin,1\n");
+        }
+        private void ensureCsvExists(String csvPath, String csvHeader, String defaultRow)
+        {
+            File csvFile = new File(csvPath);
             if (!csvFile.exists()) {
                 try {
                     // Create parent directories if they don't exist
@@ -37,20 +35,19 @@ public class JsonManager {
 
                     // Create the file and write headers
                     try (FileWriter writer = new FileWriter(csvFile)) {
-                        writer.write("username,password,is_admin\n");
-                        writer.write("admin,admin,1\n");
+                        writer.write(csvHeader);
+                        writer.write(defaultRow);
                     }
                 } catch (IOException e) {
                     System.err.println("Error creating users CSV file: " + e.getMessage());
                 }
             }
         }
-
         /**
          * Load users from the CSV file
          */
         private void loadUsers() {
-            try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(AppConfig.USERS_CSV_PATH))) {
                 String line;
                 // Skip header line
                 reader.readLine();
@@ -74,7 +71,7 @@ public class JsonManager {
          */
         private void saveAllUsers() {
             String isAdmin;
-            try (FileWriter writer = new FileWriter(csvFilePath)) {
+            try (FileWriter writer = new FileWriter(AppConfig.USERS_CSV_PATH)) {
                 // Write header
                 writer.write("username,password,is_admin\n");
 
@@ -90,7 +87,10 @@ public class JsonManager {
                 System.err.println("Error saving users to CSV: " + e.getMessage());
             }
         }
+        private void loadMusicItems()
+        {
 
+        }
         /**
          * Save a user to the repository
          */

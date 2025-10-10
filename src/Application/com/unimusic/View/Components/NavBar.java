@@ -1,12 +1,17 @@
 package com.unimusic.View.Components;
 
+import com.unimusic.Main;
 import com.unimusic.View.NavigationHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+
+import java.io.IOException;
 
 public class NavBar extends HBox {
     private boolean isAuthenticated;
@@ -28,7 +33,7 @@ public class NavBar extends HBox {
     private void initialize() {
         this.setSpacing(10);
         this.setPadding(new Insets(10));
-        this.setStyle("-fx-background-color: #007bff;");
+        //this.setStyle("-fx-background-color: #007bff;");
 
         Label brandLabel = new Label("Dash App");
         brandLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px;");
@@ -67,11 +72,10 @@ public class NavBar extends HBox {
      * Create navigation buttons for unauthenticated users
      */
     private void createUnauthenticatedNavButtons() {
-        Button homeBtn = createNavButton("Home", e -> NavigationHandler.navigateToHome());
-        Button loginBtn = createNavButton("Login", e -> NavigationHandler.navigateToLogin());
-        Button registerBtn = createNavButton("Register", e -> NavigationHandler.navigateToRegister());
-
-        this.getChildren().addAll(homeBtn, loginBtn, registerBtn);
+        /*Image uniLogo = new Image(Main.class.getResource("Images/LoginNavBarUniLogo.jpg").toString());
+        ImageView uniLogoView = new ImageView();
+        uniLogoView.setImage(uniLogo);
+        this.getChildren().addAll(uniLogoView);*/
     }
 
     /**

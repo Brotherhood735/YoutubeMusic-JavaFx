@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+
 public class MainController {
     @FXML
     private BorderPane mainContainer;
@@ -17,18 +19,16 @@ public class MainController {
     private NavBar navBar;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         // Set up the navigation bar
-
-
+        //setNavBar();
         // Register this controller with the ViewNavigator
         NavigationHandler.setMainController(this);
 
         // Load the Login view by default
         NavigationHandler.navigateToLogin();
     }
-    private void setNavBar(NavBar navBar)
-    {
+    private void setNavBar() throws IOException {
         navBar = new NavBar();
         navBarContainer.getChildren().add(navBar);
     }
@@ -43,6 +43,6 @@ public class MainController {
      * Update the navigation bar based on authentication status
      */
     public void updateNavBar(boolean isAuthenticated) {
-        navBar.updateAuthStatus(isAuthenticated, NavigationHandler.getAuthenticatedUser());
+        if (navBar != null) navBar.updateAuthStatus(isAuthenticated, NavigationHandler.getAuthenticatedUser());
     }
 }

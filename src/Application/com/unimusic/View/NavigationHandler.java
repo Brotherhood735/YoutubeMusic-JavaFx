@@ -61,7 +61,7 @@ public class NavigationHandler {
      * Navigate to the register view
      */
     public static void navigateToRegister() {
-        loadView("RegisterView.fxml");
+        loadView("Register.fxml");
     }
 
     /**
@@ -70,7 +70,7 @@ public class NavigationHandler {
      */
     public static void navigateToDashboard() {
         if (isAuthenticated()) {
-            loadView("DashboardView.fxml");
+            loadView("Home.fxml");
         } else {
             navigateToLogin();
         }
@@ -100,7 +100,7 @@ public class NavigationHandler {
      * Set the authenticated user
      * @param username The username of the authenticated user
      */
-    public static void setAuthenticatedUser(String username) {
+    public static void setAuthenticatedUser(String username) throws IOException {
         authenticatedUser = username;
         mainController.updateNavBar(isAuthenticated());
     }
@@ -124,7 +124,7 @@ public class NavigationHandler {
     /**
      * Logout the current user
      */
-    public static void logout() {
+    public static void logout(){
         authenticatedUser = null;
         mainController.updateNavBar(false);
         navigateToHome();
