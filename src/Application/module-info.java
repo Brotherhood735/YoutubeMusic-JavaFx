@@ -12,6 +12,8 @@ module com.unimusic {
     requires com.almasb.fxgl.all;
     requires javafx.graphics;
     requires java.desktop;
+    requires javafx.media;
+    requires com.unimusic;
 
     opens com.unimusic to javafx.fxml;
     exports com.unimusic;

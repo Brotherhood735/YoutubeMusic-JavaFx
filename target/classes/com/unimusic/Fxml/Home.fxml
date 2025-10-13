@@ -1,40 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.unimusic.Controller.HomeController" styleClass="root">
+<BorderPane prefHeight="700.0" prefWidth="1000.0" styleClass="root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.HomeController">
 
     <!-- Sidebar -->
     <left>
-        <VBox styleClass="sidebar" spacing="20" prefWidth="200">
+        <VBox prefWidth="200" spacing="20" styleClass="sidebar">
             <padding>
-                <Insets top="20" right="15" bottom="20" left="15"/>
+                <Insets bottom="20" left="15" right="15" top="20" />
             </padding>
 
             <!-- Logo -->
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="▶" styleClass="logo-icon"/>
-                <Label text="Music" styleClass="logo-text"/>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label styleClass="logo-icon" text="▶" />
+                <Label styleClass="logo-text" text="Music" />
             </HBox>
 
-            <Separator/>
+            <Separator />
 
             <!-- Menu -->
-            <VBox spacing="5" fx:id="menuContainer">
-                <HBox styleClass="menu-item, menu-item-active" onMouseClicked="#onHomeClick">
-                    <padding><Insets top="12" right="15" bottom="12" left="15"/></padding>
-                    <Label text="🏠 Home" styleClass="menu-label"/>
+            <VBox fx:id="menuContainer" spacing="5">
+                <HBox onMouseClicked="#onHomeClick" styleClass="menu-item, menu-item-active">
+                    <padding><Insets bottom="12" left="15" right="15" top="12" /></padding>
+                    <Label styleClass="menu-label" text="🏠 Home" />
                 </HBox>
-                <HBox styleClass="menu-item" onMouseClicked="#onExploreClick">
-                    <padding><Insets top="12" right="15" bottom="12" left="15"/></padding>
-                    <Label text="🔍 Explore" styleClass="menu-label"/>
+                <HBox onMouseClicked="#onExploreClick" styleClass="menu-item">
+                    <padding><Insets bottom="12" left="15" right="15" top="12" /></padding>
+                    <Label styleClass="menu-label" text="🔍 Explore" />
                 </HBox>
-                <HBox styleClass="menu-item" onMouseClicked="#onLibraryClick">
-                    <padding><Insets top="12" right="15" bottom="12" left="15"/></padding>
-                    <Label text="📚 Library" styleClass="menu-label"/>
+                <HBox onMouseClicked="#onLibraryClick" styleClass="menu-item">
+                    <padding><Insets bottom="12" left="15" right="15" top="12" /></padding>
+                    <Label styleClass="menu-label" text="📚 Library" />
                 </HBox>
             </VBox>
         </VBox>
@@ -42,55 +48,44 @@
 
     <!-- Main Content -->
     <center>
-        <ScrollPane styleClass="scroll-pane" fitToWidth="true" hbarPolicy="NEVER">
-            <VBox fx:id="mainContent" spacing="30" styleClass="main-content">
-                <padding>
-                    <Insets top="30" right="40" bottom="30" left="40"/>
-                </padding>
-
-                <!-- Filters -->
-                <HBox fx:id="filtersContainer" spacing="10" alignment="CENTER_LEFT"/>
-
-                <!-- Music sections will be added dynamically -->
-            </VBox>
-        </ScrollPane>
+        <ScrollPane fx:id="mainViewArea" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="500.0" prefWidth="600.0" styleClass="scroll-pane" />
     </center>
 
     <!-- Bottom Player Bar -->
     <bottom>
-        <HBox styleClass="player-bar" spacing="20" alignment="CENTER" prefHeight="90">
+        <HBox alignment="CENTER" prefHeight="90" spacing="20" styleClass="player-bar">
             <padding>
-                <Insets topRightBottomLeft="20"/>
+                <Insets topRightBottomLeft="20" />
             </padding>
 
             <!-- Now Playing -->
-            <HBox spacing="15" alignment="CENTER_LEFT" prefWidth="300">
-                <Region styleClass="player-thumbnail" prefWidth="56" prefHeight="56"/>
+            <HBox alignment="CENTER_LEFT" prefWidth="300" spacing="15">
+                <Region prefHeight="56" prefWidth="56" styleClass="player-thumbnail" />
                 <VBox spacing="5">
-                    <Label fx:id="nowPlayingTitle" text="Ask Them" styleClass="now-playing-title"/>
-                    <Label fx:id="nowPlayingArtist" text="Jxggi and Dishant • 3.4M views" styleClass="now-playing-artist"/>
+                    <Label fx:id="nowPlayingTitle" styleClass="now-playing-title" text="Ask Them" />
+                    <Label fx:id="nowPlayingArtist" styleClass="now-playing-artist" text="Jxggi and Dishant • 3.4M views" />
                 </VBox>
             </HBox>
 
             <!-- Player Controls -->
-            <VBox spacing="10" alignment="CENTER">
-                <HBox spacing="20" alignment="CENTER">
-                    <Button text="⏮" styleClass="control-btn" onAction="#onPrevious"/>
-                    <Button fx:id="playPauseBtn" text="▶" styleClass="control-btn" onAction="#onPlayPause"/>
-                    <Button text="⏭" styleClass="control-btn" onAction="#onNext"/>
+            <VBox alignment="CENTER" spacing="10">
+                <HBox alignment="CENTER" spacing="20">
+                    <Button onAction="#onPrevious" styleClass="control-btn" text="⏮" />
+                    <Button fx:id="playPauseBtn" onAction="#onPlayPause" styleClass="control-btn" text="▶" />
+                    <Button onAction="#onNext" styleClass="control-btn" text="⏭" />
                 </HBox>
 
-                <HBox spacing="10" alignment="CENTER">
-                    <Label fx:id="timeStart" text="1:09" styleClass="time-label"/>
-                    <Slider fx:id="progressBar" prefWidth="500" min="0" max="100" value="48"/>
-                    <Label fx:id="timeEnd" text="2:25" styleClass="time-label"/>
+                <HBox alignment="CENTER" spacing="10">
+                    <Label fx:id="timeStart" styleClass="time-label" text="1:09" />
+                    <Slider fx:id="progressBar" max="100" min="0" prefWidth="500" value="48" />
+                    <Label fx:id="timeEnd" styleClass="time-label" text="2:25" />
                 </HBox>
             </VBox>
 
             <!-- Volume Controls -->
-            <HBox spacing="10" alignment="CENTER_RIGHT" prefWidth="300">
-                <Button text="🔊" styleClass="small-btn"/>
-                <Slider fx:id="volumeSlider" prefWidth="100" min="0" max="100" value="70"/>
+            <HBox alignment="CENTER_RIGHT" prefWidth="300" spacing="10">
+                <Button styleClass="small-btn" text="🔊" />
+                <Slider fx:id="volumeSlider" max="100" min="0" prefWidth="100" value="70" />
             </HBox>
         </HBox>
     </bottom>

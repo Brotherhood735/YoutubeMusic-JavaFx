@@ -1,10 +1,13 @@
 package com.unimusic.Controller;
 
+import com.unimusic.Model.UniController;
+import com.unimusic.Model.UniData;
 import com.unimusic.View.NavigationHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 
-public class WelcomeController {
+public class WelcomeController extends UniController {
     @FXML
     private Button loginButton;
 
@@ -33,5 +36,16 @@ public class WelcomeController {
     @FXML
     private void handleDashboard() {
         NavigationHandler.navigateToDashboard();
+    }
+
+    @Override
+    public void setContent(Node content, int Idx) {
+
+
+    }
+
+    @Override
+    public void setData(UniData data) {
+
     }
 }

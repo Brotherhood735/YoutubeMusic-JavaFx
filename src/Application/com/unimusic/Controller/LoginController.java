@@ -1,17 +1,18 @@
 package com.unimusic.Controller;
 
 import com.unimusic.Main;
-import com.unimusic.Model.User;
-import com.unimusic.Model.csvManager;
+import com.unimusic.Model.*;
 import com.unimusic.View.NavigationHandler;
+import com.unimusic.View.UniControllerNavigation;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
-public class LoginController {
+public class LoginController  extends UniController {
     @FXML
     private TextField usernameField;
 
@@ -42,7 +43,8 @@ public class LoginController {
         User user = csvManager.getUser(username);
         if (user != null && user.checkPassword(password)) {
             // Login successful
-            NavigationHandler.setAuthenticatedUser(username);
+            AuthManager.setUser(username);
+            MainController.
             NavigationHandler.navigateToDashboard();
         } else {
             showError("Invalid username or password");
@@ -56,5 +58,20 @@ public class LoginController {
         statusLabel.setText(message);
         statusLabel.setStyle("-fx-text-fill: red;");
         statusLabel.setVisible(true);
+    }
+
+    @Override
+    public void setContent(Node content, int Idx) {
+
+    }
+
+    @Override
+    public void setData(UniData data) {
+
+    }
+
+    @Override
+    public void navigateTo() {
+        UniControllerNavigation.loadView("Login.fxml", 0, this, null);
     }
 }

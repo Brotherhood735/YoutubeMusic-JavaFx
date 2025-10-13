@@ -1,15 +1,18 @@
 package com.unimusic.Controller;
 
 import com.unimusic.Main;
+import com.unimusic.Model.UniController;
+import com.unimusic.Model.UniData;
 import com.unimusic.Model.User;
 import com.unimusic.Model.csvManager;
 import com.unimusic.View.NavigationHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-public class RegisterController {
+public class RegisterController extends UniController {
     @FXML
     private TextField usernameField;
 
@@ -80,5 +83,15 @@ public class RegisterController {
         statusLabel.setText(message);
         statusLabel.setStyle("-fx-text-fill: green;");
         statusLabel.setVisible(true);
+    }
+
+    @Override
+    public void setContent(Node content, int Idx) {
+
+    }
+
+    @Override
+    public void setData(UniData data) {
+
     }
 }

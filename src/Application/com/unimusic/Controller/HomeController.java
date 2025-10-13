@@ -1,19 +1,20 @@
 package com.unimusic.Controller;
+import com.unimusic.Main;
+import com.unimusic.Model.*;
+import com.unimusic.View.NavigationHandler;
+import com.unimusic.View.UniControllerNavigation;
 import javafx.fxml.FXML;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeController {
+public class HomeController extends UniController {
 
-    @FXML private VBox mainContent;
-    @FXML private HBox filtersContainer;
+    private UniController parentController;
     @FXML private Button playPauseBtn;
     @FXML private Label nowPlayingTitle;
     @FXML private Label nowPlayingArtist;
@@ -21,16 +22,19 @@ public class HomeController {
     @FXML private Slider volumeSlider;
     @FXML private Label timeStart;
     @FXML private Label timeEnd;
-
+    @FXML private ScrollPane mainViewArea;
     private boolean isPlaying = false;
 
     @FXML
     public void initialize() {
-        setupFilters();
-        loadMusicSections();
+        parentController = Main.mainController;
+        NavigationHandler.setHomeController(this);
+        loadDefaultHomeView();
     }
 
-    private void setupFilters() {
+    private void setupFilters(VBox vBox) {
+        HBox hBox = new HBox();
+        hBox.setPrefHeight(0);
         String[] filterNames = {"Podcasts", "Energise", "Feel good", "Relax", "Work out",
                 "Party", "Commute", "Focus", "Romance", "Sad", "Sleep"};
 
@@ -38,21 +42,31 @@ public class HomeController {
             Button btn = new Button(name);
             btn.getStyleClass().add("filter-btn");
             btn.setOnAction(e -> onFilterClick(name));
-            filtersContainer.getChildren().add(btn);
+            hBox.getChildren().add(btn);
         }
+        vBox.getChildren().add(hBox);
     }
+    private void loadDefaultHomeView()
+    {
+        VBox vBox = new VBox();
 
-    private void loadMusicSections() {
+        // populate the VBOX
+        setupFilters(vBox);
+        loadMusicSections(vBox);
+
+        mainViewArea.setContent(vBox);
+    }
+    private void loadMusicSections(VBox vBox) {
         // Sezione "Listen again"
         VBox listenAgainSection = createSection("Listen again", getSampleData1());
-        mainContent.getChildren().add(listenAgainSection);
+        vBox.getChildren().add(listenAgainSection);
 
         // Sezione "Forgotten favourites"
         VBox forgottenSection = createSection("Forgotten favourites", getSampleData2());
-        mainContent.getChildren().add(forgottenSection);
+        vBox.getChildren().add(forgottenSection);
     }
 
-    private VBox createSection(String title, List<MusicItem> items) {
+    private VBox createSection(String title, List<UniMedia> items) {
         VBox section = new VBox(15);
 
         // Section header
@@ -63,7 +77,7 @@ public class HomeController {
         HBox cardsContainer = new HBox(15);
         cardsContainer.setAlignment(Pos.CENTER_LEFT);
 
-        for (MusicItem item : items) {
+        for (UniMedia item : items) {
             VBox card = createMusicCard(item);
             cardsContainer.getChildren().add(card);
         }
@@ -75,7 +89,7 @@ public class HomeController {
         return section;
     }
 
-    private VBox createMusicCard(MusicItem item) {
+    private VBox createMusicCard(UniMedia item) {
         VBox card = new VBox(12);
         card.setPrefWidth(180);
         card.setMaxWidth(180);
@@ -106,11 +120,11 @@ public class HomeController {
         imageContainer.setOnMouseClicked(e -> onCardClick(item));
 
         // Title and artist
-        Label titleLabel = new Label(item.title);
+        Label titleLabel = new Label(item.getTitle());
         titleLabel.setWrapText(true);
         titleLabel.setMaxWidth(180);
 
-        Label artistLabel = new Label(item.type + " • " + item.artist);
+        Label artistLabel = new Label(item.type + " • " + item.getArtist());
         artistLabel.setWrapText(true);
         artistLabel.setMaxWidth(180);
 
@@ -138,10 +152,11 @@ public class HomeController {
         System.out.println("Filter clicked: " + filter);
     }
 
-    private void onCardClick(MusicItem item) {
-        nowPlayingTitle.setText(item.title);
-        nowPlayingArtist.setText(item.artist);
-        System.out.println("Playing: " + item.title);
+    private void onCardClick(UniMedia item) {
+        nowPlayingTitle.setText(item.getTitle());
+        nowPlayingArtist.setText(item.getArtist());
+        NavigationHandler.navigateToMediaPlayView(item);
+        System.out.println("Playing: " + item.getTitle());
     }
 
     @FXML
@@ -168,39 +183,47 @@ public class HomeController {
     }
 
     // Data methods - sostituisci con lettura CSV
-    private List<MusicItem> getSampleData1() {
-        List<MusicItem> items = new ArrayList<>();
-        items.add(new MusicItem("P-POP CULTURE", "Karan Aujla & Ikky", null, "Album"));
-        items.add(new MusicItem("Convo", "Chinna, Cheema Y and Gur Sidhu", null, "Song"));
-        items.add(new MusicItem("Karan Aujla", "4.59M subscribers", null, "Artist"));
-        items.add(new MusicItem("Street Knowledge", "Wazir Patar", null, "Album"));
-        items.add(new MusicItem("Culture Clicks", "Navaan Sandhu", null, "Song"));
-        items.add(new MusicItem("Bachfun*up", "Karan Aujla", null, "Album"));
+    private List<UniMedia> getSampleData1() {
+        List<UniMedia> items = new ArrayList<>();
+        items.add(new UniMedia("P-POP CULTURE","", "Karan Aujla & Ikky", null, MediaType.AudioFile));
+        items.add(new UniMedia("Convo", "","Chinna, Cheema Y and Gur Sidhu", null, MediaType.AudioFile));
+        items.add(new UniMedia("Karan Aujla", "", "4.59M subscribers", null, MediaType.AudioFile));
+        items.add(new UniMedia("Street Knowledge","", "Wazir Patar", null, MediaType.AudioFile));
+        items.add(new UniMedia("Culture Clicks", "",  "Navaan Sandhu", null, MediaType.AudioFile));
+        items.add(new UniMedia("Bachfun*up", "","Karan Aujla", null, MediaType.AudioFile));
         return items;
     }
 
-    private List<MusicItem> getSampleData2() {
-        List<MusicItem> items = new ArrayList<>();
-        items.add(new MusicItem("Get Rich", "50 Cent", null, "Album"));
-        items.add(new MusicItem("Summer Vibes", "Various Artists", null, "Playlist"));
-        items.add(new MusicItem("Random Access", "Daft Punk", null, "Album"));
-        items.add(new MusicItem("Nostalgia Mix", "Various Artists", null, "Playlist"));
-        items.add(new MusicItem("Classic Hip Hop", "Various Artists", null, "Playlist"));
+    private List<UniMedia> getSampleData2() {
+        List<UniMedia> items = new ArrayList<>();
+        items.add(new UniMedia("Get Rich","", "50 Cent", null, MediaType.AudioFile));
+        items.add(new UniMedia("Summer Vibes","", "Various Artists", null, MediaType.AudioFile));
+        items.add(new UniMedia("Random Access","", "Daft Punk", null, MediaType.AudioFile));
+        items.add(new UniMedia("Nostalgia Mix", "","Various Artists", null, MediaType.AudioFile));
+        items.add(new UniMedia("Classic Hip Hop", "", "Various Artists", null, MediaType.AudioFile));
         return items;
     }
 
-    // Inner class
-    static class MusicItem {
-        String title;
-        String artist;
-        String imageUrl;
-        String type;
+    @Override
+    public void setContent(Node content, int Idx) {
+        mainViewArea.setContent(content);
+    }
 
-        public MusicItem(String title, String artist, String imageUrl, String type) {
-            this.title = title;
-            this.artist = artist;
-            this.imageUrl = imageUrl;
-            this.type = type;
+    @Override
+    public void setData(UniData data) {
+    }
+
+    @Override
+    public void navigateTo() {
+        UniControllerNavigation.loadView("Home.fxml", 0, parentController, null);
+    }
+
+    public static void navigateToMediaPlayView(UniMedia media){
+        if (AuthManager.isAuthenticated()) {
+            UniControllerNavigation.loadView("MediaPlay.fxml", 0, this, media);
+        } else {
+            LoginController.navigateTo();
         }
     }
+
 }

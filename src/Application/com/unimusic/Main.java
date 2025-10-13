@@ -1,5 +1,7 @@
 package com.unimusic;
 
+import com.unimusic.Config.AppConfig;
+import com.unimusic.Model.UniController;
 import com.unimusic.Model.csvManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +13,7 @@ import java.net.URL;
 
 public class Main extends Application {
     private static csvManager csvManager = new csvManager();
+    public static UniController mainController;
     /**
      * Get the application-wide user repository
      */
@@ -26,9 +29,9 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(mainViewUrl);
 
         Parent root = loader.load();
-
+        mainController = loader.getController();
         // Set up the scene
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, AppConfig.APP_WIDTH, AppConfig.APP_HEIGHT);
         URL cssUrl = getClass().getResource("Css/Styles.css");
         scene.getStylesheets().add(cssUrl.toExternalForm());
 

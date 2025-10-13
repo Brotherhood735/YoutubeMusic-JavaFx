@@ -1,7 +1,13 @@
 package com.unimusic.View;
 
+import com.unimusic.Controller.HomeController;
+import com.unimusic.Controller.MediaPlayController;
 import com.unimusic.Main;
 import com.unimusic.Controller.MainController;
+import com.unimusic.Model.AuthManager;
+import com.unimusic.Model.UniController;
+import com.unimusic.Model.UniData;
+import com.unimusic.Model.UniMedia;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
@@ -13,11 +19,9 @@ import java.net.URL;
  * It works as a bridge between controllers and views, allowing for simplified navigation.
  */
 public class NavigationHandler {
-    // Reference to the main controller
     private static MainController mainController;
-
+    private static MediaPlayController mediaPlayController;
     // Current authenticated username
-    private static String authenticatedUser = null;
 
     /**
      * Set the main controller reference
@@ -26,42 +30,54 @@ public class NavigationHandler {
     public static void setMainController(MainController controller) {
         mainController = controller;
     }
-
     /**
      * Load and switch to a view
      * @param fxml The name of the FXML file to load
      */
-    public static void loadView(String fxml) {
+    public static void loadMainView(String fxml, UniData data) {
+        loadView(fxml, mainController, data);
+    }
+    public static void loadMainView(String fxml)
+    {
+        loadView(fxml, mainController);
+    }
+    private static void loadView(String fxml, UniController controller, UniData data)
+    {
         try {
             URL fxmlUrl = Main.class.getResource("Fxml/" + fxml);
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
             Node view = loader.load();
-            mainController.setContent(view);
+            controller.setContent(view, );
+            UniController uniController = loader.getController();
+            uniController.setData(data);
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error loading view: " + fxml);
         }
     }
-
+    private static void loadView(String fxml, UniController controller)
+    {
+        loadView(fxml, controller, null);
+    }
     /**
      * Navigate to the home view
      */
     public static void navigateToHome() {
-        loadView("WelcomePage.fxml ");
+        loadMainView("WelcomePage.fxml ");
     }
 
     /**
      * Navigate to the login view
      */
     public static void navigateToLogin() {
-        loadView("Login.fxml");
+        loadMainView("Login.fxml");
     }
 
     /**
      * Navigate to the register view
      */
     public static void navigateToRegister() {
-        loadView("Register.fxml");
+        loadMainView("Register.fxml");
     }
 
     /**
@@ -69,8 +85,8 @@ public class NavigationHandler {
      * Will redirect to login if not authenticated
      */
     public static void navigateToDashboard() {
-        if (isAuthenticated()) {
-            loadView("Home.fxml");
+        if (AuthManager.isAuthenticated()) {
+            loadMainView("Home.fxml");
         } else {
             navigateToLogin();
         }
@@ -81,51 +97,26 @@ public class NavigationHandler {
      * Will redirect to login if not authenticated
      */
     public static void navigateToProfile() {
-        if (isAuthenticated()) {
-            loadView("ProfileView.fxml");
+        if (AuthManager.isAuthenticated()) {
+            loadMainView("ProfileView.fxml");
         } else {
             navigateToLogin();
         }
     }
 
     public static void navigateToStats() {
-        if (isAuthenticated()) {
-            loadView("StatsView.fxml");
+        if (AuthManager.isAuthenticated()) {
+            loadMainView("StatsView.fxml");
         } else {
             navigateToLogin();
         }
     }
 
     /**
-     * Set the authenticated user
-     * @param username The username of the authenticated user
-     */
-    public static void setAuthenticatedUser(String username) throws IOException {
-        authenticatedUser = username;
-        mainController.updateNavBar(isAuthenticated());
-    }
-
-    /**
-     * Get the authenticated user
-     * @return The username of the authenticated user, or null if not authenticated
-     */
-    public static String getAuthenticatedUser() {
-        return authenticatedUser;
-    }
-
-    /**
-     * Check if a user is authenticated
-     * @return true if a user is authenticated, false otherwise
-     */
-    public static boolean isAuthenticated() {
-        return authenticatedUser != null;
-    }
-
-    /**
      * Logout the current user
      */
     public static void logout(){
-        authenticatedUser = null;
+        AuthManager.logout();
         mainController.updateNavBar(false);
         navigateToHome();
     }

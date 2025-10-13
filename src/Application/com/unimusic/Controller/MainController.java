@@ -1,5 +1,7 @@
 package com.unimusic.Controller;
 
+import com.unimusic.Model.UniController;
+import com.unimusic.Model.UniData;
 import com.unimusic.View.NavigationHandler;
 import com.unimusic.View.Components.NavBar;
 import javafx.fxml.FXML;
@@ -9,7 +11,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class MainController {
+public  class MainController extends UniController {
     @FXML
     private BorderPane mainContainer;
 
@@ -24,7 +26,6 @@ public class MainController {
         //setNavBar();
         // Register this controller with the ViewNavigator
         NavigationHandler.setMainController(this);
-
         // Load the Login view by default
         NavigationHandler.navigateToLogin();
     }
@@ -35,8 +36,19 @@ public class MainController {
     /**
      * Set the content of the main area
      */
-    public void setContent(Node content) {
+    @Override
+    public void setContent(Node content, int Idx) {
         mainContainer.setCenter(content);
+    }
+
+    @Override
+    public void setData(UniData data) {
+
+    }
+
+    @Override
+    public void navigateTo() {
+        
     }
 
     /**
