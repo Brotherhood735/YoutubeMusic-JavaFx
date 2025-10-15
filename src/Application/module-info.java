@@ -13,7 +13,6 @@ module com.unimusic {
     requires javafx.graphics;
     requires java.desktop;
     requires javafx.media;
-    requires com.unimusic;
 
     opens com.unimusic to javafx.fxml;
     exports com.unimusic;

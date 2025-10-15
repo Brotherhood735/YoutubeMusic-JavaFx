@@ -1,5 +1,6 @@
 package com.unimusic.Controller;
 
+import com.unimusic.Model.AuthManager;
 import com.unimusic.Model.UniController;
 import com.unimusic.Model.UniData;
 import com.unimusic.View.NavigationHandler;
@@ -17,7 +18,7 @@ public class WelcomeController extends UniController {
     @FXML
     public void initialize() {
         // If we're already authenticated, hide login/register buttons
-        if (NavigationHandler.isAuthenticated()) {
+        if (AuthManager.isAuthenticated()) {
             loginButton.setVisible(false);
             registerButton.setVisible(false);
         }

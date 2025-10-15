@@ -20,7 +20,8 @@ import java.net.URL;
  */
 public class NavigationHandler {
     private static MainController mainController;
-    private static MediaPlayController mediaPlayController;
+    private static HomeController homeController;
+    private static MediaPlayController mediaController;
     // Current authenticated username
 
     /**
@@ -30,12 +31,25 @@ public class NavigationHandler {
     public static void setMainController(MainController controller) {
         mainController = controller;
     }
+    public static void setHomeController(HomeController controller) {
+        homeController = controller;
+    }
+    public static void setMediaController(MediaPlayController controller) {
+        mediaController = controller;
+    }
     /**
      * Load and switch to a view
      * @param fxml The name of the FXML file to load
      */
     public static void loadMainView(String fxml, UniData data) {
         loadView(fxml, mainController, data);
+    }
+    public static void loadHomeView(String fxml, UniData data)
+    {
+        loadView(fxml, homeController, data);
+    }
+    public static void loadHomeView(String fxml){
+       loadView(fxml, homeController);
     }
     public static void loadMainView(String fxml)
     {
@@ -44,10 +58,9 @@ public class NavigationHandler {
     private static void loadView(String fxml, UniController controller, UniData data)
     {
         try {
-            URL fxmlUrl = Main.class.getResource("Fxml/" + fxml);
-            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            FXMLLoader loader = getLoader(fxml);
             Node view = loader.load();
-            controller.setContent(view, );
+            controller.setContent(view, 0);
             UniController uniController = loader.getController();
             uniController.setData(data);
         } catch (IOException e) {
@@ -58,6 +71,18 @@ public class NavigationHandler {
     private static void loadView(String fxml, UniController controller)
     {
         loadView(fxml, controller, null);
+    }
+    public static FXMLLoader getLoader(String fxml){
+        URL fxmlUrl = Main.class.getResource("Fxml/" + fxml);
+        return new FXMLLoader(fxmlUrl);
+    }
+    public static void navigateToMediaPlay(UniData data)
+    {
+        if (AuthManager.isAuthenticated()) {
+            loadHomeView("MediaPlay.fxml", data);
+        } else {
+            navigateToLogin();
+        }
     }
     /**
      * Navigate to the home view

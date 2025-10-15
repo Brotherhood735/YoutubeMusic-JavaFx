@@ -1,5 +1,6 @@
 package com.unimusic.Controller;
 
+import com.unimusic.Model.AuthManager;
 import com.unimusic.Model.UniController;
 import com.unimusic.Model.UniData;
 import com.unimusic.View.NavigationHandler;
@@ -46,15 +47,10 @@ public  class MainController extends UniController {
 
     }
 
-    @Override
-    public void navigateTo() {
-        
-    }
-
     /**
      * Update the navigation bar based on authentication status
      */
     public void updateNavBar(boolean isAuthenticated) {
-        if (navBar != null) navBar.updateAuthStatus(isAuthenticated, NavigationHandler.getAuthenticatedUser());
+        if (navBar != null) navBar.updateAuthStatus(isAuthenticated, AuthManager.getAuthenticatedUser());
     }
 }

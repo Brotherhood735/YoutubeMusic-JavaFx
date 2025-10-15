@@ -2,7 +2,6 @@ package com.unimusic.Controller;
 import com.unimusic.Main;
 import com.unimusic.Model.*;
 import com.unimusic.View.NavigationHandler;
-import com.unimusic.View.UniControllerNavigation;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -155,7 +154,7 @@ public class HomeController extends UniController {
     private void onCardClick(UniMedia item) {
         nowPlayingTitle.setText(item.getTitle());
         nowPlayingArtist.setText(item.getArtist());
-        NavigationHandler.navigateToMediaPlayView(item);
+        NavigationHandler.navigateToMediaPlay(item);
         System.out.println("Playing: " + item.getTitle());
     }
 
@@ -212,18 +211,4 @@ public class HomeController extends UniController {
     @Override
     public void setData(UniData data) {
     }
-
-    @Override
-    public void navigateTo() {
-        UniControllerNavigation.loadView("Home.fxml", 0, parentController, null);
-    }
-
-    public static void navigateToMediaPlayView(UniMedia media){
-        if (AuthManager.isAuthenticated()) {
-            UniControllerNavigation.loadView("MediaPlay.fxml", 0, this, media);
-        } else {
-            LoginController.navigateTo();
-        }
-    }
-
 }

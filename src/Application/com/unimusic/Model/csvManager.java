@@ -2,6 +2,7 @@ package com.unimusic.Model;
 
 import com.unimusic.Config.AppConfig;
 
+import javax.xml.stream.events.Comment;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.Map;
 public class csvManager {
 
         private Map<String, User> users = new HashMap<>();
-
+        private Map<Double, UniComment> comments = new HashMap<>();
 
         public csvManager() {
             ensureUsersCsvExists();
@@ -21,6 +22,9 @@ public class csvManager {
          */
         private void ensureUsersCsvExists() {
             ensureCsvExists(AppConfig.USERS_CSV_PATH, "username,password,is_admin\n", "admin,admin,1\n");
+        }
+        private void ensureCommentsCsvExists() {
+            ensureCsvExists(AppConfig.COMMENTS_CSV_PATH, "id_comment,id_media,username,comment\n", "");
         }
         private void ensureCsvExists(String csvPath, String csvHeader, String defaultRow)
         {
@@ -65,7 +69,38 @@ public class csvManager {
                 System.err.println("Error loading users from CSV: " + e.getMessage());
             }
         }
+        private void loadComments() {
+            try (BufferedReader reader = new BufferedReader(new FileReader(AppConfig.COMMENTS_CSV_PATH))) {
+                String line;
+                // Skip header line
+                reader.readLine();
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length >= 3) {
+                        double media_id = Double.parseDouble(parts[0]);
+                        String username = parts[1];
+                        String comment = parts[2];
+                        comments.put(media_id, new UniComment(media_id, username, comment));
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("Error loading comments from CSV: " + e.getMessage());
+            }
+        }
+    private void saveAllComments() {
+        String isAdmin;
+        try (FileWriter writer = new FileWriter(AppConfig.COMMENTS_CSV_PATH)) {
+            // Write header
+            writer.write("id_comment,id_media,username,comments\n");
 
+            // Write users
+            for (UniComment comment : comments.values()) {
+                writer.write(comment.getMediaId() + "," + comment.getUsername() + "," + comment.getComment() +  "\n");
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving comments to CSV: " + e.getMessage());
+        }
+    }
         /**
          * Save all users to the CSV file
          */
@@ -87,10 +122,6 @@ public class csvManager {
                 System.err.println("Error saving users to CSV: " + e.getMessage());
             }
         }
-        private void loadMusicItems()
-        {
-
-        }
         /**
          * Save a user to the repository
          */
@@ -98,7 +129,14 @@ public class csvManager {
             users.put(user.getUsername(), user);
             saveAllUsers();
         }
+        public void saveComment(UniComment comment) {
+            comments.put(comment.getMediaId(), comment);
+            saveAllComments();
+        }
+        public void deleteComment(double comment_id)
+        {
 
+        }
         /**
          * Delete a user from the repository
          */
