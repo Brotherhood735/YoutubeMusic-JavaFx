@@ -2,17 +2,16 @@ package com.unimusic.Model;
 
 import com.unimusic.Config.AppConfig;
 
-import javax.xml.stream.events.Comment;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class csvManager {
-
-        private Map<String, User> users = new HashMap<>();
+public class DataManager {
+        private final String COMMENTS_CSV_HEADER = "id_comment,id_media,username,comment";
         private Map<Double, UniComment> comments = new HashMap<>();
+        private Map<String, User> users = new HashMap<>();
 
-        public csvManager() {
+        public DataManager() {
             ensureUsersCsvExists();
             loadUsers();
         }
@@ -24,7 +23,7 @@ public class csvManager {
             ensureCsvExists(AppConfig.USERS_CSV_PATH, "username,password,is_admin\n", "admin,admin,1\n");
         }
         private void ensureCommentsCsvExists() {
-            ensureCsvExists(AppConfig.COMMENTS_CSV_PATH, "id_comment,id_media,username,comment\n", "");
+            ensureCsvExists(AppConfig.COMMENTS_CSV_PATH, COMMENTS_CSV_HEADER + "\n", "");
         }
         private void ensureCsvExists(String csvPath, String csvHeader, String defaultRow)
         {
@@ -69,33 +68,38 @@ public class csvManager {
                 System.err.println("Error loading users from CSV: " + e.getMessage());
             }
         }
-        private void loadComments() {
+        public Map<Double, UniComment> loadComments(double id) {
+            Map<Double, UniComment> comments = new HashMap<>();
             try (BufferedReader reader = new BufferedReader(new FileReader(AppConfig.COMMENTS_CSV_PATH))) {
                 String line;
                 // Skip header line
                 reader.readLine();
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.split(",");
-                    if (parts.length >= 3) {
-                        double media_id = Double.parseDouble(parts[0]);
-                        String username = parts[1];
-                        String comment = parts[2];
-                        comments.put(media_id, new UniComment(media_id, username, comment));
+                    if (parts.length >= 4) {
+                        double media_id = Double.parseDouble(parts[1]);
+                        if (media_id != id){ continue; }
+
+                        double comment_id = Double.parseDouble(parts[0]);
+                        String username = parts[2];
+                        String comment = parts[3];
+                        comments.put(comment_id, new UniComment(comment_id, media_id, username, comment));
                     }
                 }
             } catch (IOException e) {
                 System.err.println("Error loading comments from CSV: " + e.getMessage());
             }
+            return comments;
         }
-    private void saveAllComments() {
+    private void saveAllComments(Map<Double, UniComment> comments) {
         String isAdmin;
         try (FileWriter writer = new FileWriter(AppConfig.COMMENTS_CSV_PATH)) {
             // Write header
-            writer.write("id_comment,id_media,username,comments\n");
+            writer.write(COMMENTS_CSV_HEADER + "\n");
 
             // Write users
             for (UniComment comment : comments.values()) {
-                writer.write(comment.getMediaId() + "," + comment.getUsername() + "," + comment.getComment() +  "\n");
+                writer.write(comment.getId() + "," + comment.getMediaId() + "," + comment.getUsername() + "," + comment.getComment() +  "\n");
             }
         } catch (IOException e) {
             System.err.println("Error saving comments to CSV: " + e.getMessage());
@@ -129,13 +133,16 @@ public class csvManager {
             users.put(user.getUsername(), user);
             saveAllUsers();
         }
-        public void saveComment(UniComment comment) {
+        public void saveComment(Map<Double, UniComment> comments, UniComment comment) {
             comments.put(comment.getMediaId(), comment);
-            saveAllComments();
+            saveAllComments(comments);
         }
-        public void deleteComment(double comment_id)
+        public void deleteComment(Map<Double, UniComment> comments, double comment_id)
         {
-
+            if (comments.containsKey(comment_id)) {
+                comments.remove(comment_id);
+                saveAllComments(comments);
+            }
         }
         /**
          * Delete a user from the repository
@@ -150,7 +157,7 @@ public class csvManager {
                 }
             }
         }
-
+        public UniComment getComment(double comment_id) {return comments.get(comment_id);}
         /**
          * Get a user by username
          */
@@ -165,6 +172,7 @@ public class csvManager {
             return users.containsKey(username);
         }
 
+        public Map<Double, UniComment> getAllComments() { return new HashMap<>(comments); }
         /**
          * Get all users
          */

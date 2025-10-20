@@ -1,13 +1,12 @@
 package com.unimusic.View;
 
 import com.unimusic.Controller.HomeController;
-import com.unimusic.Controller.MediaPlayController;
+import com.unimusic.Controller.MediaMainController;
 import com.unimusic.Main;
 import com.unimusic.Controller.MainController;
 import com.unimusic.Model.AuthManager;
 import com.unimusic.Model.UniController;
 import com.unimusic.Model.UniData;
-import com.unimusic.Model.UniMedia;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
@@ -21,7 +20,7 @@ import java.net.URL;
 public class NavigationHandler {
     private static MainController mainController;
     private static HomeController homeController;
-    private static MediaPlayController mediaController;
+    private static MediaMainController mediaController;
     // Current authenticated username
 
     /**
@@ -34,7 +33,7 @@ public class NavigationHandler {
     public static void setHomeController(HomeController controller) {
         homeController = controller;
     }
-    public static void setMediaController(MediaPlayController controller) {
+    public static void setMediaController(MediaMainController controller) {
         mediaController = controller;
     }
     /**
@@ -79,7 +78,7 @@ public class NavigationHandler {
     public static void navigateToMediaPlay(UniData data)
     {
         if (AuthManager.isAuthenticated()) {
-            loadHomeView("MediaPlay.fxml", data);
+            loadHomeView("MediaMain.fxml", data);
         } else {
             navigateToLogin();
         }

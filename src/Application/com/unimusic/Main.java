@@ -2,7 +2,7 @@ package com.unimusic;
 
 import com.unimusic.Config.AppConfig;
 import com.unimusic.Model.UniController;
-import com.unimusic.Model.csvManager;
+import com.unimusic.Model.DataManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,13 +12,13 @@ import javafx.stage.Stage;
 import java.net.URL;
 
 public class Main extends Application {
-    private static csvManager csvManager = new csvManager();
+    private static DataManager DataManager = new DataManager();
     public static UniController mainController;
     /**
      * Get the application-wide user repository
      */
-    public static csvManager getJsonManager() {
-        return csvManager;
+    public static DataManager getDataManager() {
+        return DataManager;
     }
 
     @Override

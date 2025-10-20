@@ -1,6 +1,5 @@
 package com.unimusic.Controller;
 
-import com.unimusic.Main;
 import com.unimusic.Model.UniController;
 import com.unimusic.Model.UniData;
 import com.unimusic.Model.UniMedia;
@@ -13,12 +12,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.net.URL;
 
-public class MediaPlayController extends UniController {
+public class MediaMainController extends UniController {
     //TODO: to implement the left side business logic
     private Pane leftSideArea;
-    private ScrollPane rightSideArea;
+    @FXML private ScrollPane rightSideArea;
     private UniMedia currentMedia;
 
     @FXML
@@ -46,7 +44,7 @@ public class MediaPlayController extends UniController {
 
     @FXML
     void onComments(ActionEvent event) {
-        loadViewOnRight("onCommments.fxml");
+        loadViewOnRight("MediaComments.fxml");
     }
 
     @FXML
