@@ -19,16 +19,26 @@ public class MediaMainController extends UniController {
     @FXML private ScrollPane rightSideArea;
     private UniMedia currentMedia;
 
+
+    public MediaMainController(UniMedia media)
+    {
+        currentMedia = media;
+    }
     @FXML
     public void initialize() {
         NavigationHandler.setMediaController(this);
-        //loadViewOnRight("onComments.fxml");
+        loadViewOnRight("MediaComments.fxml");
+    }
+    public UniMedia getCurrentMedia()
+    {
+        return currentMedia;
     }
     private void loadViewOnRight(String fxml)
     {
         FXMLLoader loader = NavigationHandler.getLoader(fxml);
+        loader.setControllerFactory( c -> new MediaCommentsController(currentMedia));
         try {
-            updateRightArea(loader.load());
+            Node view = loader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -70,8 +80,4 @@ public class MediaMainController extends UniController {
 
     }
 
-    @Override
-    public void setData(UniData data) {
-        currentMedia = (UniMedia) data;
-    }
 }

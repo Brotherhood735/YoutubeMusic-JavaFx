@@ -63,9 +63,4 @@ public class LoginController  extends UniController {
 
     }
 
-    @Override
-    public void setData(UniData data) {
-
-    }
-
 }

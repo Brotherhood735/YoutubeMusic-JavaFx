@@ -208,7 +208,4 @@ public class HomeController extends UniController {
         mainViewArea.setContent(content);
     }
 
-    @Override
-    public void setData(UniData data) {
-    }
 }

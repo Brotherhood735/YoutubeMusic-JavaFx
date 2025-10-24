@@ -7,8 +7,10 @@ import com.unimusic.Controller.MainController;
 import com.unimusic.Model.AuthManager;
 import com.unimusic.Model.UniController;
 import com.unimusic.Model.UniData;
+import com.unimusic.Model.UniMedia;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,6 +49,10 @@ public class NavigationHandler {
     {
         loadView(fxml, homeController, data);
     }
+    public static void loadHomeView(String fxml, UniData data, Callback<Class<?>, Object> controllerFactory)
+    {
+        loadView(fxml, homeController, data, controllerFactory);
+    }
     public static void loadHomeView(String fxml){
        loadView(fxml, homeController);
     }
@@ -60,8 +66,18 @@ public class NavigationHandler {
             FXMLLoader loader = getLoader(fxml);
             Node view = loader.load();
             controller.setContent(view, 0);
-            UniController uniController = loader.getController();
-            uniController.setData(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading view: " + fxml);
+        }
+    }
+    private static void loadView(String fxml, UniController controller, UniData data, Callback<Class<?>, Object> controllerFactory)
+    {
+        try {
+            FXMLLoader loader = getLoader(fxml);
+            loader.setControllerFactory(controllerFactory);
+            Node view = loader.load();
+            controller.setContent(view, 0);
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error loading view: " + fxml);
@@ -78,7 +94,10 @@ public class NavigationHandler {
     public static void navigateToMediaPlay(UniData data)
     {
         if (AuthManager.isAuthenticated()) {
-            loadHomeView("MediaMain.fxml", data);
+            UniMedia currentMedia = (UniMedia) data;
+            loadHomeView("MediaMain.fxml", data, c -> {
+                return new MediaMainController(currentMedia);
+            });
         } else {
             navigateToLogin();
         }

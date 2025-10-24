@@ -45,8 +45,4 @@ public class WelcomeController extends UniController {
 
     }
 
-    @Override
-    public void setData(UniData data) {
-
-    }
 }

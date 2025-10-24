@@ -90,8 +90,4 @@ public class RegisterController extends UniController {
 
     }
 
-    @Override
-    public void setData(UniData data) {
-
-    }
 }

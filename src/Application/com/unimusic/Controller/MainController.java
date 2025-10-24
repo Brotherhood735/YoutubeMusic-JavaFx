@@ -42,10 +42,6 @@ public  class MainController extends UniController {
         mainContainer.setCenter(content);
     }
 
-    @Override
-    public void setData(UniData data) {
-
-    }
 
     /**
      * Update the navigation bar based on authentication status
