@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DataManager {
-        private final String COMMENTS_CSV_HEADER = "id_comment,id_media,username,comment";
+        private final String COMMENTS_CSV_HEADER = "id_comment,id_media,id_parent,username,comment";
         private Map<String, User> users = new HashMap<>();
 
         public DataManager() {
@@ -94,6 +94,36 @@ public class DataManager {
                 System.err.println("Error loading comments from CSV: " + e.getMessage());
             }
             return comments;
+        }
+        private UniComment getCommentFromCsv(double id)
+        {
+            ensureCommentsCsvExists();
+            UniComment comment;
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(AppConfig.COMMENTS_CSV_PATH))) {
+                String line;
+                // Skip header line
+                reader.readLine();
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length >= 4) {
+                        double comment_id = Double.parseDouble(parts[0]);
+                        if (comment_id != id){ continue; }
+
+                        double media_id = Double.parseDouble(parts[1]);
+                        String username = parts[3];
+                        String comment = parts[4];
+                        double parent_id = Double.parseDouble(parts[2]);
+                        if(parent_id != -1)
+                        {
+                            comment = new UniComment(getCommentFromCsv(parent_id), comment_id, media_id, username, comment));
+                        }
+                        comment = new UniComment(null, comment_id, media_id, username, comment));
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("Error loading comments from CSV: " + e.getMessage());
+            }
         }
     private void saveAllComments(List<UniComment> comments) {
         String isAdmin;

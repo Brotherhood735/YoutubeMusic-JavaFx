@@ -72,7 +72,7 @@ public class MediaCommentsController extends UniController {
         return commentBox;
     }
 
-    private void onDepthCommentRequest(UniMedia media,  UniComment comment)
+    protected void onDepthCommentRequest(UniMedia media,  UniComment comment)
     {
         NavigationHandler.navigateToInDepthCommentSection(media, comment, null, depthLevel + 1);
     }
@@ -92,7 +92,7 @@ public class MediaCommentsController extends UniController {
         double commentId = currentMediaComments.getLast().getId() + 1;
         String commentText = commentField.getText();
         String username = AuthManager.getUser();
-        return new UniComment(commentId, mediaId, username, commentText);
+        return new UniComment(null, commentId, mediaId, username, commentText);
     }
     @Override
     public void setContent(Node content, int Idx)

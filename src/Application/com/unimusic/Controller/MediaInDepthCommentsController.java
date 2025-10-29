@@ -42,7 +42,12 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
             return;
         }
         // otherwise go to a lower depth in comment section
-        NavigationHandler.navigateToInDepthCommentSection(currentMedia, currentComment, currentComment, depthLevel - 1);
+        NavigationHandler.navigateToInDepthCommentSection(currentMedia, previousComment, null, depthLevel - 1);
+    }
+
+    @Override
+    protected void onDepthCommentRequest(UniMedia media, UniComment comment) {
+        NavigationHandler.navigateToInDepthCommentSection(media, comment, currentComment, depthLevel + 1);
     }
     private void populateComments() {
 
