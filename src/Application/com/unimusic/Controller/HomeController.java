@@ -133,7 +133,10 @@ public class HomeController extends UniController {
 
     // Event handlers
     @FXML
-    private void onHomeClick() {
+    private void onHomeClick()
+    {
+        mainViewArea.setContent(null);
+        loadDefaultHomeView();
         System.out.println("Home clicked");
     }
 

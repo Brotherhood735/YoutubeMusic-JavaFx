@@ -1,13 +1,11 @@
 package com.unimusic.View;
 
 import com.unimusic.Controller.HomeController;
+import com.unimusic.Controller.MediaInDepthCommentsController;
 import com.unimusic.Controller.MediaMainController;
 import com.unimusic.Main;
 import com.unimusic.Controller.MainController;
-import com.unimusic.Model.AuthManager;
-import com.unimusic.Model.UniController;
-import com.unimusic.Model.UniData;
-import com.unimusic.Model.UniMedia;
+import com.unimusic.Model.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.util.Callback;
@@ -22,7 +20,7 @@ import java.net.URL;
 public class NavigationHandler {
     private static MainController mainController;
     private static HomeController homeController;
-    private static MediaMainController mediaController;
+    private static MediaMainController mediaMainController;
     // Current authenticated username
 
     /**
@@ -36,22 +34,18 @@ public class NavigationHandler {
         homeController = controller;
     }
     public static void setMediaController(MediaMainController controller) {
-        mediaController = controller;
+        mediaMainController = controller;
     }
     /**
      * Load and switch to a view
      * @param fxml The name of the FXML file to load
      */
-    public static void loadMainView(String fxml, UniData data) {
-        loadView(fxml, mainController, data);
-    }
-    public static void loadHomeView(String fxml, UniData data)
+    public static void loadHomeView(String fxml, Callback<Class<?>, Object> controllerFactory)
     {
-        loadView(fxml, homeController, data);
+        loadView(fxml, homeController, controllerFactory);
     }
-    public static void loadHomeView(String fxml, UniData data, Callback<Class<?>, Object> controllerFactory)
-    {
-        loadView(fxml, homeController, data, controllerFactory);
+    public static void loadMediaView(String fxml, Callback<Class<?>, Object> controllerFactory){
+        loadView(fxml, mediaMainController, controllerFactory);
     }
     public static void loadHomeView(String fxml){
        loadView(fxml, homeController);
@@ -60,7 +54,11 @@ public class NavigationHandler {
     {
         loadView(fxml, mainController);
     }
-    private static void loadView(String fxml, UniController controller, UniData data)
+    public static void loadMediaView(String fxml)
+    {
+        loadView(fxml, mediaMainController);
+    }
+    private static void loadView(String fxml, UniController controller)
     {
         try {
             FXMLLoader loader = getLoader(fxml);
@@ -71,7 +69,7 @@ public class NavigationHandler {
             System.err.println("Error loading view: " + fxml);
         }
     }
-    private static void loadView(String fxml, UniController controller, UniData data, Callback<Class<?>, Object> controllerFactory)
+    private static void loadView(String fxml, UniController controller, Callback<Class<?>, Object> controllerFactory)
     {
         try {
             FXMLLoader loader = getLoader(fxml);
@@ -83,10 +81,6 @@ public class NavigationHandler {
             System.err.println("Error loading view: " + fxml);
         }
     }
-    private static void loadView(String fxml, UniController controller)
-    {
-        loadView(fxml, controller, null);
-    }
     public static FXMLLoader getLoader(String fxml){
         URL fxmlUrl = Main.class.getResource("Fxml/" + fxml);
         return new FXMLLoader(fxmlUrl);
@@ -95,7 +89,7 @@ public class NavigationHandler {
     {
         if (AuthManager.isAuthenticated()) {
             UniMedia currentMedia = (UniMedia) data;
-            loadHomeView("MediaMain.fxml", data, c -> {
+            loadHomeView("MediaMain.fxml", c -> {
                 return new MediaMainController(currentMedia);
             });
         } else {
@@ -162,5 +156,16 @@ public class NavigationHandler {
         AuthManager.logout();
         mainController.updateNavBar(false);
         navigateToHome();
+    }
+
+    public static void navigateToInDepthCommentSection(UniMedia media, UniComment comment)
+    {
+        if (AuthManager.isAuthenticated()) {
+            loadMediaView("MediaCommentsInDepth.fxml", c -> {
+                return new MediaInDepthCommentsController(media, comment);
+            });
+        } else {
+            navigateToLogin();
+        }
     }
 }

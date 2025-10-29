@@ -7,16 +7,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="511.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.MediaCommentsController">
+<VBox fx:id="mainArea" alignment="BASELINE_CENTER" maxHeight="1.7976931348623157E308" prefHeight="511.0" prefWidth="424.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.MediaCommentsController">
    <children>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="460.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
          <content>
-            <VBox fx:id="commentsArea" alignment="CENTER" prefHeight="460.0" prefWidth="600.0" />
+            <VBox fx:id="commentsArea" alignment="CENTER" prefHeight="460.0" prefWidth="338.0" />
          </content>
       </ScrollPane>
       <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="300.0">
          <children>
-            <TextField alignment="TOP_LEFT" prefHeight="42.0" prefWidth="316.0" promptText="Type your comment here...">
+            <TextField fx:id="commentField" alignment="TOP_LEFT" prefHeight="42.0" prefWidth="316.0" promptText="Type your comment here...">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>

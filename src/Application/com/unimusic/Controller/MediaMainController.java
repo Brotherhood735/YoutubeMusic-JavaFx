@@ -9,20 +9,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
 public class MediaMainController extends UniController {
     //TODO: to implement the left side business logic
     private Pane leftSideArea;
-    @FXML private ScrollPane rightSideArea;
+    @FXML private VBox rightSideArea;
     private UniMedia currentMedia;
-
+    private int rightSideAreaIdx;
 
     public MediaMainController(UniMedia media)
     {
         currentMedia = media;
+        rightSideAreaIdx = -1;
     }
     @FXML
     public void initialize() {
@@ -39,6 +42,7 @@ public class MediaMainController extends UniController {
         loader.setControllerFactory( c -> new MediaCommentsController(currentMedia));
         try {
             Node view = loader.load();
+            setRightContent(view);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -54,7 +58,10 @@ public class MediaMainController extends UniController {
 
     @FXML
     void onComments(ActionEvent event) {
-        loadViewOnRight("MediaComments.fxml");
+        if (rightSideAreaIdx != 0 | rightSideAreaIdx == -1) {
+            rightSideAreaIdx = 0;
+            loadViewOnRight("MediaComments.fxml");
+        }
     }
 
     @FXML
@@ -70,14 +77,24 @@ public class MediaMainController extends UniController {
     }
 
 
-    private void updateRightArea(Node content)
+    private void setRightContent(Node content)
     {
-        rightSideArea.setContent(content);
+
+        int size = rightSideArea.getChildren().size();
+        // the section is already initialized we nedd to remove before
+        // putting something else on it
+        if (size > 1)
+        {
+            rightSideArea.getChildren().remove(1);
+        }
+
+        rightSideArea.getChildren().add(content);
     }
 
     @Override
-    public void setContent(Node content, int Idx) {
-
+    public void setContent(Node content, int Idx)
+    {
+        setRightContent(content);
     }
 
 }

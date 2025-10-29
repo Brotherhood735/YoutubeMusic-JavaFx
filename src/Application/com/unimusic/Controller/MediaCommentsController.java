@@ -2,11 +2,17 @@ package com.unimusic.Controller;
 
 import com.unimusic.Main;
 import com.unimusic.Model.*;
+import com.unimusic.View.NavigationHandler;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -15,12 +21,13 @@ import java.util.Map;
 
 public class MediaCommentsController extends UniController {
 
-    private ArrayList<UniComment> currentMediaComments;
-    private UniMedia currentMedia;
-    private DataManager dataManager;
-    @FXML private VBox commentsArea;
-    @FXML private ScrollPane mainArea;
-    @FXML private TextField commentField;
+    protected ArrayList<UniComment> currentMediaComments;
+    protected UniMedia currentMedia;
+    protected DataManager dataManager;
+    protected int depthLevel = 0;
+    @FXML protected VBox commentsArea;
+    @FXML protected VBox mainArea;
+    @FXML protected TextField commentField;
 
     public MediaCommentsController(UniMedia media)
     {
@@ -32,12 +39,14 @@ public class MediaCommentsController extends UniController {
         loadComments();
         // once we have all the comments on that specific media we can populate the UI
         populateSection();
+        VBox.setVgrow(mainArea, Priority.ALWAYS);
     }
-    private void loadComments() {
+    protected void loadComments() {
         currentMediaComments = dataManager.loadComments(currentMedia.getId());
     }
-    private void populateSection()
+    protected void populateSection()
     {
+        commentsArea.getChildren().clear();
         for (UniComment comment : currentMediaComments)
         {
             VBox commentBox = createCommentBox(comment);
@@ -45,25 +54,40 @@ public class MediaCommentsController extends UniController {
         }
     }
 
-    private VBox createCommentBox(UniComment comment) {
+    protected VBox createCommentBox(UniComment comment) {
         Label usernameLabel =  new Label(comment.getUsername());
         Label commentLabel = new Label(comment.getComment());
+        Button respondButton = new  Button("See Responses");
+        respondButton.setOnMouseClicked( e -> onDepthCommentRequest(currentMedia, comment));
+
         VBox commentBox = new VBox();
+
+
+        usernameLabel.setOpacity(0.5);
+        Insets insets = new Insets(5,5,5,5);
+        commentBox.setPadding(insets);
         commentBox.setPrefWidth(100);
         commentBox.setPrefHeight(100);
-        commentBox.getChildren().addAll(usernameLabel, commentLabel);
+        commentBox.getChildren().addAll(usernameLabel, commentLabel,  respondButton);
         return commentBox;
     }
 
+    private void onDepthCommentRequest(UniMedia media,  UniComment comment)
+    {
+        NavigationHandler.navigateToInDepthCommentSection(media, comment);
+
+    }
+
     @FXML
-    private void sendComment()
+    protected void sendComment()
     {
         dataManager.saveComment(currentMediaComments, createComment());
         loadComments();
+        populateSection();
     }
     // will create the comment instance by using the current values of the UI
     // elements and internal datas
-    private UniComment  createComment()
+    protected UniComment  createComment()
     {
         double mediaId = currentMedia.getId();
         double commentId = currentMediaComments.getLast().getId() + 1;
@@ -72,7 +96,8 @@ public class MediaCommentsController extends UniController {
         return new UniComment(commentId, mediaId, username, commentText);
     }
     @Override
-    public void setContent(Node content, int Idx) {
+    public void setContent(Node content, int Idx)
+    {
 
     }
 
