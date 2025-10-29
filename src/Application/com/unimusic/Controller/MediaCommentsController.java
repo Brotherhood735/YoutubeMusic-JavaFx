@@ -42,7 +42,7 @@ public class MediaCommentsController extends UniController {
         VBox.setVgrow(mainArea, Priority.ALWAYS);
     }
     protected void loadComments() {
-        currentMediaComments = dataManager.loadComments(currentMedia.getId());
+        currentMediaComments = dataManager.loadComments(currentMedia.getId(), depthLevel);
     }
     protected void populateSection()
     {
@@ -80,7 +80,7 @@ public class MediaCommentsController extends UniController {
     @FXML
     protected void sendComment()
     {
-        dataManager.saveComment(currentMediaComments, createComment());
+        dataManager.saveComment(currentMediaComments, createComment(), depthLevel);
         loadComments();
         populateSection();
     }
@@ -88,11 +88,11 @@ public class MediaCommentsController extends UniController {
     // elements and internal datas
     protected UniComment  createComment()
     {
-        double mediaId = currentMedia.getId();
-        double commentId = currentMediaComments.getLast().getId() + 1;
+        int mediaId = currentMedia.getId();
+        int commentId = currentMediaComments.size() + 1;
         String commentText = commentField.getText();
         String username = AuthManager.getUser();
-        return new UniComment(null, commentId, mediaId, username, commentText);
+        return new UniComment(null, commentId, mediaId, username, commentText, depthLevel);
     }
     @Override
     public void setContent(Node content, int Idx)

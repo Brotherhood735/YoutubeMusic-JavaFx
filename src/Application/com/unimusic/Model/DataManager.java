@@ -9,22 +9,35 @@ import java.util.List;
 import java.util.Map;
 
 public class DataManager {
+        private ArrayList<UniComment> comments = new ArrayList<>();
         private final String COMMENTS_CSV_HEADER = "id_comment,id_media,id_parent,username,comment";
         private Map<String, User> users = new HashMap<>();
 
         public DataManager() {
             ensureUsersCsvExists();
             loadUsers();
+            loadAllComments();
         }
 
-        /**
+    private void loadAllComments()
+    {
+        int i = 0;
+        while (checkCsvExists(AppConfig.COMMENTS_CSV_PATH + i + ".csv"))
+        {
+            comments.addAll(loadComments(i));
+            i++;
+        }
+    }
+
+    /**
          * Make sure the CSV file exists, create it if needed
          */
         private void ensureUsersCsvExists() {
             ensureCsvExists(AppConfig.USERS_CSV_PATH, "username,password,is_admin\n", "admin,admin,1\n");
         }
-        private void ensureCommentsCsvExists() {
-            ensureCsvExists(AppConfig.COMMENTS_CSV_PATH, COMMENTS_CSV_HEADER + "\n", "");
+        private void ensureCommentsCsvExists(int depthLevel)
+        {
+            ensureCsvExists(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv", COMMENTS_CSV_HEADER + "\n", "");
         }
         private void ensureCsvExists(String csvPath, String csvHeader, String defaultRow)
         {
@@ -45,6 +58,37 @@ public class DataManager {
                 } catch (IOException e) {
                     System.err.println("Error creating users CSV file: " + e.getMessage());
                 }
+            }
+        }
+        private boolean checkCsvExists(String csvPath)
+        {
+            File csvFile = new File(csvPath);
+            if (!csvFile.exists()) {
+                return false;
+            }
+            return true;
+        }
+        private void createCsvFile(String csvPath, String csvHeader, String defaultRow)
+        {
+            File csvFile = new File(csvPath);
+            try
+            {
+                // Create parent directories if they don't exist
+                File parentDir = csvFile.getParentFile();
+                if (parentDir != null)
+                {
+                    parentDir.mkdirs();
+                }
+                // Create the file and write headers
+                try (FileWriter writer = new FileWriter(csvFile))
+                {
+                    writer.write(csvHeader);
+                    writer.write(defaultRow);
+                }
+            }
+            catch (IOException e)
+            {
+                System.err.println("Error creating users CSV file: " + e.getMessage());
             }
         }
         /**
@@ -69,25 +113,28 @@ public class DataManager {
                 System.err.println("Error loading users from CSV: " + e.getMessage());
             }
         }
+
         // with id we mean the media id
-        public ArrayList<UniComment> loadComments(double id) {
-            ensureCommentsCsvExists();
+        public ArrayList<UniComment> loadComments(double id, int depthLevel) {
+            ensureCommentsCsvExists(depthLevel);
             ArrayList<UniComment> comments = new ArrayList<>();
 
-            try (BufferedReader reader = new BufferedReader(new FileReader(AppConfig.COMMENTS_CSV_PATH))) {
+            try (BufferedReader reader = new BufferedReader(
+                    new FileReader(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv"))) {
                 String line;
                 // Skip header line
                 reader.readLine();
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.split(",");
                     if (parts.length >= 4) {
-                        double media_id = Double.parseDouble(parts[1]);
+                        int media_id =  Integer.parseInt(parts[1]);
                         if (media_id != id){ continue; }
 
-                        double comment_id = Double.parseDouble(parts[0]);
-                        String username = parts[2];
-                        String comment = parts[3];
-                        comments.add(new UniComment(comment_id, media_id, username, comment));
+                        int comment_id = Integer.parseInt(parts[0]);
+                        int parent_id =  Integer.parseInt(parts[2]);
+                        String username = parts[3];
+                        String comment = parts[4];
+                        comments.add(new UniComment(getParentComment(parent_id), comment_id, media_id, username, comment, depthLevel));
                     }
                 }
             } catch (IOException e) {
@@ -95,45 +142,85 @@ public class DataManager {
             }
             return comments;
         }
-        private UniComment getCommentFromCsv(double id)
-        {
-            ensureCommentsCsvExists();
-            UniComment comment;
+    public ArrayList<UniComment> loadComments(double id, int depthLevel, boolean getOnlyParentComments) {
+        ensureCommentsCsvExists(depthLevel);
+        ArrayList<UniComment> comments = new ArrayList<>();
 
-            try (BufferedReader reader = new BufferedReader(new FileReader(AppConfig.COMMENTS_CSV_PATH))) {
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv"))) {
+            String line;
+            // Skip header line
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 4) {
+                    int media_id =  Integer.parseInt(parts[1]);
+                    int comment_id = Integer.parseInt(parts[0]);
+                    int parent_id =  Integer.parseInt(parts[2]);
+                    if (getOnlyParentComments)
+                    {
+                        if (parent_id != id) continue;
+                    }
+                    else
+                    {
+                        if (media_id != id){ continue; }
+                    }
+                    String username = parts[3];
+                    String comment = parts[4];
+                    comments.add(new UniComment(getParentComment(parent_id), comment_id, media_id, username, comment, depthLevel));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading comments from CSV: " + e.getMessage());
+        }
+        return comments;
+    }
+        public ArrayList<UniComment> loadComments(int depthLevel) {
+            ArrayList<UniComment> comments = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(
+                    new FileReader(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv"))) {
                 String line;
                 // Skip header line
                 reader.readLine();
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.split(",");
                     if (parts.length >= 4) {
-                        double comment_id = Double.parseDouble(parts[0]);
-                        if (comment_id != id){ continue; }
-
-                        double media_id = Double.parseDouble(parts[1]);
+                        int comment_id =  Integer.parseInt(parts[0]);
+                        int media_id =  Integer.parseInt(parts[1]);
+                        int parent_id =  Integer.parseInt(parts[2]);
                         String username = parts[3];
                         String comment = parts[4];
-                        double parent_id = Double.parseDouble(parts[2]);
-                        if(parent_id != -1)
-                        {
-                            comment = new UniComment(getCommentFromCsv(parent_id), comment_id, media_id, username, comment));
-                        }
-                        comment = new UniComment(null, comment_id, media_id, username, comment));
+                        comments.add(new UniComment(
+                                getParentComment(parent_id), comment_id, media_id, username, comment, depthLevel));
                     }
                 }
             } catch (IOException e) {
                 System.err.println("Error loading comments from CSV: " + e.getMessage());
             }
+            return comments;
         }
-    private void saveAllComments(List<UniComment> comments) {
+
+    private UniComment getParentComment(int parentId) {
+            for (UniComment comment : comments) {
+               if (comment.getId() == parentId) {
+                   return comment;
+               }
+            }
+            // return null if no parent comment was found meaning this will be a parent comment for others.
+            return null;
+    }
+
+    private void saveAllComments(List<UniComment> comments, int depthLevel) {
         String isAdmin;
-        try (FileWriter writer = new FileWriter(AppConfig.COMMENTS_CSV_PATH)) {
+        try (FileWriter writer = new FileWriter(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv")) {
             // Write header
             writer.write(COMMENTS_CSV_HEADER + "\n");
 
             // Write users
             for (UniComment comment : comments) {
-                writer.write(comment.getId() + "," + comment.getMediaId() + "," + comment.getUsername() + "," + comment.getComment() +  "\n");
+                if (comment.getDepth() != depthLevel) continue;
+                String parent = comment.getParent() != null ? String.valueOf(comment.getParent().getId()) : "-1";
+                writer.write(comment.getId() + "," + comment.getMediaId() + "," + parent + ',' + comment.getUsername() + "," + comment.getComment() +  "\n");
             }
         } catch (IOException e) {
             System.err.println("Error saving comments to CSV: " + e.getMessage());
@@ -167,11 +254,12 @@ public class DataManager {
             users.put(user.getUsername(), user);
             saveAllUsers();
         }
-        public void saveComment(List<UniComment> comments, UniComment comment) {
+        public void saveComment(List<UniComment> controllerComments, UniComment comment, int depthLevel) {
             comments.add(comment);
-            saveAllComments(comments);
+            controllerComments.add(comment);
+            saveAllComments(comments, depthLevel);
         }
-        public void deleteComment(List<UniComment> comments, double comment_id)
+        public void deleteComment(List<UniComment> comments, double comment_id, int depthLevel)
         {
             for (UniComment comment : comments)
             {
@@ -181,7 +269,7 @@ public class DataManager {
 
                 }
             }
-            saveAllComments(comments);
+            saveAllComments(comments, depthLevel);
         }
         /**
          * Delete a user from the repository

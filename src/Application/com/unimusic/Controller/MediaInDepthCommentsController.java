@@ -1,5 +1,6 @@
 package com.unimusic.Controller;
 
+import com.unimusic.Model.AuthManager;
 import com.unimusic.Model.UniComment;
 import com.unimusic.Model.UniMedia;
 import com.unimusic.View.NavigationHandler;
@@ -32,6 +33,11 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
         parentCommentLabel.setText(currentComment.getComment());
     }
 
+    @Override
+    protected void loadComments() {
+        currentMediaComments = dataManager.loadComments(currentComment.getId(), depthLevel, true);
+    }
+
     @FXML
     private void onReturnHandler()
     {
@@ -42,7 +48,7 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
             return;
         }
         // otherwise go to a lower depth in comment section
-        NavigationHandler.navigateToInDepthCommentSection(currentMedia, previousComment, null, depthLevel - 1);
+        NavigationHandler.navigateToInDepthCommentSection(currentMedia, previousComment, previousComment.getParent(), depthLevel - 1);
     }
 
     @Override
@@ -51,6 +57,16 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
     }
     private void populateComments() {
 
+    }
+
+    @Override
+    protected UniComment createComment() {
+        int mediaId = currentMedia.getId();
+        int commentId = Integer.parseInt(String.valueOf(currentComment.getId()) + (currentMediaComments.size() + 1));
+        String commentText = commentField.getText();
+        String username = AuthManager.getUser();
+        UniComment parentComment = currentComment;
+        return new UniComment(parentComment, commentId, mediaId, username, commentText, depthLevel);
     }
 
     @Override

@@ -1,18 +1,21 @@
 package com.unimusic.Model;
 
 public class UniComment extends UniData{
-    private double mediaId;
+    private int depth;
+    private int mediaId;
     private String username;
     private String comment;
     private UniComment parentComment;
-    public UniComment(UniComment parentComment, double commentId, double mediaId,  String username, String comment){
+    public UniComment(UniComment parentComment, int commentId, int mediaId,  String username, String comment, int depth){
+        this.dataId = (int)commentId;
         this.mediaId = mediaId;
         this.username = username;
         this.comment = comment;
         this.parentComment = parentComment;
+        this.depth = depth;
     }
 
-    public double getMediaId() {
+    public int getMediaId() {
         return mediaId;
     }
 
@@ -25,4 +28,11 @@ public class UniComment extends UniData{
     }
 
 
+    public int getDepth() {
+        return depth;
+    }
+
+    public UniComment getParent() {
+        return parentComment;
+    }
 }
