@@ -158,14 +158,15 @@ public class NavigationHandler {
         navigateToHome();
     }
 
-    public static void navigateToInDepthCommentSection(UniMedia media, UniComment comment)
+    public static void navigateToInDepthCommentSection(UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
     {
         if (AuthManager.isAuthenticated()) {
             loadMediaView("MediaCommentsInDepth.fxml", c -> {
-                return new MediaInDepthCommentsController(media, comment);
+                return new MediaInDepthCommentsController(media, currentComment, previousComment, depthLevel);
             });
         } else {
             navigateToLogin();
         }
     }
+
 }

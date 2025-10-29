@@ -74,8 +74,7 @@ public class MediaCommentsController extends UniController {
 
     private void onDepthCommentRequest(UniMedia media,  UniComment comment)
     {
-        NavigationHandler.navigateToInDepthCommentSection(media, comment);
-
+        NavigationHandler.navigateToInDepthCommentSection(media, comment, null, depthLevel + 1);
     }
 
     @FXML
