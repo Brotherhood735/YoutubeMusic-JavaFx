@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DataManager {
-        private ArrayList<UniComment> comments = new ArrayList<>();
+    private ArrayList<UniComment> comments = new ArrayList<>();
+    private ArrayList<UniMedia> media = new ArrayList<>();
         private final String COMMENTS_CSV_HEADER = "id_comment,id_media,id_parent,username,comment";
         private Map<String, User> users = new HashMap<>();
 
@@ -199,7 +200,61 @@ public class DataManager {
             }
             return comments;
         }
-
+    public ArrayList<UniMedia> loadMedia() {
+        ArrayList<UniMedia> media = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(AppConfig.UNI_MEDIA_CSV_PATH))) {
+            String line;
+            // Skip header line
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 4) {
+                    String title =  parts[0];
+                    String videoUrl =  parts[1];
+                    String audioUrl =  parts[2];
+                    String webUrl =  parts[3];
+                    String artist =  parts[4];
+                    String imageUrl = parts[5];
+                    String type = parts[6];
+                    media.add(new UniMedia(title, videoUrl, audioUrl, webUrl, artist, imageUrl, type));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading comments from CSV: " + e.getMessage());
+        }
+        return media;
+    }
+    public ArrayList<UniMedia> loadMediaWithInterval(int start, int end) {
+        ArrayList<UniMedia> media = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(AppConfig.UNI_MEDIA_CSV_PATH))) {
+            String line;
+            // Skip header line
+            reader.readLine();
+            // skip to startpoint
+            for (int i = 0; i < start; i++) {
+                reader.readLine();
+            }
+            for (int i = start; i < end; i++) {
+                line = reader.readLine();
+                String[] parts = line.split(",");
+                if (parts.length >= 4) {
+                    String title =  parts[0];
+                    String videoUrl =  parts[1];
+                    String audioUrl =  parts[2];
+                    String webUrl =  parts[3];
+                    String artist =  parts[4];
+                    String imageUrl = parts[5];
+                    String type = parts[6];
+                    media.add(new UniMedia(title, videoUrl, audioUrl, webUrl, artist, imageUrl, type));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading comments from CSV: " + e.getMessage());
+        }
+        return media;
+    }
     private UniComment getParentComment(int parentId) {
             for (UniComment comment : comments) {
                if (comment.getId() == parentId) {

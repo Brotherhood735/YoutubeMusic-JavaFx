@@ -44,7 +44,7 @@
       </VBox>
       <HBox alignment="CENTER_RIGHT" prefWidth="300" spacing="10">
          <children>
-            <Button styleClass="small-btn" text="🔊" />
+            <Button fx:id="muteAudibleBtn" onAction="#onMuteAudible" styleClass="small-btn" text="🔊" />
             <Slider fx:id="volumeSlider" max="100" min="0" prefWidth="100" value="70" />
          </children>
       </HBox>

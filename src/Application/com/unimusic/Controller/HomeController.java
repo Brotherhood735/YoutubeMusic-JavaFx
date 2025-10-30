@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class HomeController extends UniController {
     @FXML private BorderPane homeContainer;
+    private static MediaMainController mediaMainController;
     private UniController parentController;
     private static MediaControlController mediaControl;
     @FXML private ScrollPane mainViewArea;
@@ -25,15 +28,17 @@ public class HomeController extends UniController {
         parentController = Main.mainController;
         NavigationHandler.setHomeController(this);
         loadDefaultHomeView();
-        loadMediaControlView("MediaControl.fxml");
 
     }
 
     private void loadMediaControlView(String fxml)
     {
+        //if the media control is already initilized we don't need to restart it
+        if(mediaControl != null) return;
         try {
             FXMLLoader loader = NavigationHandler.getLoader(fxml);
             Node view = loader.load();
+            mediaControl = loader.getController();
             homeContainer.setBottom(view);
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,15 +46,13 @@ public class HomeController extends UniController {
         }
     }
 
-    public static void setMediaController(MediaControlController mediaControlController) {
-        mediaControl = mediaControlController;
+    public static void setMediaMainController(MediaMainController controller) {
+        mediaMainController = controller;
     }
-
     private void setupFilters(VBox vBox) {
         HBox hBox = new HBox();
         hBox.setPrefHeight(0);
-        String[] filterNames = {"Podcasts", "Energise", "Feel good", "Relax", "Work out",
-                "Party", "Commute", "Focus", "Romance", "Sad", "Sleep"};
+        String[] filterNames = {"Songs", "Concerts"};
 
         for (String name : filterNames) {
             Button btn = new Button(name);
@@ -62,7 +65,6 @@ public class HomeController extends UniController {
     private void loadDefaultHomeView()
     {
         VBox vBox = new VBox();
-
         // populate the VBOX
         setupFilters(vBox);
         loadMusicSections(vBox);
@@ -70,12 +72,18 @@ public class HomeController extends UniController {
     }
     private void loadMusicSections(VBox vBox) {
         // Sezione "Listen again"
-        VBox listenAgainSection = createSection("Listen again", getSampleData1());
+        VBox listenAgainSection = createSection("", Main.getDataManager().loadMediaWithInterval(0, 6));
         vBox.getChildren().add(listenAgainSection);
 
         // Sezione "Forgotten favourites"
-        VBox forgottenSection = createSection("Forgotten favourites", getSampleData2());
+        VBox forgottenSection = createSection("", Main.getDataManager().loadMediaWithInterval(6, 12));
         vBox.getChildren().add(forgottenSection);
+        VBox forgottenSection2 = createSection("", Main.getDataManager().loadMediaWithInterval(12, 18));
+        vBox.getChildren().add(forgottenSection2);
+        VBox forgottenSection3 = createSection("", Main.getDataManager().loadMediaWithInterval(18, 24));
+        vBox.getChildren().add(forgottenSection3);
+        VBox forgottenSection4 = createSection("", Main.getDataManager().loadMediaWithInterval(24, 30));
+        vBox.getChildren().add(forgottenSection4);
     }
 
     private VBox createSection(String title, List<UniMedia> items) {
@@ -113,20 +121,18 @@ public class HomeController extends UniController {
         imageContainer.setMaxSize(180, 180);
 
         // Placeholder image
-        Region imagePlaceholder = new Region();
-        imagePlaceholder.setPrefSize(180, 180);
-        imagePlaceholder.setStyle("-fx-background-color: linear-gradient(to bottom right, #" +
-                getRandomColor() + ", #" + getRandomColor() + "); -fx-background-radius: 8;");
-
-
-        imageContainer.getChildren().addAll(imagePlaceholder);
+        ImageView imagePlaceHolder = new ImageView(new Image(item.getThumbnailUrl()));
+        imagePlaceHolder.setFitWidth(130);
+        imagePlaceHolder.setFitHeight(130);
+        imagePlaceHolder.setPreserveRatio(true);
+        imageContainer.getChildren().addAll(imagePlaceHolder);
 
         // Hover effects
         imageContainer.setOnMouseEntered(e -> {
-            imagePlaceholder.setOpacity(0.7);
+            imagePlaceHolder.setOpacity(0.7);
         });
         imageContainer.setOnMouseExited(e -> {
-            imagePlaceholder.setOpacity(1.0);
+            imagePlaceHolder.setOpacity(1.0);
         });
 
         imageContainer.setOnMouseClicked(e -> onCardClick(item));
@@ -136,7 +142,7 @@ public class HomeController extends UniController {
         titleLabel.setWrapText(true);
         titleLabel.setMaxWidth(180);
 
-        Label artistLabel = new Label(item.type + " • " + item.getArtist());
+        Label artistLabel = new Label(item.getType() + " • " + item.getArtist());
         artistLabel.setWrapText(true);
         artistLabel.setMaxWidth(180);
 
@@ -168,6 +174,15 @@ public class HomeController extends UniController {
     }
 
     private void onCardClick(UniMedia item) {
+        loadMediaControlView("MediaControl.fxml");
+        if (mediaMainController != null) {
+            if(item.getId() == mediaMainController.getCurrentMedia().getId())
+            {
+                setContent(mediaMainController.getView(), 0);
+                return;
+            }
+        }
+        mainViewArea.setContent(null);
         NavigationHandler.navigateToMediaPlay(item);
         System.out.println("Playing: " + item.getTitle());
     }
@@ -180,27 +195,6 @@ public class HomeController extends UniController {
         return colors[(int)(Math.random() * colors.length)];
     }
 
-    // Data methods - sostituisci con lettura CSV
-    private List<UniMedia> getSampleData1() {
-        List<UniMedia> items = new ArrayList<>();
-        items.add(new UniMedia("P-POP CULTURE","", "Karan Aujla & Ikky", null, MediaType.AudioFile));
-        items.add(new UniMedia("Convo", "","Chinna, Cheema Y and Gur Sidhu", null, MediaType.AudioFile));
-        items.add(new UniMedia("Karan Aujla", "", "4.59M subscribers", null, MediaType.AudioFile));
-        items.add(new UniMedia("Street Knowledge","", "Wazir Patar", null, MediaType.AudioFile));
-        items.add(new UniMedia("Culture Clicks", "",  "Navaan Sandhu", null, MediaType.AudioFile));
-        items.add(new UniMedia("Bachfun*up", "","Karan Aujla", null, MediaType.AudioFile));
-        return items;
-    }
-
-    private List<UniMedia> getSampleData2() {
-        List<UniMedia> items = new ArrayList<>();
-        items.add(new UniMedia("Get Rich","", "50 Cent", null, MediaType.AudioFile));
-        items.add(new UniMedia("Summer Vibes","", "Various Artists", null, MediaType.AudioFile));
-        items.add(new UniMedia("Random Access","", "Daft Punk", null, MediaType.AudioFile));
-        items.add(new UniMedia("Nostalgia Mix", "","Various Artists", null, MediaType.AudioFile));
-        items.add(new UniMedia("Classic Hip Hop", "", "Various Artists", null, MediaType.AudioFile));
-        return items;
-    }
 
     @Override
     public void setContent(Node content, int Idx) {

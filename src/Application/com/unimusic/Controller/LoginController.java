@@ -21,7 +21,7 @@ public class LoginController  extends UniController {
     @FXML
     private Label statusLabel;
 
-    private DataManager dataManager;
+    private  DataManager dataManager;
 
     @FXML
     public void initialize() {

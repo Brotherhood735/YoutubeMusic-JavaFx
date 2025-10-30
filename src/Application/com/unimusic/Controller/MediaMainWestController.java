@@ -48,7 +48,7 @@ public class MediaMainWestController extends UniController {
     @FXML
     private void onVideoRequest()
     {
-        videoRenderer = new VideoRenderer(AppConfig.DATA_DIR + "/one piece.mp4");
+        videoRenderer = new VideoRenderer(AppConfig.DATA_DIR + "/tutor.mp4");
         MediaPlayer video = videoRenderer.getVideo();
 
         mediaView.setPreserveRatio(true);

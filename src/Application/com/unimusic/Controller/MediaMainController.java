@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -24,6 +25,7 @@ public class MediaMainController extends UniController {
     private static MediaMainWestController westController;
     private UniMedia currentMedia;
 
+    @FXML private BorderPane root;
     @FXML private AnchorPane eastArea;
     @FXML private AnchorPane westArea;
     public MediaMainController(UniMedia media)
@@ -34,6 +36,7 @@ public class MediaMainController extends UniController {
     @FXML
     public void initialize() {
         NavigationHandler.setMediaController(this);
+        HomeController.setMediaMainController(this);
         loadView("MediaMainEast.fxml", eastArea,
                 c -> { return new MediaMainEastController(currentMedia, eastArea);});
         loadView("MediaMainWest.fxml", westArea,

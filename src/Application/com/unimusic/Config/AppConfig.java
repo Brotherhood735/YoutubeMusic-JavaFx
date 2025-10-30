@@ -11,11 +11,11 @@ public class AppConfig {
     // Data storage settings
     public static final String DATA_DIR = "src/resources/data";
     public static final String USERS_CSV_PATH = DATA_DIR + "/users.csv";
-    public static final String MUSIC_ITEMS_CSV_PATH = DATA_DIR + "/uniMedia.csv";
 
     // Navigation Settings
     public static final double HOME_MEDIA_PLAY_AREA_IDX = 0;
     public static final String COMMENTS_CSV_PATH = DATA_DIR + "/comments depth level";
+    public static final String UNI_MEDIA_CSV_PATH = DATA_DIR + "/uniMedia.csv";
 
     // Create data directory if it doesn't exist
     static {

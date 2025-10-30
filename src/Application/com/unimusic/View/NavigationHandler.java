@@ -60,6 +60,9 @@ public class NavigationHandler {
         try {
             FXMLLoader loader = getLoader(fxml);
             Node view = loader.load();
+            UniController newController = loader.getController();
+
+            newController.setView(view);
             controller.setContent(view, 0);
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,6 +75,8 @@ public class NavigationHandler {
             FXMLLoader loader = getLoader(fxml);
             loader.setControllerFactory(controllerFactory);
             Node view = loader.load();
+            UniController newController = loader.getController();
+            newController.setView(view);
             controller.setContent(view, 0);
         } catch (IOException e) {
             e.printStackTrace();

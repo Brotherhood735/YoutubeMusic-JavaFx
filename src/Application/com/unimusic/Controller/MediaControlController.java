@@ -17,9 +17,10 @@ public class MediaControlController extends UniController
 
     private VideoRenderer renderer;
     private UniMedia currentMedia;
-
+    private boolean canModifyProgressBar;
 
     @FXML private Button playPauseBtn;
+    @FXML private Button muteAudibleBtn;
     @FXML private Label nowPlayingTitle;
     @FXML private Label nowPlayingArtist;
     @FXML private Slider progressBar;
@@ -27,11 +28,13 @@ public class MediaControlController extends UniController
     @FXML private Label timeStart;
     @FXML private Label timeEnd;
     private boolean isPlaying = false;
+    private boolean isMute = false;
 
     public void setData(VideoRenderer renderer, UniMedia media, boolean isPlaying)
     {
         this.renderer = renderer;
         this.currentMedia = media;
+        canModifyProgressBar = true;
         setNowPlaying(media.getTitle(), media.getArtist());
         setDuration();
         onPlayPause();
@@ -46,20 +49,42 @@ public class MediaControlController extends UniController
             int minutes = ((int) m.getDuration().toMinutes());
             double seconds = m.getDuration().toSeconds() - (minutes * 60);
             timeEnd.setText(String.valueOf(minutes) + ":" + String.format("%02d", (int)seconds));
+            progressBar.setMax(m.getDuration().toSeconds());
+            progressBar.setValue(0);
+
+            volumeSlider.setMin(0);
+            volumeSlider.setMax(1);
+            volumeSlider.setValue(0.5);
+            media.setVolume(volumeSlider.getValue());
         });
         media.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
             int minutes = ((int) newTime.toMinutes());
             double seconds = newTime.toSeconds() - (minutes * 60);
             timeStart.setText(String.valueOf(minutes) + ":" + String.format("%02d", (int)seconds));
-
+            if (!canModifyProgressBar) return;
+            progressBar.setValue(newTime.toSeconds());
         });
+        progressBar.setOnMouseClicked(event -> {canModifyProgressBar = false;});
+        progressBar.setOnMouseReleased((obs) ->
+        {
+            media.seek(Duration.seconds(progressBar.getValue()));
+            canModifyProgressBar = true;
+        });
+        volumeSlider.setMin(0);
+        volumeSlider.setMax(1);
+        volumeSlider.setValue(0.5);
+        media.setVolume(volumeSlider.getValue());
+        volumeSlider.setOnMouseReleased(
+                event -> {
+                    media.setVolume(volumeSlider.getValue());
+                }
+        );
     }
 
 
     @FXML
     private void initialize()
     {
-        HomeController.setMediaController(this);
         MediaMainController.setBottomController(this);
     }
 
@@ -70,6 +95,18 @@ public class MediaControlController extends UniController
         playPauseBtn.setText(isPlaying ? "⏸" : "▶");
         setRendererPlay(isPlaying);
     }
+    @FXML
+    private void onMuteAudible()
+    {
+        isMute = !isMute;
+        muteAudibleBtn.setText(isMute ? "X" : "\uD83D\uDD0A");
+        setRendererMute(isMute);
+    }
+
+    private void setRendererMute(boolean isMute) {
+        renderer.getVideo().setMute(isMute);
+    }
+
     private void setRendererPlay(boolean isPlaying)
     {
         if (isPlaying)
