@@ -44,7 +44,7 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
         // go to the main commments section
         if (depthLevel == 1)
         {
-            NavigationHandler.navigateToMediaPlay(currentMedia);
+            NavigationHandler.navigateToMainCommentsSection(currentMedia);
             return;
         }
         // otherwise go to a lower depth in comment section

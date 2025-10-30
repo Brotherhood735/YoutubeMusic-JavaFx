@@ -3,32 +3,46 @@ import com.unimusic.Main;
 import com.unimusic.Model.*;
 import com.unimusic.View.NavigationHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeController extends UniController {
-
+    @FXML private BorderPane homeContainer;
     private UniController parentController;
-    @FXML private Button playPauseBtn;
-    @FXML private Label nowPlayingTitle;
-    @FXML private Label nowPlayingArtist;
-    @FXML private Slider progressBar;
-    @FXML private Slider volumeSlider;
-    @FXML private Label timeStart;
-    @FXML private Label timeEnd;
+    private static MediaControlController mediaControl;
     @FXML private ScrollPane mainViewArea;
-    private boolean isPlaying = false;
 
     @FXML
     public void initialize() {
         parentController = Main.mainController;
         NavigationHandler.setHomeController(this);
         loadDefaultHomeView();
+        loadMediaControlView("MediaControl.fxml");
+
+    }
+
+    private void loadMediaControlView(String fxml)
+    {
+        try {
+            FXMLLoader loader = NavigationHandler.getLoader(fxml);
+            Node view = loader.load();
+            homeContainer.setBottom(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading view: " + fxml);
+        }
+    }
+
+    public static void setMediaController(MediaControlController mediaControlController) {
+        mediaControl = mediaControlController;
     }
 
     private void setupFilters(VBox vBox) {
@@ -52,7 +66,6 @@ public class HomeController extends UniController {
         // populate the VBOX
         setupFilters(vBox);
         loadMusicSections(vBox);
-
         mainViewArea.setContent(vBox);
     }
     private void loadMusicSections(VBox vBox) {
@@ -155,27 +168,10 @@ public class HomeController extends UniController {
     }
 
     private void onCardClick(UniMedia item) {
-        nowPlayingTitle.setText(item.getTitle());
-        nowPlayingArtist.setText(item.getArtist());
         NavigationHandler.navigateToMediaPlay(item);
         System.out.println("Playing: " + item.getTitle());
     }
 
-    @FXML
-    private void onPlayPause() {
-        isPlaying = !isPlaying;
-        playPauseBtn.setText(isPlaying ? "⏸" : "▶");
-    }
-
-    @FXML
-    private void onPrevious() {
-        System.out.println("Previous track");
-    }
-
-    @FXML
-    private void onNext() {
-        System.out.println("Next track");
-    }
 
     // Helper methods
     private String getRandomColor() {

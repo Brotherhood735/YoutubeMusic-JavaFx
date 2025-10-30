@@ -62,7 +62,7 @@ public class MediaCommentsController extends UniController {
 
         VBox commentBox = new VBox();
 
-
+        commentLabel.setWrapText(true);
         usernameLabel.setOpacity(0.5);
         Insets insets = new Insets(5,5,5,5);
         commentBox.setPadding(insets);

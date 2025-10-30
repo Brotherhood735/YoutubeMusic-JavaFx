@@ -6,8 +6,8 @@ public class AppConfig {
 
     // Application settings
     public static final String APP_TITLE = "Uni Music - JavaFX Version";
-    public static final double APP_WIDTH = 1000;
-    public static final double APP_HEIGHT = 800;
+    public static final double APP_WIDTH = 1400;
+    public static final double APP_HEIGHT = 950;
     // Data storage settings
     public static final String DATA_DIR = "src/resources/data";
     public static final String USERS_CSV_PATH = DATA_DIR + "/users.csv";
