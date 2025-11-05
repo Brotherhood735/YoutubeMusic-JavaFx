@@ -3,27 +3,22 @@ package com.unimusic.Controller;
 import com.unimusic.Main;
 import com.unimusic.Model.*;
 import com.unimusic.View.NavigationHandler;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class MediaCommentsController extends UniController {
 
     protected ArrayList<UniComment> currentMediaComments;
     protected UniMedia currentMedia;
-    protected DataManager dataManager;
+    protected CsvDataManager csvDataManager;
     protected int depthLevel = 0;
     @FXML protected VBox commentsArea;
     @FXML protected VBox mainArea;
@@ -35,14 +30,14 @@ public class MediaCommentsController extends UniController {
     }
     @FXML
     public void initialize() {
-        dataManager = Main.getDataManager();
+        csvDataManager = Main.getDataManager();
         loadComments();
         // once we have all the comments on that specific media we can populate the UI
         populateSection();
         VBox.setVgrow(mainArea, Priority.ALWAYS);
     }
     protected void loadComments() {
-        currentMediaComments = dataManager.loadComments(currentMedia.getId(), depthLevel);
+        currentMediaComments = csvDataManager.loadComments(currentMedia.getId(), depthLevel);
     }
     protected void populateSection()
     {
@@ -80,7 +75,9 @@ public class MediaCommentsController extends UniController {
     @FXML
     protected void sendComment()
     {
-        dataManager.saveComment(currentMediaComments, createComment(), depthLevel);
+
+        csvDataManager.saveComment(createComment(), depthLevel);
+        currentMediaComments = csvDataManager.loadComments(currentMedia.getId(), depthLevel);
         loadComments();
         populateSection();
     }

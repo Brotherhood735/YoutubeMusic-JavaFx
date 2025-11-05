@@ -2,9 +2,8 @@ package com.unimusic.Controller;
 
 import com.unimusic.Main;
 import com.unimusic.Model.UniController;
-import com.unimusic.Model.UniData;
 import com.unimusic.Model.User;
-import com.unimusic.Model.DataManager;
+import com.unimusic.Model.CsvDataManager;
 import com.unimusic.View.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -25,11 +24,11 @@ public class RegisterController extends UniController {
     @FXML
     private Label statusLabel;
 
-    private DataManager dataManager;
+    private CsvDataManager csvDataManager;
 
     @FXML
     public void initialize() {
-        dataManager = Main.getDataManager();
+        csvDataManager = Main.getDataManager();
         statusLabel.setVisible(false);
     }
 
@@ -45,7 +44,7 @@ public class RegisterController extends UniController {
             return;
         }
 
-        if (dataManager.usernameExists(username)) {
+        if (csvDataManager.usernameExists(username)) {
             showError("Username already exists");
             return;
         }
@@ -57,7 +56,7 @@ public class RegisterController extends UniController {
 
         // Create and save new user
         User newUser = User.create(username, password);
-        dataManager.saveUser(newUser);
+        csvDataManager.saveUser(newUser);
 
         // Show success message
         showSuccess("Registration successful! Please log in.");

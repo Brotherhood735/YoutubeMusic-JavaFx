@@ -35,7 +35,7 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
 
     @Override
     protected void loadComments() {
-        currentMediaComments = dataManager.loadComments(currentComment.getId(), depthLevel, true);
+        currentMediaComments = csvDataManager.loadComments(currentComment.getId(), depthLevel, true);
     }
 
     @FXML

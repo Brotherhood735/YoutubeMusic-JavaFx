@@ -1,4 +1,6 @@
 package com.unimusic.Controller;
+import com.almasb.fxgl.ui.FontFactory;
+import com.unimusic.Config.AppConfig;
 import com.unimusic.Main;
 import com.unimusic.Model.*;
 import com.unimusic.View.NavigationHandler;
@@ -10,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +21,7 @@ import java.util.List;
 
 public class HomeController extends UniController {
     @FXML private BorderPane homeContainer;
+    private VBox homePage;
     private static MediaMainController mediaMainController;
     private UniController parentController;
     private static MediaControlController mediaControl;
@@ -64,89 +68,95 @@ public class HomeController extends UniController {
     }
     private void loadDefaultHomeView()
     {
-        VBox vBox = new VBox();
+        mainViewArea.setFitToHeight(false);
+        mainViewArea.setFitToWidth(false);
+        if (homePage != null)
+        {
+            mainViewArea.setContent(homePage);
+            return;
+        }
+        homePage = new VBox(15);
+        homePage.setStyle("-fx-box-border: transparent;");
         // populate the VBOX
-        setupFilters(vBox);
-        loadMusicSections(vBox);
-        mainViewArea.setContent(vBox);
+        setupFilters(homePage);
+        loadMusicSections(homePage);
+        mainViewArea.setContent(homePage);
     }
     private void loadMusicSections(VBox vBox) {
         // Sezione "Listen again"
-        VBox listenAgainSection = createSection("", Main.getDataManager().loadMediaWithInterval(0, 6));
+        ScrollPane listenAgainSection = createSection("", Main.getDataManager().loadMediaWithInterval(0, 6));
         vBox.getChildren().add(listenAgainSection);
 
         // Sezione "Forgotten favourites"
-        VBox forgottenSection = createSection("", Main.getDataManager().loadMediaWithInterval(6, 12));
+        ScrollPane forgottenSection = createSection("", Main.getDataManager().loadMediaWithInterval(6, 12));
         vBox.getChildren().add(forgottenSection);
-        VBox forgottenSection2 = createSection("", Main.getDataManager().loadMediaWithInterval(12, 18));
+        ScrollPane forgottenSection2 = createSection("", Main.getDataManager().loadMediaWithInterval(12, 18));
         vBox.getChildren().add(forgottenSection2);
-        VBox forgottenSection3 = createSection("", Main.getDataManager().loadMediaWithInterval(18, 24));
+        ScrollPane forgottenSection3 = createSection("", Main.getDataManager().loadMediaWithInterval(18, 24));
         vBox.getChildren().add(forgottenSection3);
-        VBox forgottenSection4 = createSection("", Main.getDataManager().loadMediaWithInterval(24, 30));
+        ScrollPane forgottenSection4 = createSection("", Main.getDataManager().loadMediaWithInterval(24, 30));
         vBox.getChildren().add(forgottenSection4);
     }
 
-    private VBox createSection(String title, List<UniMedia> items) {
-        VBox section = new VBox(15);
-
-        // Section header
-        Label titleLabel = new Label(title);
-        titleLabel.getStyleClass().add("section-title");
-
+    private ScrollPane createSection(String title, List<UniMedia> items) {
         // Cards container
         HBox cardsContainer = new HBox(15);
         cardsContainer.setAlignment(Pos.CENTER_LEFT);
-
         for (UniMedia item : items) {
             VBox card = createMusicCard(item);
             cardsContainer.getChildren().add(card);
         }
         ScrollPane cardsScroll = new ScrollPane(cardsContainer);
-        cardsContainer.setFillHeight(true);
-        cardsScroll.setFitToHeight(true); // match height of content
+        cardsScroll.setFitToHeight(false); // match height of content
         cardsScroll.setFitToWidth(false);
-        section.getChildren().addAll(titleLabel, cardsScroll);
-        return section;
+        return cardsScroll;
     }
 
     private VBox createMusicCard(UniMedia item) {
-        VBox card = new VBox(12);
+        VBox card = new VBox();
+        card.setAlignment(Pos.TOP_CENTER);
         card.setPrefWidth(180);
+        card.setPrefHeight(100);
         card.setMaxWidth(180);
         card.setStyle("-fx-cursor: hand;");
 
         // Image container
-        StackPane imageContainer = new StackPane();
-        imageContainer.setPrefSize(180, 180);
-        imageContainer.setMaxSize(180, 180);
-
         // Placeholder image
-        ImageView imagePlaceHolder = new ImageView(new Image(item.getThumbnailUrl()));
-        imagePlaceHolder.setFitWidth(130);
-        imagePlaceHolder.setFitHeight(130);
-        imagePlaceHolder.setPreserveRatio(true);
-        imageContainer.getChildren().addAll(imagePlaceHolder);
-
+        Image image = new Image(item.getThumbnailUrl());
+        ImageView imagePlaceHolder;
+        System.out.println(item.getTitle() + image.heightProperty().intValue() + image.errorProperty().getValue());
+        if (!image.errorProperty().getValue())
+        {
+            imagePlaceHolder = new ImageView(image);
+        }
+        else
+        {
+            URL fxmlUrl = Main.class.getResource("Images/default_music_icon.png");
+            imagePlaceHolder = new ImageView(fxmlUrl.toString());
+        }
+        imagePlaceHolder.setFitWidth(180);
+        imagePlaceHolder.setFitHeight(100);
         // Hover effects
-        imageContainer.setOnMouseEntered(e -> {
+        imagePlaceHolder.setOnMouseEntered(e -> {
             imagePlaceHolder.setOpacity(0.7);
         });
-        imageContainer.setOnMouseExited(e -> {
+        imagePlaceHolder.setOnMouseExited(e -> {
             imagePlaceHolder.setOpacity(1.0);
         });
 
-        imageContainer.setOnMouseClicked(e -> onCardClick(item));
+        imagePlaceHolder.setOnMouseClicked(e -> onCardClick(item));
 
         // Title and artist
         Label titleLabel = new Label(item.getTitle());
-        titleLabel.setWrapText(true);
+        titleLabel.setFont(Font.font("Roboto", 16));
+        titleLabel.setStyle("font-weight: bold;");
         titleLabel.setMaxWidth(180);
 
         Label artistLabel = new Label(item.getType() + " • " + item.getArtist());
-        artistLabel.setWrapText(true);
+        artistLabel.setFont(Font.font("Roboto", 5));
         artistLabel.setMaxWidth(180);
 
-        card.getChildren().addAll(imageContainer, titleLabel, artistLabel);
+        card.getChildren().addAll(imagePlaceHolder, titleLabel, artistLabel);
         return card;
     }
 
@@ -174,6 +184,8 @@ public class HomeController extends UniController {
     }
 
     private void onCardClick(UniMedia item) {
+        mainViewArea.setFitToHeight(true);
+        mainViewArea.setFitToWidth(true);
         loadMediaControlView("MediaControl.fxml");
         if (mediaMainController != null) {
             if(item.getId() == mediaMainController.getCurrentMedia().getId())

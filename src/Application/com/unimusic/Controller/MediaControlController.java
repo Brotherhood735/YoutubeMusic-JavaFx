@@ -2,7 +2,8 @@ package com.unimusic.Controller;
 
 import com.unimusic.Model.UniController;
 import com.unimusic.Model.UniMedia;
-import com.unimusic.View.Components.VideoRenderer;
+import com.unimusic.View.Components.LocalVideoRenderer;
+import com.unimusic.View.Components.MediaRenderer;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -15,7 +16,7 @@ import javafx.util.Duration;
 public class MediaControlController extends UniController
 {
 
-    private VideoRenderer renderer;
+    private MediaRenderer renderer;
     private UniMedia currentMedia;
     private boolean canModifyProgressBar;
 
@@ -30,7 +31,7 @@ public class MediaControlController extends UniController
     private boolean isPlaying = false;
     private boolean isMute = false;
 
-    public void setData(VideoRenderer renderer, UniMedia media, boolean isPlaying)
+    public void setData(MediaRenderer renderer, UniMedia media, boolean isPlaying)
     {
         this.renderer = renderer;
         this.currentMedia = media;
@@ -42,22 +43,21 @@ public class MediaControlController extends UniController
 
     private void setDuration()
     {
-        MediaPlayer media = renderer.getVideo();
-        Media m = media.getMedia();
-        media.setOnReady( () -> {
-            Duration duration = m.getDuration();
-            int minutes = ((int) m.getDuration().toMinutes());
-            double seconds = m.getDuration().toSeconds() - (minutes * 60);
+        MediaPlayer mediaPlayer = renderer.getMediaPlayer();
+        Media media = mediaPlayer.getMedia();
+        mediaPlayer.setOnReady( () -> {
+            Duration duration = media.getDuration();
+            int minutes = ((int) media.getDuration().toMinutes());
+            double seconds = media.getDuration().toSeconds() - (minutes * 60);
             timeEnd.setText(String.valueOf(minutes) + ":" + String.format("%02d", (int)seconds));
-            progressBar.setMax(m.getDuration().toSeconds());
+            progressBar.setMax(media.getDuration().toSeconds());
             progressBar.setValue(0);
-
             volumeSlider.setMin(0);
             volumeSlider.setMax(1);
             volumeSlider.setValue(0.5);
-            media.setVolume(volumeSlider.getValue());
+            mediaPlayer.setVolume(volumeSlider.getValue());
         });
-        media.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
+        mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
             int minutes = ((int) newTime.toMinutes());
             double seconds = newTime.toSeconds() - (minutes * 60);
             timeStart.setText(String.valueOf(minutes) + ":" + String.format("%02d", (int)seconds));
@@ -67,16 +67,13 @@ public class MediaControlController extends UniController
         progressBar.setOnMouseClicked(event -> {canModifyProgressBar = false;});
         progressBar.setOnMouseReleased((obs) ->
         {
-            media.seek(Duration.seconds(progressBar.getValue()));
+            mediaPlayer.seek(Duration.seconds(progressBar.getValue()));
             canModifyProgressBar = true;
         });
-        volumeSlider.setMin(0);
-        volumeSlider.setMax(1);
-        volumeSlider.setValue(0.5);
-        media.setVolume(volumeSlider.getValue());
+
         volumeSlider.setOnMouseReleased(
                 event -> {
-                    media.setVolume(volumeSlider.getValue());
+                    mediaPlayer.setVolume(volumeSlider.getValue());
                 }
         );
     }
@@ -104,7 +101,7 @@ public class MediaControlController extends UniController
     }
 
     private void setRendererMute(boolean isMute) {
-        renderer.getVideo().setMute(isMute);
+        renderer.getMediaPlayer().setMute(isMute);
     }
 
     private void setRendererPlay(boolean isPlaying)

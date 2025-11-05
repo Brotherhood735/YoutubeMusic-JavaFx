@@ -34,6 +34,12 @@
 .button-success:hover {
     -fx-background-color: #218838;
 }
+.label {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 16px;
+    -fx-font-weight: 500; /* medium weight */
+}
+
 /* Form Styles */
 .form-control {
     -fx-padding: 8px;

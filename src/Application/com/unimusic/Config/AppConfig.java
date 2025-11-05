@@ -9,9 +9,9 @@ public class AppConfig {
     public static final double APP_WIDTH = 1400;
     public static final double APP_HEIGHT = 950;
     // Data storage settings
-    public static final String DATA_DIR = "src/resources/data";
+    public static final String DATA_DIR = "src/Application/resources/com/unimusic/data";
     public static final String USERS_CSV_PATH = DATA_DIR + "/users.csv";
-
+    public static final String DEFAULT_MUSIC_IMAGE_PATH = DATA_DIR + "/default_music_icon.png";
     // Navigation Settings
     public static final double HOME_MEDIA_PLAY_AREA_IDX = 0;
     public static final String COMMENTS_CSV_PATH = DATA_DIR + "/comments depth level";

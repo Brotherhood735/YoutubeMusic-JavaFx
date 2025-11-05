@@ -21,11 +21,11 @@ public class LoginController  extends UniController {
     @FXML
     private Label statusLabel;
 
-    private  DataManager dataManager;
+    private CsvDataManager csvDataManager;
 
     @FXML
     public void initialize() {
-        dataManager = Main.getDataManager();
+        csvDataManager = Main.getDataManager();
         statusLabel.setVisible(false);
     }
 
@@ -39,7 +39,7 @@ public class LoginController  extends UniController {
             return;
         }
 
-        User user = dataManager.getUser(username);
+        User user = csvDataManager.getUser(username);
         if (user != null && user.checkPassword(password)) {
             // Login successful
             AuthManager.setUser(username);

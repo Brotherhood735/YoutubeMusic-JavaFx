@@ -15,6 +15,7 @@ module com.unimusic {
     requires javafx.media;
     requires javafx.base;
 
+
     opens com.unimusic to javafx.fxml;
     exports com.unimusic;
     exports com.unimusic.Controller;
