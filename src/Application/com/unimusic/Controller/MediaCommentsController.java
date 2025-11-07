@@ -5,13 +5,11 @@ import com.unimusic.Model.*;
 import com.unimusic.View.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
 import java.util.ArrayList;
 
 public class MediaCommentsController extends UniController {
@@ -20,6 +18,7 @@ public class MediaCommentsController extends UniController {
     protected UniMedia currentMedia;
     protected CsvDataManager csvDataManager;
     protected int depthLevel = 0;
+    @FXML protected ScrollPane commentsAreaParent;
     @FXML protected VBox commentsArea;
     @FXML protected VBox mainArea;
     @FXML protected TextField commentField;
@@ -41,28 +40,35 @@ public class MediaCommentsController extends UniController {
     }
     protected void populateSection()
     {
+        commentsAreaParent.setFitToWidth(true);
+        commentsAreaParent.setFitToHeight(false);
+        commentsArea.setFillWidth(true);
         commentsArea.getChildren().clear();
         for (UniComment comment : currentMediaComments)
         {
             VBox commentBox = createCommentBox(comment);
+            Separator seperator = new Separator();
+            seperator.setOrientation(Orientation.HORIZONTAL);
             commentsArea.getChildren().add(commentBox);
+            commentsArea.getChildren().add(seperator);
         }
     }
 
     protected VBox createCommentBox(UniComment comment) {
         Label usernameLabel =  new Label(comment.getUsername());
         Label commentLabel = new Label(comment.getComment());
+        commentLabel.setPrefHeight(3 * commentLabel.getFont().getSize() * 1.2);
         Button respondButton = new  Button("See Responses");
         respondButton.setOnMouseClicked( e -> onDepthCommentRequest(currentMedia, comment));
-
         VBox commentBox = new VBox();
-
+        commentBox.setFillWidth(true);
         commentLabel.setWrapText(true);
+        commentLabel.setMaxWidth(Double.MAX_VALUE);
         usernameLabel.setOpacity(0.5);
         Insets insets = new Insets(5,5,5,5);
         commentBox.setPadding(insets);
-        commentBox.setPrefWidth(100);
-        commentBox.setPrefHeight(100);
+        commentBox.setPrefWidth(200);
+        commentBox.setPrefHeight(200);
         commentBox.getChildren().addAll(usernameLabel, commentLabel,  respondButton);
         return commentBox;
     }

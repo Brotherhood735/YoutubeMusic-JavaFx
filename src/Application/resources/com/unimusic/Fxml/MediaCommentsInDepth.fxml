@@ -44,7 +44,7 @@
             <Insets top="10.0" />
          </VBox.margin>
       </Separator>
-      <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="549.0" prefWidth="424.0">
+      <ScrollPane fx:id="commentsAreaParent" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="549.0" prefWidth="424.0">
          <content>
             <VBox fx:id="commentsArea" alignment="CENTER" prefHeight="460.0" prefWidth="338.0" />
          </content>
