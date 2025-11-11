@@ -211,14 +211,15 @@ public class CsvDataManager implements MediaRepository, UserRepository, CommentR
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 4) {
-                    String title =  parts[0];
-                    String videoUrl =  parts[1];
-                    String audioUrl =  parts[2];
-                    String webUrl =  parts[3];
-                    String artist =  parts[4];
-                    String imageUrl = parts[5];
-                    String type = parts[6];
-                    media.add(new UniMedia(title, videoUrl, audioUrl, webUrl, artist, imageUrl, type));
+                    int id = Integer.parseInt(parts[0]);
+                    String title =  parts[1];
+                    String videoUrl =  parts[2];
+                    String audioUrl =  parts[3];
+                    String webUrl =  parts[4];
+                    String artist =  parts[5];
+                    String imageUrl = parts[6];
+                    String type = parts[7];
+                    media.add(new UniMedia(id, title, videoUrl, audioUrl, webUrl, artist, imageUrl, type));
                 }
             }
         } catch (IOException e) {
@@ -241,14 +242,15 @@ public class CsvDataManager implements MediaRepository, UserRepository, CommentR
                 line = reader.readLine();
                 String[] parts = line.split(",");
                 if (parts.length >= 4) {
-                    String title =  parts[0];
-                    String videoUrl =  parts[1];
-                    String audioUrl =  parts[2];
-                    String webUrl =  parts[3];
-                    String artist =  parts[4];
-                    String imageUrl = parts[5];
-                    String type = parts[6];
-                    media.add(new UniMedia(title, videoUrl, audioUrl, webUrl, artist, imageUrl, type));
+                    int id = Integer.parseInt(parts[0]);
+                    String title =  parts[1];
+                    String videoUrl =  parts[2];
+                    String audioUrl =  parts[3];
+                    String webUrl =  parts[4];
+                    String artist =  parts[5];
+                    String imageUrl = parts[6];
+                    String type = parts[7];
+                    media.add(new UniMedia(id, title, videoUrl, audioUrl, webUrl, artist, imageUrl, type));
                 }
             }
         } catch (IOException e) {

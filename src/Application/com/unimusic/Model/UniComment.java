@@ -7,7 +7,7 @@ public class UniComment extends UniData{
     private String comment;
     private UniComment parentComment;
     public UniComment(UniComment parentComment, int commentId, int mediaId,  String username, String comment, int depth){
-        this.dataId = (int)commentId;
+        super(commentId);
         this.mediaId = mediaId;
         this.username = username;
         this.comment = comment;

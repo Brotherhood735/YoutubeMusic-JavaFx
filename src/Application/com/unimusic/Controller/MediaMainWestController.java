@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.web.WebView;
 
 public class MediaMainWestController extends UniController {
 
@@ -91,6 +92,9 @@ public class MediaMainWestController extends UniController {
         } else if (view instanceof ImageView imageViewNode) {
             imageViewNode.fitHeightProperty().bind(parentArea.heightProperty().subtract(100));
             imageViewNode.fitWidthProperty().bind(parentArea.widthProperty().subtract(100));
+        } else if (view instanceof WebView webViewNode) {
+            webViewNode.prefWidthProperty().bind(parentArea.widthProperty());
+            webViewNode.prefHeightProperty().bind(parentArea.heightProperty());
         }
     }
 
@@ -115,5 +119,14 @@ public class MediaMainWestController extends UniController {
 
     public MediaRenderer getRenderer() {
         return currentRenderer;
+    }
+
+    public void stopRenderer()
+    {
+        if (currentRenderer != null)
+        {
+            currentRenderer.pauseMedia();
+            currentRenderer.getMediaPlayer().dispose();
+        }
     }
 }

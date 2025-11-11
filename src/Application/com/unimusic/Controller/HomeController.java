@@ -1,6 +1,4 @@
 package com.unimusic.Controller;
-import com.almasb.fxgl.ui.FontFactory;
-import com.unimusic.Config.AppConfig;
 import com.unimusic.Main;
 import com.unimusic.Model.*;
 import com.unimusic.View.NavigationHandler;
@@ -16,7 +14,6 @@ import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeController extends UniController {
@@ -35,10 +32,11 @@ public class HomeController extends UniController {
 
     }
 
-    private void loadMediaControlView(String fxml)
+    private void loadMediaControlView(String fxml, boolean restartPanel)
     {
-        //if the media control is already initilized we don't need to restart it
-        if(mediaControl != null) return;
+        if (!restartPanel) return;
+
+        homeContainer.setBottom(null);
         try {
             FXMLLoader loader = NavigationHandler.getLoader(fxml);
             Node view = loader.load();
@@ -186,25 +184,22 @@ public class HomeController extends UniController {
     private void onCardClick(UniMedia item) {
         mainViewArea.setFitToHeight(true);
         mainViewArea.setFitToWidth(true);
-        loadMediaControlView("MediaControl.fxml");
         if (mediaMainController != null) {
+            // we check if the clicked media is the current media
+            // if it is, we don't play it again
             if(item.getId() == mediaMainController.getCurrentMedia().getId())
             {
+                loadMediaControlView("MediaControl.fxml", false);
                 setContent(mediaMainController.getView(), 0);
                 return;
             }
+            // we stop whatever is playing before playing a new media
+            mediaMainController.stopPlayer();
         }
+        loadMediaControlView("MediaControl.fxml", true);
         mainViewArea.setContent(null);
         NavigationHandler.navigateToMediaPlay(item);
         System.out.println("Playing: " + item.getTitle());
-    }
-
-
-    // Helper methods
-    private String getRandomColor() {
-        String[] colors = {"ff0000", "00ff00", "0000ff", "ff00ff", "00ffff",
-                "ffff00", "ff6600", "6600ff", "ff0066", "00ff66"};
-        return colors[(int)(Math.random() * colors.length)];
     }
 
 

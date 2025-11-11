@@ -11,8 +11,9 @@ public class UniMedia extends UniData
     String artist;
     String thumbnailUrl;
 
-    public UniMedia(String title,String videoUrl, String audioUrl, String webUrl,
+    public UniMedia(int id, String title,String videoUrl, String audioUrl, String webUrl,
                     String artist, String thumbnailUrl, String type) {
+        super(id);
         this.title = title;
         this.videoUrl = videoUrl;
         this.audioUrl = audioUrl;
