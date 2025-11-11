@@ -11,7 +11,7 @@
          <children>
             <Button maxWidth="100.0" mnemonicParsing="false" onAction="#onVideoRequest" text="Video" />
             <Button layoutX="10.0" layoutY="10.0" maxWidth="100.0" mnemonicParsing="false" onAction="#onAudioRequest" text="Audio" />
-            <Button layoutX="62.0" layoutY="10.0" maxWidth="100.0" mnemonicParsing="false" text="Youtube" />
+            <Button layoutX="62.0" layoutY="10.0" maxWidth="100.0" mnemonicParsing="false" onAction="#onYoutubeRequest" text="Youtube" />
          </children>
          <opaqueInsets>
             <Insets />

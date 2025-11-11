@@ -2,15 +2,15 @@ package com.unimusic.Controller;
 
 import com.unimusic.Model.UniController;
 import com.unimusic.Model.UniMedia;
-import com.unimusic.View.Components.LocalAudioRenderer;
-import com.unimusic.View.Components.LocalVideoRenderer;
-import com.unimusic.View.Components.MediaRenderer;
+import com.unimusic.View.Components.LocalPlayableAudio;
+import com.unimusic.View.Components.LocalPlayableVideo;
+import com.unimusic.View.Components.PlayableMedia;
+import com.unimusic.View.Components.OnlineVideoPlayable;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.web.WebView;
 
@@ -19,9 +19,10 @@ public class MediaMainWestController extends UniController {
     private MediaControlController bottomController;
     private UniMedia currentMedia;
     private AnchorPane parentArea;
-    private LocalVideoRenderer localVideoRenderer;
-    private LocalAudioRenderer localAudioRenderer;
-    private MediaRenderer currentRenderer;
+    private LocalPlayableVideo localVideoRenderer;
+    private LocalPlayableAudio localAudioRenderer;
+    private OnlineVideoPlayable onlineVideoRenderer;
+    private PlayableMedia currentRenderer;
     private MediaView mediaView;
     private ImageView imageView;
     @FXML private VBox mainArea;
@@ -48,17 +49,18 @@ public class MediaMainWestController extends UniController {
     private void onVideoRequest()
     {
         if (localVideoRenderer != null) return;
-        if (localAudioRenderer != null)
-        {
-            localAudioRenderer.pauseMedia();
-            localAudioRenderer.getMediaPlayer().dispose();
-            localAudioRenderer = null;
-            imageView = null;
-        }
+
+        if(localAudioRenderer != null) localAudioRenderer.stopRender();
+        if(onlineVideoRenderer != null) onlineVideoRenderer.stopRender();
+        localAudioRenderer = null;
+        onlineVideoRenderer = null;
+        mediaView = null;
+        imageView = null;
+
         mediaView = new MediaView();
         bindViewDimensionsToParentArea(mediaView);
         replaceOrAddViewToMainArea(mediaView);
-        localVideoRenderer = new LocalVideoRenderer("tutor.mp4", mediaView, currentMedia);
+        localVideoRenderer = new LocalPlayableVideo("tutor.mp4", mediaView, currentMedia);
         currentRenderer = localVideoRenderer;
         bottomController.setData(getRenderer(), currentMedia, true);
         localVideoRenderer.render();
@@ -68,22 +70,42 @@ public class MediaMainWestController extends UniController {
     private void onAudioRequest()
     {
         if (localAudioRenderer != null) return;
-        if (localVideoRenderer != null)
-        {
-            localVideoRenderer.pauseMedia();
-            localVideoRenderer.getMediaPlayer().dispose();
-            localVideoRenderer = null;
-            mediaView = null;
-        }
+
+        if(localVideoRenderer != null) localVideoRenderer.stopRender();
+        if(onlineVideoRenderer != null) onlineVideoRenderer.stopRender();
+
+        localVideoRenderer = null;
+        onlineVideoRenderer = null;
+        mediaView = null;
+
         imageView = new ImageView();
         replaceOrAddViewToMainArea(imageView);
         bindViewDimensionsToParentArea(imageView);
-        localAudioRenderer = new LocalAudioRenderer("Convo.mp3", imageView, currentMedia);
+        localAudioRenderer = new LocalPlayableAudio("Convo.mp3", imageView, currentMedia);
         currentRenderer = localAudioRenderer;
         bottomController.setData(getRenderer(), currentMedia, true);
         localAudioRenderer.render();
     }
+    @FXML
+    private void onYoutubeRequest()
+    {
+        if (onlineVideoRenderer != null) return;
 
+        if(localVideoRenderer != null) localVideoRenderer.stopRender();
+        if(localAudioRenderer != null) localAudioRenderer.stopRender();
+
+        localVideoRenderer = null;
+        localAudioRenderer = null;
+        imageView = null;
+
+        imageView = new ImageView();
+        replaceOrAddViewToMainArea(imageView);
+        bindViewDimensionsToParentArea(imageView);
+        onlineVideoRenderer = new OnlineVideoPlayable("https://www.youtube.com/watch?v=dQw4w9WgXcQ", imageView, currentMedia);
+        currentRenderer = onlineVideoRenderer;
+        bottomController.setData(getRenderer(), currentMedia, true);
+        onlineVideoRenderer.render();
+    }
 
     private void bindViewDimensionsToParentArea(Node view) {
         if (view instanceof MediaView mediaViewNode) {
@@ -106,10 +128,7 @@ public class MediaMainWestController extends UniController {
             mainArea.getChildren().add(view);
         }
     }
-    @FXML
-    private void onYoutubeRequest()
-    {
-    }
+
 
 
     @Override
@@ -117,7 +136,7 @@ public class MediaMainWestController extends UniController {
 
     }
 
-    public MediaRenderer getRenderer() {
+    public PlayableMedia getRenderer() {
         return currentRenderer;
     }
 
@@ -126,7 +145,7 @@ public class MediaMainWestController extends UniController {
         if (currentRenderer != null)
         {
             currentRenderer.pauseMedia();
-            currentRenderer.getMediaPlayer().dispose();
+            currentRenderer.getLocalMediaPlayer().dispose();
         }
     }
 }

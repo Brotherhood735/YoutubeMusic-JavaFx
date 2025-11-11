@@ -14,6 +14,8 @@ module com.unimusic {
     requires java.desktop;
     requires javafx.media;
     requires javafx.base;
+    requires uk.co.caprica.vlcj;
+    requires uk.co.caprica.vlcj.javafx;
 
 
     opens com.unimusic to javafx.fxml;

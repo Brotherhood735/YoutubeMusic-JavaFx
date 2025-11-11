@@ -4,11 +4,11 @@ import com.unimusic.Model.UniMedia;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class LocalAudioRenderer extends MediaRenderer
+public class LocalPlayableAudio extends LocalPlayableMedia
 {
     private Image image;
     private ImageView imageView;
-    public LocalAudioRenderer(String audioName, ImageView view, UniMedia uniMedia) {
+    public LocalPlayableAudio(String audioName, ImageView view, UniMedia uniMedia) {
         super("data/" + audioName, uniMedia);
         this.imageView = view;
         this.image = null;
@@ -18,5 +18,10 @@ public class LocalAudioRenderer extends MediaRenderer
     public void render() {
         imageView.setPreserveRatio(true);
         imageView.setImage(image);
+    }
+    @Override
+    public void stopRender() {
+        pauseMedia();
+        mediaPlayer.dispose();
     }
 }
