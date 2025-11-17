@@ -25,6 +25,7 @@ public class MediaMainWestController extends UniController {
     private PlayableMedia currentRenderer;
     private MediaView mediaView;
     private ImageView imageView;
+    private WebView webView;
     @FXML private VBox mainArea;
 
 
@@ -44,67 +45,55 @@ public class MediaMainWestController extends UniController {
         // the default is to go for the video
         onAudioRequest();
     }
-
     @FXML
-    private void onVideoRequest()
-    {
+    private void onVideoRequest() {
         if (localVideoRenderer != null) return;
-
-        if(localAudioRenderer != null) localAudioRenderer.stopRender();
-        if(onlineVideoRenderer != null) onlineVideoRenderer.stopRender();
-        localAudioRenderer = null;
-        onlineVideoRenderer = null;
-        mediaView = null;
-        imageView = null;
-
-        mediaView = new MediaView();
-        bindViewDimensionsToParentArea(mediaView);
-        replaceOrAddViewToMainArea(mediaView);
-        localVideoRenderer = new LocalPlayableVideo("tutor.mp4", mediaView, currentMedia);
-        currentRenderer = localVideoRenderer;
-        bottomController.setData(getRenderer(), currentMedia, true);
-        localVideoRenderer.render();
+        MediaView mediaViewNode = new MediaView();
+        mediaView = mediaViewNode;
+        switchRenderer(mediaViewNode, new LocalPlayableVideo("tutor.mp4", mediaViewNode, currentMedia));
     }
 
     @FXML
-    private void onAudioRequest()
-    {
+    private void onAudioRequest() {
         if (localAudioRenderer != null) return;
-
-        if(localVideoRenderer != null) localVideoRenderer.stopRender();
-        if(onlineVideoRenderer != null) onlineVideoRenderer.stopRender();
-
-        localVideoRenderer = null;
-        onlineVideoRenderer = null;
-        mediaView = null;
-
-        imageView = new ImageView();
-        replaceOrAddViewToMainArea(imageView);
-        bindViewDimensionsToParentArea(imageView);
-        localAudioRenderer = new LocalPlayableAudio("Convo.mp3", imageView, currentMedia);
-        currentRenderer = localAudioRenderer;
-        bottomController.setData(getRenderer(), currentMedia, true);
-        localAudioRenderer.render();
+        ImageView imageViewNode = new ImageView();
+        imageView = imageViewNode;
+        switchRenderer(imageViewNode, new LocalPlayableAudio("Convo.mp3", imageViewNode, currentMedia));
     }
+
     @FXML
-    private void onYoutubeRequest()
-    {
+    private void onYoutubeRequest() {
         if (onlineVideoRenderer != null) return;
+        WebView webViewNode = new WebView();
+        webView = webViewNode;
+        switchRenderer(webViewNode, new OnlineVideoPlayable("https://m.youtube.com/watch?v=1KwO85wBXX0", webViewNode, currentMedia));
+    }
+    private void switchRenderer(Node view, PlayableMedia newRenderer) {
+        // Stop all existing renderers
+        if (localVideoRenderer != null) localVideoRenderer.stopRender();
+        if (localAudioRenderer != null) localAudioRenderer.stopRender();
+        if (onlineVideoRenderer != null) onlineVideoRenderer.stopRender();
 
-        if(localVideoRenderer != null) localVideoRenderer.stopRender();
-        if(localAudioRenderer != null) localAudioRenderer.stopRender();
-
+        // Nullify old references
         localVideoRenderer = null;
         localAudioRenderer = null;
+        onlineVideoRenderer = null;
+        mediaView = null;
         imageView = null;
+        webView = null;
 
-        imageView = new ImageView();
-        replaceOrAddViewToMainArea(imageView);
-        bindViewDimensionsToParentArea(imageView);
-        onlineVideoRenderer = new OnlineVideoPlayable("https://www.youtube.com/watch?v=dQw4w9WgXcQ", imageView, currentMedia);
-        currentRenderer = onlineVideoRenderer;
+        // Add and bind view
+        replaceOrAddViewToMainArea(view);
+        bindViewDimensionsToParentArea(view);
+
+        // Set the new renderer
+        currentRenderer = newRenderer;
+        if (newRenderer instanceof LocalPlayableVideo) localVideoRenderer = (LocalPlayableVideo) newRenderer;
+        else if (newRenderer instanceof LocalPlayableAudio) localAudioRenderer = (LocalPlayableAudio) newRenderer;
+        else if (newRenderer instanceof OnlineVideoPlayable) onlineVideoRenderer = (OnlineVideoPlayable) newRenderer;
+
         bottomController.setData(getRenderer(), currentMedia, true);
-        onlineVideoRenderer.render();
+        newRenderer.render();
     }
 
     private void bindViewDimensionsToParentArea(Node view) {
