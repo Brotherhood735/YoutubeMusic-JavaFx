@@ -1,8 +1,6 @@
 package com.unimusic.Controller;
 
-import com.unimusic.Model.AuthManager;
-import com.unimusic.Model.UniController;
-import com.unimusic.Model.UniData;
+import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.View.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

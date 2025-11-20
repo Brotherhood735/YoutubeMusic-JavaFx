@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="mainArea" alignment="BASELINE_CENTER" maxHeight="1.7976931348623157E308" prefHeight="511.0" prefWidth="424.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.MediaCommentsController">
+<VBox fx:id="mainArea" alignment="BASELINE_CENTER" maxHeight="1.7976931348623157E308" prefHeight="511.0" prefWidth="424.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.Media.Comment.MediaCommentsController">
    <children>
       <ScrollPane fx:id="commentsAreaParent" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="460.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
          <content>

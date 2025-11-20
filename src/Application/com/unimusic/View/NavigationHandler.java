@@ -1,8 +1,14 @@
 package com.unimusic.View;
 
 import com.unimusic.Controller.*;
+import com.unimusic.Controller.Media.Comment.MediaCommentsController;
+import com.unimusic.Controller.Media.Comment.MediaInDepthCommentsController;
+import com.unimusic.Controller.Media.MediaMainController;
 import com.unimusic.Main;
-import com.unimusic.Model.*;
+import com.unimusic.Model.Authentication.AuthManager;
+import com.unimusic.Model.Media.UniMedia;
+import com.unimusic.Model.Repository.UniComment;
+import com.unimusic.Model.Repository.UniData;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.util.Callback;
@@ -176,6 +182,16 @@ public class NavigationHandler {
         if (AuthManager.isAuthenticated()) {
             loadMediaView("MediaComments.fxml", c -> {
                 return new MediaCommentsController(media);
+            });
+        } else {
+            navigateToLogin();
+        }
+    }
+
+    public static void navigateToAddSong() {
+        if (AuthManager.isAuthenticated()) {
+            loadHomeView("AddSong.fxml", c -> {
+                return new SongFormController();
             });
         } else {
             navigateToLogin();

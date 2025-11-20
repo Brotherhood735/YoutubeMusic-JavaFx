@@ -22,8 +22,18 @@ module com.unimusic {
     exports com.unimusic;
     exports com.unimusic.Controller;
     opens com.unimusic.Controller to javafx.fxml;
-    exports com.unimusic.Model;
-    opens com.unimusic.Model to javafx.fxml;
     exports com.unimusic.Nav;
     opens com.unimusic.Nav to javafx.fxml;
+    exports com.unimusic.Model.Media;
+    opens com.unimusic.Model.Media to javafx.fxml;
+    exports com.unimusic.Model.Repository;
+    opens com.unimusic.Model.Repository to javafx.fxml;
+    exports com.unimusic.Model.Authentication;
+    opens com.unimusic.Model.Authentication to javafx.fxml;
+    exports com.unimusic.Controller.Media;
+    opens com.unimusic.Controller.Media to javafx.fxml;
+    exports com.unimusic.Controller.Authentication;
+    opens com.unimusic.Controller.Authentication to javafx.fxml;
+    exports com.unimusic.Controller.Media.Comment;
+    opens com.unimusic.Controller.Media.Comment to javafx.fxml;
 }

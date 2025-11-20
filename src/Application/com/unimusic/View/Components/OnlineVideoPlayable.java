@@ -1,19 +1,12 @@
 package com.unimusic.View.Components;
 
-import com.unimusic.Model.UniMedia;
-import javafx.scene.image.ImageView;
+import com.unimusic.Model.Media.UniMedia;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Duration;
-import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
-import uk.co.caprica.vlcj.javafx.videosurface.ImageViewVideoSurface;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class OnlineVideoPlayable implements PlayableMedia {
 

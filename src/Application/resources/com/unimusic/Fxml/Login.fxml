@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" maxWidth="400.0" styleClass="card, container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.LoginController">
+<VBox alignment="CENTER" maxWidth="400.0" styleClass="card, container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.Authentication.LoginController">
     <children>
         <Label text="Login" textAlignment="CENTER">
             <font>

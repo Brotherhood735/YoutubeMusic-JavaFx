@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox alignment="CENTER" prefHeight="90" spacing="20" styleClass="player-bar" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.MediaControlController">
+<HBox alignment="CENTER" prefHeight="90" spacing="20" styleClass="player-bar" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.Media.MediaControlController">
    <padding>
       <Insets topRightBottomLeft="20" />
    </padding>

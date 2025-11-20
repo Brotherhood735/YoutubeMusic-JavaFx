@@ -13,7 +13,7 @@
 <VBox alignment="CENTER" maxWidth="400.0" styleClass="card, container"
       xmlns="http://javafx.com/javafx/16"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.unimusic.Controller.RegisterController">
+      fx:controller="com.unimusic.Controller.Authentication.RegisterController">
     <children>
         <Label text="Register" textAlignment="CENTER">
             <font>

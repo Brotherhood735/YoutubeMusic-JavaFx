@@ -1,6 +1,6 @@
 package com.unimusic.View.Components;
 
-import com.unimusic.Model.UniMedia;
+import com.unimusic.Model.Media.UniMedia;
 import javafx.scene.media.MediaView;
 
 

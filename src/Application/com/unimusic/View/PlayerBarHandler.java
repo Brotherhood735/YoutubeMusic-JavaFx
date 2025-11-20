@@ -1,6 +1,6 @@
 package com.unimusic.View;
 
-import com.unimusic.Model.UniMedia;
+import com.unimusic.Model.Media.UniMedia;
 import javafx.scene.media.MediaPlayer;
 
 // Handles the backbend of the player

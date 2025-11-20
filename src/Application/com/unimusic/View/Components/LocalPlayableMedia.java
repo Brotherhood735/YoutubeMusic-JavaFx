@@ -1,7 +1,7 @@
 package com.unimusic.View.Components;
 
 import com.unimusic.Main;
-import com.unimusic.Model.UniMedia;
+import com.unimusic.Model.Media.UniMedia;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;

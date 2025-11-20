@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.unimusic.Controller.SongFormController"
+      spacing="15" style="-fx-background-color: #f5f5f5;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Title Header -->
+    <Label text="Add New Song" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+    <Separator/>
+
+    <!-- Basic Information Section -->
+    <VBox spacing="10">
+        <Label text="Basic Information" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+        <!-- Song Title -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Title:" minWidth="120" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="titleField" promptText="Enter song title" HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <!-- Artist Name -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Artist:" minWidth="120" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="artistField" promptText="Enter artist name" HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <!-- Instruments (for MIDI) -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Instruments:" minWidth="120" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="instrumentsField" promptText="e.g., Piano, Guitar, Drums (for MIDI files)"
+                       HBox.hgrow="ALWAYS"/>
+        </HBox>
+        <Label text="* Instruments field is optional and primarily for MIDI files"
+               style="-fx-font-size: 10; -fx-text-fill: gray;">
+            <padding>
+                <Insets left="130"/>
+            </padding>
+        </Label>
+    </VBox>
+
+    <Separator/>
+
+    <!-- File Selection Section -->
+    <VBox spacing="10">
+        <Label text="Media Files" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+        <!-- Audio File -->
+        <VBox spacing="5">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Audio File:" minWidth="120" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="audioPathField" promptText="No file selected"
+                           editable="false" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="browseAudioBtn" text="Browse..." onAction="#onBrowseAudio"/>
+                <Button fx:id="clearAudioBtn" text="Clear" onAction="#onClearAudio"/>
+            </HBox>
+            <Label text="Supported formats: MP3, WAV, FLAC, OGG, MIDI"
+                   style="-fx-font-size: 10; -fx-text-fill: gray;">
+                <padding>
+                    <Insets left="130"/>
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Video File -->
+        <VBox spacing="5">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Video File:" minWidth="120" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="videoPathField" promptText="No file selected"
+                           editable="false" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="browseVideoBtn" text="Browse..." onAction="#onBrowseVideo"/>
+                <Button fx:id="clearVideoBtn" text="Clear" onAction="#onClearVideo"/>
+            </HBox>
+            <Label text="Supported formats: MP4, AVI, MKV, MOV"
+                   style="-fx-font-size: 10; -fx-text-fill: gray;">
+                <padding>
+                    <Insets left="130"/>
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- YouTube URL -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="YouTube URL:" minWidth="120" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="youtubeUrlField" promptText="https://www.youtube.com/watch?v=..."
+                       HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <!-- Cover Image -->
+        <VBox spacing="5">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Cover Image:" minWidth="120" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="imagePathField" promptText="No image selected"
+                           editable="false" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="browseImageBtn" text="Browse..." onAction="#onBrowseImage"/>
+                <Button fx:id="clearImageBtn" text="Clear" onAction="#onClearImage"/>
+            </HBox>
+            <Label text="Supported formats: JPG, PNG, GIF"
+                   style="-fx-font-size: 10; -fx-text-fill: gray;">
+                <padding>
+                    <Insets left="130"/>
+                </padding>
+            </Label>
+        </VBox>
+    </VBox>
+
+    <Separator/>
+
+    <!-- File Type Summary -->
+    <VBox spacing="5">
+        <Label text="Selected File Types:" style="-fx-font-weight: bold;"/>
+        <HBox spacing="15">
+            <CheckBox fx:id="hasAudioCheck" text="Audio" disable="true"/>
+            <CheckBox fx:id="hasVideoCheck" text="Video" disable="true"/>
+            <CheckBox fx:id="hasYoutubeCheck" text="YouTube" disable="true"/>
+            <CheckBox fx:id="hasImageCheck" text="Cover Image" disable="true"/>
+        </HBox>
+    </VBox>
+
+    <Separator/>
+
+    <!-- Action Buttons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="saveBtn" text="Save Song" onAction="#onSave"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"
+                prefWidth="120"/>
+        <Button fx:id="cancelBtn" text="Cancel" onAction="#onCancel" prefWidth="120"/>
+    </HBox>
+
+</VBox>

@@ -1,6 +1,9 @@
 package com.unimusic.Controller;
+import com.unimusic.Controller.Media.MediaControlController;
+import com.unimusic.Controller.Media.MediaMainController;
 import com.unimusic.Main;
-import com.unimusic.Model.*;
+import com.unimusic.Model.Media.UniMedia;
+import com.unimusic.Model.Repository.MediaRepository;
 import com.unimusic.View.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,13 +22,16 @@ import java.util.List;
 public class HomeController extends UniController {
     @FXML private BorderPane homeContainer;
     private VBox homePage;
+    private MediaRepository mediaRepo;
     private static MediaMainController mediaMainController;
+    private static SongFormController addSongController;
     private UniController parentController;
     private static MediaControlController mediaControl;
     @FXML private ScrollPane mainViewArea;
 
     @FXML
     public void initialize() {
+        mediaRepo = Main.getDataRepository();
         parentController = Main.mainController;
         NavigationHandler.setHomeController(this);
         loadDefaultHomeView();
@@ -51,6 +57,7 @@ public class HomeController extends UniController {
     public static void setMediaMainController(MediaMainController controller) {
         mediaMainController = controller;
     }
+    public static void setAddSongController(SongFormController controller) {addSongController = controller;}
     private void setupFilters(VBox vBox) {
         HBox hBox = new HBox();
         hBox.setPrefHeight(0);
@@ -82,18 +89,12 @@ public class HomeController extends UniController {
     }
     private void loadMusicSections(VBox vBox) {
         // Sezione "Listen again"
-        ScrollPane listenAgainSection = createSection("", Main.getDataManager().loadMediaWithInterval(0, 6));
+        ScrollPane listenAgainSection = createSection("", mediaRepo.loadMediaWithInterval(0, 2));
         vBox.getChildren().add(listenAgainSection);
 
         // Sezione "Forgotten favourites"
-        ScrollPane forgottenSection = createSection("", Main.getDataManager().loadMediaWithInterval(6, 12));
+        ScrollPane forgottenSection = createSection("", mediaRepo.loadMediaWithInterval(2, 4));
         vBox.getChildren().add(forgottenSection);
-        ScrollPane forgottenSection2 = createSection("", Main.getDataManager().loadMediaWithInterval(12, 18));
-        vBox.getChildren().add(forgottenSection2);
-        ScrollPane forgottenSection3 = createSection("", Main.getDataManager().loadMediaWithInterval(18, 24));
-        vBox.getChildren().add(forgottenSection3);
-        ScrollPane forgottenSection4 = createSection("", Main.getDataManager().loadMediaWithInterval(24, 30));
-        vBox.getChildren().add(forgottenSection4);
     }
 
     private ScrollPane createSection(String title, List<UniMedia> items) {
@@ -178,6 +179,8 @@ public class HomeController extends UniController {
     }
 
     private void onFilterClick(String filter) {
+
+        NavigationHandler.navigateToAddSong();
         System.out.println("Filter clicked: " + filter);
     }
 

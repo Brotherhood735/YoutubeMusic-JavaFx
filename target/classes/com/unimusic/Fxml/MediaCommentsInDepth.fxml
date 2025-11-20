@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="mainArea" alignment="BASELINE_CENTER" maxHeight="1.7976931348623157E308" prefHeight="500.0" prefWidth="424.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.MediaCommentsController">
+<VBox fx:id="mainArea" alignment="BASELINE_CENTER" maxHeight="1.7976931348623157E308" prefHeight="500.0" prefWidth="424.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.Media.Comment.MediaCommentsController">
    <children>
       <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
          <VBox.margin>
