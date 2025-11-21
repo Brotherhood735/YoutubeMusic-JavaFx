@@ -1,4 +1,4 @@
-package com.unimusic.View;
+package com.unimusic.Nav;
 
 import com.unimusic.Controller.*;
 import com.unimusic.Controller.Media.Comment.MediaCommentsController;
@@ -105,12 +105,6 @@ public class NavigationHandler {
             navigateToLogin();
         }
     }
-    /**
-     * Navigate to the home view
-     */
-    public static void navigateToHome() {
-        loadMainView("WelcomePage.fxml ");
-    }
 
     /**
      * Navigate to the login view
@@ -130,7 +124,7 @@ public class NavigationHandler {
      * Navigate to the dashboard view (protected)
      * Will redirect to login if not authenticated
      */
-    public static void navigateToDashboard() {
+    public static void navigateToHome() {
         if (AuthManager.isAuthenticated()) {
             loadMainView("Home.fxml");
         } else {

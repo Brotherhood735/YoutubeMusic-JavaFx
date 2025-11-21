@@ -1,12 +1,3 @@
-media_id,title,videoUrl,audioUrl,webUrl,artist,imageurl,type
-0,295,,,,Sidhu Moose Wala,https://img.youtube.com/vi/n_FCrCQ6-bA/maxresdefault.jpg,song
-1,GOAT,,,,Sidhu Moose Wala,https://img.youtube.com/vi/M8vDwlHigJA/maxresdefault.jpg,song
-2,THE LAST RIDE,,,,Sidhu Moose Wala,https://img.youtube.com/vi/6xoB4ZiKKn0/maxresdefault.jpg,song
-3,LEVELS,,,,Sidhu Moose Wala,https://img.youtube.com/vi/tpFljbJxZiw/maxresdefault.jpg,song
-4,Drippy,,,,Sidhu Moose Wala,https://img.youtube.com/vi/5ZKLM5pNoGQ/maxresdefault.jpg,song
-5,LOCK,,,,Sidhu Moose Wala,https://img.youtube.com/vi/_wfrNbLguWw/maxresdefault.jpg,song
-6,Signed To God,,,,Sidhu Moose Wala,https://img.youtube.com/vi/7DPcBQ1sjX4/maxresdefault.jpg,song
-7,0008,,,,Sidhu Moose Wala,https://img.youtube.com/vi/unknown/maxresdefault.jpg,song
-8,NEAL,,,,Sidhu Moose Wala,https://img.youtube.com/vi/EdxguQAXeoU/maxresdefault.jpg,song
-9,TAKE NOTES,,,,Sidhu Moose Wala,https://img.youtube.com/vi/EdxguQAXeoU/maxresdefault.jpg,song
-10,So High,,,,Karan Aujla,https://img.youtube.com/vi/GgmFC8y8q3k/maxresdefault.jpg,song
+id_media,title,video_name,audio_name,web_url,artist,image_name,type,instruments,date,place
+0,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Song,null,null,null
+1,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null

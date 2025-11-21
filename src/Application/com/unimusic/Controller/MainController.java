@@ -1,7 +1,7 @@
 package com.unimusic.Controller;
 
 import com.unimusic.Model.Authentication.AuthManager;
-import com.unimusic.View.NavigationHandler;
+import com.unimusic.Nav.NavigationHandler;
 import com.unimusic.View.Components.NavBar;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

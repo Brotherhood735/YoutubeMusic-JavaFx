@@ -1,17 +1,12 @@
 package com.unimusic.View.Components;
 
-import com.unimusic.Main;
-import com.unimusic.View.NavigationHandler;
+import com.unimusic.Nav.NavigationHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-
-import java.io.IOException;
 
 public class NavBar extends HBox {
     private boolean isAuthenticated;
@@ -57,7 +52,7 @@ public class NavBar extends HBox {
      */
     private void createAuthenticatedNavButtons() {
         Button homeBtn = createNavButton("Home", e -> NavigationHandler.navigateToHome());
-        Button dashboardBtn = createNavButton("Dashboard", e -> NavigationHandler.navigateToDashboard());
+        Button dashboardBtn = createNavButton("Dashboard", e -> NavigationHandler.navigateToHome());
         Button profileBtn = createNavButton("Profile", e -> NavigationHandler.navigateToProfile());
 
         Label userLabel = new Label("Hello, " + username);

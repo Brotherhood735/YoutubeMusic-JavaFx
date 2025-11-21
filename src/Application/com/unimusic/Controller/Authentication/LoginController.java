@@ -5,7 +5,7 @@ import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Authentication.User;
 import com.unimusic.Model.Repository.UserRepository;
-import com.unimusic.View.NavigationHandler;
+import com.unimusic.Nav.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -46,7 +46,7 @@ public class LoginController  extends UniController {
         if (user != null && user.checkPassword(password)) {
             // Login successful
             AuthManager.setUser(username);
-            NavigationHandler.navigateToDashboard();
+            NavigationHandler.navigateToHome();
         } else {
             showError("Invalid username or password");
         }

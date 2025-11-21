@@ -4,13 +4,13 @@ import com.unimusic.Controller.Media.MediaMainController;
 import com.unimusic.Main;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Repository.MediaRepository;
-import com.unimusic.View.NavigationHandler;
+import com.unimusic.Nav.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -84,20 +84,24 @@ public class HomeController extends UniController {
         homePage.setStyle("-fx-box-border: transparent;");
         // populate the VBOX
         setupFilters(homePage);
-        loadMusicSections(homePage);
+        loadMusicSections(homePage, 3);
         mainViewArea.setContent(homePage);
     }
-    private void loadMusicSections(VBox vBox) {
-        // Sezione "Listen again"
-        ScrollPane listenAgainSection = createSection("", mediaRepo.loadMediaWithInterval(0, 2));
-        vBox.getChildren().add(listenAgainSection);
-
-        // Sezione "Forgotten favourites"
-        ScrollPane forgottenSection = createSection("", mediaRepo.loadMediaWithInterval(2, 4));
-        vBox.getChildren().add(forgottenSection);
+    private void loadMusicSections(VBox vBox, int sectionLength) {
+        int songsToLoad = mediaRepo.getMediaLength();
+        int startLength = 0;
+        int endLength = sectionLength;
+        while (songsToLoad > 0)
+        {
+            ScrollPane section = createSection(mediaRepo.loadMediaWithInterval(startLength, endLength));
+            startLength = endLength;
+            endLength += sectionLength;
+            vBox.getChildren().add(section);
+            songsToLoad -= sectionLength;
+        }
     }
 
-    private ScrollPane createSection(String title, List<UniMedia> items) {
+    private ScrollPane createSection(List<UniMedia> items) {
         // Cards container
         HBox cardsContainer = new HBox(15);
         cardsContainer.setAlignment(Pos.CENTER_LEFT);
@@ -105,6 +109,7 @@ public class HomeController extends UniController {
             VBox card = createMusicCard(item);
             cardsContainer.getChildren().add(card);
         }
+        cardsContainer.setPadding(new Insets(0, 0, 0, 10));
         ScrollPane cardsScroll = new ScrollPane(cardsContainer);
         cardsScroll.setFitToHeight(false); // match height of content
         cardsScroll.setFitToWidth(false);
@@ -121,20 +126,11 @@ public class HomeController extends UniController {
 
         // Image container
         // Placeholder image
-        Image image = new Image(item.getThumbnailUrl());
+        URL imageUrl = Main.class.getResource("Images/"+ item.getImageName());
         ImageView imagePlaceHolder;
-        System.out.println(item.getTitle() + image.heightProperty().intValue() + image.errorProperty().getValue());
-        if (!image.errorProperty().getValue())
-        {
-            imagePlaceHolder = new ImageView(image);
-        }
-        else
-        {
-            URL fxmlUrl = Main.class.getResource("Images/default_music_icon.png");
-            imagePlaceHolder = new ImageView(fxmlUrl.toString());
-        }
+        imagePlaceHolder = new ImageView(imageUrl.toString());
         imagePlaceHolder.setFitWidth(180);
-        imagePlaceHolder.setFitHeight(100);
+        imagePlaceHolder.setFitHeight(180);
         // Hover effects
         imagePlaceHolder.setOnMouseEntered(e -> {
             imagePlaceHolder.setOpacity(0.7);
@@ -148,11 +144,12 @@ public class HomeController extends UniController {
         // Title and artist
         Label titleLabel = new Label(item.getTitle());
         titleLabel.setFont(Font.font("Roboto", 16));
+        titleLabel.getStyleClass().add("label-title");
         titleLabel.setStyle("font-weight: bold;");
         titleLabel.setMaxWidth(180);
 
         Label artistLabel = new Label(item.getType() + " • " + item.getArtist());
-        artistLabel.setFont(Font.font("Roboto", 5));
+        artistLabel.getStyleClass().add("label-artist");
         artistLabel.setMaxWidth(180);
 
         card.getChildren().addAll(imagePlaceHolder, titleLabel, artistLabel);

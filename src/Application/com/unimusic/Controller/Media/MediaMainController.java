@@ -3,7 +3,7 @@ package com.unimusic.Controller.Media;
 import com.unimusic.Controller.HomeController;
 import com.unimusic.Controller.UniController;
 import com.unimusic.Model.Media.UniMedia;
-import com.unimusic.View.NavigationHandler;
+import com.unimusic.Nav.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

@@ -6,7 +6,7 @@ import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Repository.CommentRepository;
 import com.unimusic.Model.Repository.UniComment;
-import com.unimusic.View.NavigationHandler;
+import com.unimusic.Nav.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;

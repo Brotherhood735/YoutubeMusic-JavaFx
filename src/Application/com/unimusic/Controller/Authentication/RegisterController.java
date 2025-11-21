@@ -4,7 +4,7 @@ import com.unimusic.Controller.UniController;
 import com.unimusic.Main;
 import com.unimusic.Model.Authentication.User;
 import com.unimusic.Model.Repository.UserRepository;
-import com.unimusic.View.NavigationHandler;
+import com.unimusic.Nav.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;

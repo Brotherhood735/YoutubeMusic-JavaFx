@@ -1,7 +1,7 @@
 package com.unimusic.Controller;
 
 import com.unimusic.Model.Authentication.AuthManager;
-import com.unimusic.View.NavigationHandler;
+import com.unimusic.Nav.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -34,7 +34,7 @@ public class WelcomeController extends UniController {
 
     @FXML
     private void handleDashboard() {
-        NavigationHandler.navigateToDashboard();
+        NavigationHandler.navigateToHome();
     }
 
     @Override

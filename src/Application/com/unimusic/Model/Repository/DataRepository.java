@@ -20,6 +20,7 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         ensureUsersCsvExists();
         loadUsers();
         loadAllComments();
+        loadAllMedia();
     }
 
     private void loadAllComments()
@@ -33,10 +34,10 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
     }
 
     private void ensureUsersCsvExists() {
-        ensureCsvExists(AppConfig.USERS_CSV_PATH, "username,password,is_admin\n", "admin,admin,1\n");
+        ensureCsvExists(AppConfig.USERS_CSV_PATH, AppConfig.USERS_CSV_HEADER, AppConfig.USERS_DEFAULT_ROW);
     }
     private void ensureCommentsCsvExists(int depthLevel) {
-        ensureCsvExists(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv", COMMENTS_CSV_HEADER + "\n", "");
+        ensureCsvExists(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv", AppConfig.COMMENTS_CSV_HEADER, "");
     }
     private void ensureCsvExists(String csvPath, String csvHeader, String defaultRow) {
         File csvFile = new File(csvPath);
@@ -192,8 +193,8 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         return comments;
     }
 
-    public ArrayList<UniMedia> loadMedia() {
-            ArrayList<UniMedia> media = new ArrayList<>();
+    private void loadAllMedia() {
+            media = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(
                     new FileReader(AppConfig.UNI_MEDIA_CSV_PATH))) {
                 String line;
@@ -203,51 +204,79 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
                     String[] parts = line.split(",");
                     if (parts.length >= 4) {
                         int id = Integer.parseInt(parts[0]);
-                        String title =  parts[1];
-                        String videoUrl =  parts[2];
-                        String audioUrl =  parts[3];
-                        String webUrl =  parts[4];
-                        String artist =  parts[5];
-                        String imageUrl = parts[6];
-                        String type = parts[7];
-                        media.add(new UniMedia(id, title, videoUrl, audioUrl, webUrl, artist, imageUrl, type));
+                        String title       = getNullValue(parts[1]);
+                        String videoUrl    = getNullValue(parts[2]);
+                        String audioUrl    = getNullValue(parts[3]);
+                        String webUrl      = getNullValue(parts[4]);
+                        String artist      = getNullValue(parts[5]);
+                        String imageUrl    = getNullValue(parts[6]);
+                        String type        = getNullValue(parts[7]);
+                        String instruments = getNullValue(parts[8]);
+                        String date        = getNullValue(parts[9]);
+                        String place       = getNullValue(parts[10]);
+                        media.add(new UniMedia(id, title, videoUrl, audioUrl, webUrl, artist, imageUrl, type,
+                                instruments, date, place));
                     }
                 }
             } catch (IOException e) {
                 System.err.println("Error loading comments from CSV: " + e.getMessage());
             }
-            return media;
     }
-    public ArrayList<UniMedia> loadMediaWithInterval(int start, int end) {
-        ArrayList<UniMedia> media = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(
-                new FileReader(AppConfig.UNI_MEDIA_CSV_PATH))) {
-            String line;
-            // Skip header line
-            reader.readLine();
-            // skip to startpoint
-            for (int i = 0; i < start; i++) {
-                reader.readLine();
-            }
-            for (int i = start; i < end; i++) {
-                line = reader.readLine();
-                String[] parts = line.split(",");
-                if (parts.length >= 4) {
-                    int id = Integer.parseInt(parts[0]);
-                    String title =  parts[1];
-                    String videoUrl =  parts[2];
-                    String audioUrl =  parts[3];
-                    String webUrl =  parts[4];
-                    String artist =  parts[5];
-                    String imageUrl = parts[6];
-                    String type = parts[7];
-                    media.add(new UniMedia(id, title, videoUrl, audioUrl, webUrl, artist, imageUrl, type));
-                }
+    private String getNullValue(String str)
+    {
+        if(str.equals("null")) return null;
+        else return str;
+    }
+    private String validateStr(String str)
+    {
+        if(str == null || str.isEmpty()) return "null";
+        else return str;
+    }
+    public void saveMedia(UniMedia uniMedia)
+    {
+        media.add(uniMedia);
+        saveAllMedia();
+    }
+
+    private void saveAllMedia() {
+        try (FileWriter writer = new FileWriter(AppConfig.UNI_MEDIA_CSV_PATH)) {
+            // Write header
+            writer.write(AppConfig.UNI_MEDIA_CSV_HEADER);
+
+            // Write users
+            for (UniMedia medium : media) {
+                writer.write(
+                        "%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n".formatted(
+                        medium.getId(), validateStr(medium.getTitle()), validateStr(medium.getVideoName()),
+                        validateStr(medium.getAudioName()), validateStr(medium.getWebUrl()),
+                        validateStr(medium.getArtist()), validateStr(medium.getImageName()),
+                        validateStr(medium.getType()), validateStr(medium.getInstruments()),
+                        validateStr(medium.getDate()), validateStr(medium.getPlace())));
             }
         } catch (IOException e) {
-            System.err.println("Error loading comments from CSV: " + e.getMessage());
+            System.err.println("Error saving media to CSV: " + e.getMessage());
         }
-        return media;
+    }
+
+    public ArrayList<UniMedia> loadMediaWithInterval(int start, int end) {
+
+        ArrayList<UniMedia> subMedia = new ArrayList<>();
+        if (start >= media.size() || end > media.size()) {return media;}
+        if (media.isEmpty()) {return null;}
+        for (int i = start; i < end; i++) {
+            subMedia.add(media.get(i));
+        }
+        return subMedia;
+    }
+
+    @Override
+    public int generateMediaId() {
+        return media.size();
+    }
+
+    @Override
+    public int getMediaLength() {
+        return media.size();
     }
 
     private UniComment getParentComment(int parentId) {
@@ -263,7 +292,7 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
     private void saveAllComments(List<UniComment> comments, int depthLevel) {
         try (FileWriter writer = new FileWriter(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv")) {
             // Write header
-            writer.write(COMMENTS_CSV_HEADER + "\n");
+            writer.write(AppConfig.COMMENTS_CSV_HEADER);
 
             // Write users
             for (UniComment comment : comments) {
@@ -282,7 +311,7 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         String isAdmin;
         try (FileWriter writer = new FileWriter(AppConfig.USERS_CSV_PATH)) {
             // Write header
-            writer.write("username,password,is_admin\n");
+            writer.write(AppConfig.USERS_CSV_HEADER);
 
             // Write users
             for (User user : users.values()) {

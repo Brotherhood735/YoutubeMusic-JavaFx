@@ -8,6 +8,7 @@ import com.unimusic.View.Components.PlayableMedia;
 import com.unimusic.View.Components.OnlineVideoPlayable;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -27,8 +28,9 @@ public class MediaMainWestController extends UniController {
     private ImageView imageView;
     private WebView webView;
     @FXML private VBox mainArea;
-
-
+    @FXML private Button videoRequestButton;
+    @FXML private Button audioRequestButton;
+    @FXML private Button webRequestButton;
 
     public MediaMainWestController(UniMedia currentMedia, AnchorPane westArea, MediaControlController bottomController) {
         this.currentMedia = currentMedia;
@@ -43,14 +45,41 @@ public class MediaMainWestController extends UniController {
         AnchorPane.setRightAnchor(mainArea, 0.0);
         MediaMainController.setWestController(this);
         // the default is to go for the video
-        onAudioRequest();
+        startDefaultRenderer();
     }
+
+    private void startDefaultRenderer() {
+        boolean isRequested = false;
+        if (currentMedia.getVideoName() != null) {
+            videoRequestButton.setDisable(false);
+            onVideoRequest();
+            isRequested = true;
+        }
+        if (currentMedia.getAudioName() != null)
+        {
+            audioRequestButton.setDisable(false);
+            if(!isRequested)
+            {
+                onAudioRequest();
+                isRequested = true;
+            };
+        }
+        if (currentMedia.getWebUrl() != null)
+        {
+            webRequestButton.setDisable(false);
+            if(!isRequested)
+            {
+                onWebRequest();
+            };
+        }
+    }
+
     @FXML
     private void onVideoRequest() {
         if (localVideoRenderer != null) return;
         MediaView mediaViewNode = new MediaView();
         mediaView = mediaViewNode;
-        switchRenderer(mediaViewNode, new LocalPlayableVideo("CONVO.mp4", mediaViewNode, currentMedia));
+        switchRenderer(mediaViewNode, new LocalPlayableVideo(currentMedia.getVideoName(), mediaViewNode, currentMedia));
     }
 
     @FXML
@@ -58,15 +87,15 @@ public class MediaMainWestController extends UniController {
         if (localAudioRenderer != null) return;
         ImageView imageViewNode = new ImageView();
         imageView = imageViewNode;
-        switchRenderer(imageViewNode, new LocalPlayableAudio("Convo.mp3", imageViewNode, currentMedia));
+        switchRenderer(imageViewNode, new LocalPlayableAudio(currentMedia.getAudioName(), imageViewNode, currentMedia));
     }
 
     @FXML
-    private void onYoutubeRequest() {
+    private void onWebRequest() {
         if (onlineVideoRenderer != null) return;
         WebView webViewNode = new WebView();
         webView = webViewNode;
-        switchRenderer(webViewNode, new OnlineVideoPlayable("https://m.youtube.com/watch?v=1KwO85wBXX0", webViewNode, currentMedia));
+        switchRenderer(webViewNode, new OnlineVideoPlayable(currentMedia.getWebUrl(), webViewNode, currentMedia));
     }
     private void switchRenderer(Node view, PlayableMedia newRenderer) {
         // Stop all existing renderers

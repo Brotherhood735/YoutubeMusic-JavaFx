@@ -3,7 +3,7 @@ package com.unimusic.Controller.Media;
 import com.unimusic.Controller.Media.Comment.MediaCommentsController;
 import com.unimusic.Controller.UniController;
 import com.unimusic.Model.Media.UniMedia;
-import com.unimusic.View.NavigationHandler;
+import com.unimusic.Nav.NavigationHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

@@ -9,9 +9,9 @@
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
-            <Button maxWidth="100.0" mnemonicParsing="false" onAction="#onVideoRequest" text="Video" />
-            <Button layoutX="10.0" layoutY="10.0" maxWidth="100.0" mnemonicParsing="false" onAction="#onAudioRequest" text="Audio" />
-            <Button layoutX="62.0" layoutY="10.0" maxWidth="100.0" mnemonicParsing="false" onAction="#onYoutubeRequest" text="Youtube" />
+            <Button fx:id="videoRequestButton" disable="true" maxWidth="100.0" mnemonicParsing="false" onAction="#onVideoRequest" text="Video" />
+            <Button fx:id="audioRequestButton" disable="true" layoutX="10.0" layoutY="10.0" maxWidth="100.0" mnemonicParsing="false" onAction="#onAudioRequest" text="Audio" />
+            <Button fx:id="webRequestButton" disable="true" layoutX="62.0" layoutY="10.0" maxWidth="100.0" mnemonicParsing="false" onAction="#onWebRequest" text="Web" />
          </children>
          <opaqueInsets>
             <Insets />

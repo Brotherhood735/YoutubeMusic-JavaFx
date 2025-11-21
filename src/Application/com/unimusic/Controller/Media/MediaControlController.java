@@ -1,6 +1,7 @@
 package com.unimusic.Controller.Media;
 
 import com.unimusic.Controller.UniController;
+import com.unimusic.Main;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.View.Components.PlayableMedia;
 import javafx.fxml.FXML;
@@ -8,7 +9,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+
+import java.net.URL;
 
 public class MediaControlController extends UniController
 {
@@ -25,6 +30,7 @@ public class MediaControlController extends UniController
     @FXML private Slider volumeSlider;
     @FXML private Label timeStart;
     @FXML private Label timeEnd;
+    @FXML private ImageView coverImageView;
     private boolean isPlaying = false;
     private boolean isMute = false;
 
@@ -34,6 +40,8 @@ public class MediaControlController extends UniController
         this.currentMedia = media;
         canModifyProgressBar = true;
         setNowPlaying(media.getTitle(), media.getArtist());
+        URL imageUrl = Main.class.getResource("Images/"+ media.getImageName());
+        coverImageView.setImage(new Image(imageUrl.toString()));
         setDuration();
         onPlayPause();
     }
