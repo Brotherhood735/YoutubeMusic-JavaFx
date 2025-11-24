@@ -36,7 +36,7 @@ public class MediaMainController extends UniController {
         NavigationHandler.setMediaController(this);
         HomeController.setMediaMainController(this);
         loadView("MediaMainEast.fxml", eastArea,
-                c -> { return new MediaMainEastController(currentMedia, eastArea);});
+                c -> { return new MediaMainEastController(currentMedia, eastArea, bottomController);});
         loadView("MediaMainWest.fxml", westArea,
                 c -> { return new MediaMainWestController(currentMedia, westArea, bottomController);});
         bottomController.setData(westController.getRenderer(), currentMedia, true);

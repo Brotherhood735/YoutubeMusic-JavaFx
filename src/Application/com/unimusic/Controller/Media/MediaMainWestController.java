@@ -9,6 +9,7 @@ import com.unimusic.View.Components.OnlineVideoPlayable;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -24,6 +25,11 @@ public class MediaMainWestController extends UniController {
     private LocalPlayableAudio localAudioRenderer;
     private OnlineVideoPlayable onlineVideoRenderer;
     private PlayableMedia currentRenderer;
+
+    @FXML private Label strumentiLabel;
+    @FXML private Label dataLabel;
+    @FXML private Label luogoLabel;
+
     private MediaView mediaView;
     private ImageView imageView;
     private WebView webView;
@@ -44,10 +50,19 @@ public class MediaMainWestController extends UniController {
         AnchorPane.setLeftAnchor(mainArea, 0.0);
         AnchorPane.setRightAnchor(mainArea, 0.0);
         MediaMainController.setWestController(this);
+        setMediaInfo();
         // the default is to go for the video
         startDefaultRenderer();
     }
 
+    private void setMediaInfo() {
+        strumentiLabel.setText(notProvidedChecker(currentMedia.getInstruments()));
+        dataLabel.setText(notProvidedChecker(currentMedia.getDate()));
+        luogoLabel.setText(notProvidedChecker(currentMedia.getPlace()));
+    }
+    private String notProvidedChecker(String str){
+        return str == null ? "Non fornito" : str;
+    }
     private void startDefaultRenderer() {
         boolean isRequested = false;
         if (currentMedia.getVideoName() != null) {
@@ -139,11 +154,11 @@ public class MediaMainWestController extends UniController {
     }
 
     private void replaceOrAddViewToMainArea(Node view) {
-        if (mainArea.getChildren().size() > 1) {
+        if (mainArea.getChildren().size() > 2) {
             mainArea.getChildren().remove(1);
             mainArea.getChildren().add(1, view);
         } else {
-            mainArea.getChildren().add(view);
+            mainArea.getChildren().add(1,view);
         }
     }
 

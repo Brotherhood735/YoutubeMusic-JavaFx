@@ -19,12 +19,12 @@ public class UniMedia extends UniData
     String place;
     public UniMedia(int id)
     {
-        super(id);
+        super(id, UniDataType.Media);
 
     }
     public UniMedia(int id, String title, String videoName, String audioName, String webUrl,
                     String artist, String imageName, String type, String instruments, String date, String place) {
-        super(id);
+        super(id, UniDataType.Media);
         this.title = title;
         this.videoName = videoName;
         this.audioName = audioName;

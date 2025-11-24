@@ -1,5 +1,6 @@
 package com.unimusic.Controller.Media;
 
+import com.unimusic.Controller.AddMediaMetaInfoController;
 import com.unimusic.Controller.Media.Comment.MediaCommentsController;
 import com.unimusic.Controller.UniController;
 import com.unimusic.Model.Media.UniMedia;
@@ -10,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 import java.io.IOException;
 
@@ -17,6 +19,7 @@ public class MediaMainEastController extends UniController {
     private UniMedia currentMedia;
     private int areaIdx;
     private AnchorPane parentArea;
+    private MediaControlController bottomController;
     @FXML private VBox mainArea;
 
     @FXML
@@ -26,29 +29,30 @@ public class MediaMainEastController extends UniController {
         AnchorPane.setLeftAnchor(mainArea, 0.0);
         AnchorPane.setRightAnchor(mainArea, 0.0);
         MediaMainController.setEastController(this);
-        loadView("MediaComments.fxml", 0);
+        loadView("MediaComments.fxml", 0, c -> new MediaCommentsController(currentMedia));
     }
 
-    public MediaMainEastController(UniMedia currentMedia, AnchorPane parentArea) {
+    public MediaMainEastController(UniMedia currentMedia, AnchorPane parentArea, MediaControlController bottomController) {
         this.currentMedia = currentMedia;
         this.parentArea = parentArea;
+        this.bottomController = bottomController;
         areaIdx = -1;
     }
 
     @FXML
     void onOther(ActionEvent event) {
-        loadView("onOther.fxml", 2);
+        loadView("AddMediaMetaInfo.fxml", 2, c -> new AddMediaMetaInfoController(currentMedia));
 
     }
 
     @FXML
     void onComments(ActionEvent event) {
-        loadView("MediaComments.fxml", 0);
+        loadView("MediaComments.fxml", 0, c -> new MediaCommentsController(currentMedia));
     }
 
     @FXML
     void onLyrics(ActionEvent event) {
-        loadView("onLyrics.fxml", 1);
+        //loadView("onLyrics.fxml", 1);
 
     }
 
@@ -58,12 +62,12 @@ public class MediaMainEastController extends UniController {
 
     }
 
-    public void loadView(String fxml, int idx)
+    public void loadView(String fxml, int idx, Callback<Class<?>, Object> controllerFactory)
     {
         if (idx == areaIdx) return;
         areaIdx = idx;
         FXMLLoader loader = NavigationHandler.getLoader(fxml);
-        loader.setControllerFactory( c -> new MediaCommentsController(currentMedia));
+        loader.setControllerFactory(controllerFactory);
         try {
             Node view = loader.load();
             setContent(view);

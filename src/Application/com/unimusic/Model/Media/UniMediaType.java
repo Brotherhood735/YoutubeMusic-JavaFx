@@ -1,6 +1,6 @@
 package com.unimusic.Model.Media;
 
-public enum MediaType
+public enum UniMediaType
 {
     AudioFile,
     VideoFile,

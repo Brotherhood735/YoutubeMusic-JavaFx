@@ -45,7 +45,10 @@ public class MediaControlController extends UniController
         setDuration();
         onPlayPause();
     }
-
+    public PlayableMedia getRenderer()
+    {
+        return renderer;
+    }
     private void setDuration()
     {
         renderer.setOnReady( () -> {

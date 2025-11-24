@@ -2,8 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
 
 <VBox fx:id="mainArea" alignment="TOP_CENTER" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.Media.MediaMainWestController">
    <children>
@@ -20,5 +24,84 @@
             <Insets />
          </VBox.margin>
       </HBox>
+      <ScrollPane hbarPolicy="NEVER" prefWidth="485.0">
+         <VBox.margin>
+            <Insets left="10.0" top="10.0" />
+         </VBox.margin>
+         <content>
+            <VBox maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="488.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label text="Esecutori:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="esecutoriLabel" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="108.0" text="Example Text" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0">
+                     <children>
+                        <Label text="Strumenti:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="strumentiLabel" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="108.0" text="Example Text" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="35.0">
+                     <children>
+                        <Label text="Data:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="dataLabel" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="108.0" text="Example Text" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="60.0">
+                     <children>
+                        <Label text="Luogo di registrazione:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="luogoLabel" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="108.0" text="Example Text" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
    </children>
 </VBox>

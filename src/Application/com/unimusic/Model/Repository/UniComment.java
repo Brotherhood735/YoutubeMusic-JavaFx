@@ -1,5 +1,7 @@
 package com.unimusic.Model.Repository;
 
+import com.unimusic.Model.Media.UniDataType;
+
 public class UniComment extends UniData{
     private int depth;
     private int mediaId;
@@ -7,7 +9,7 @@ public class UniComment extends UniData{
     private String comment;
     private UniComment parentComment;
     public UniComment(UniComment parentComment, int commentId, int mediaId,  String username, String comment, int depth){
-        super(commentId);
+        super(commentId, UniDataType.Comment);
         this.mediaId = mediaId;
         this.username = username;
         this.comment = comment;
