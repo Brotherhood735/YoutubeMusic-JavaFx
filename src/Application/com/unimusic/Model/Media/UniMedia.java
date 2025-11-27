@@ -57,4 +57,5 @@ public class UniMedia extends UniData
     public void setInstruments(String instruments) { this.instruments = instruments; }
     public void setDate(String date) { this.date = date; }
     public void setPlace(String place) { this.place = place; }
+
 }

@@ -3,6 +3,7 @@ package com.unimusic.Model.Repository;
 import com.unimusic.Config.AppConfig;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Authentication.User;
+import com.unimusic.Model.Media.UniMediaMetaInfo;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,17 +11,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DataRepository implements MediaRepository, UserRepository, CommentRepository{
+public class DataRepository implements MediaRepository, UserRepository, CommentRepository, MediaMetaInfoRepository{
     private ArrayList<UniComment> comments = new ArrayList<>();
     private ArrayList<UniMedia> media = new ArrayList<>();
     private final String COMMENTS_CSV_HEADER = "id_comment,id_media,id_parent,username,comment";
     private Map<String, User> users = new HashMap<>();
+    private ArrayList<UniMediaMetaInfo> metaInfos = new ArrayList<>();
 
     public DataRepository() {
         ensureUsersCsvExists();
         loadUsers();
         loadAllComments();
         loadAllMedia();
+        loadAllMediaMetaInfo();
+    }
+
+    private void loadAllMediaMetaInfo() {
+        metaInfos = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(AppConfig.UNI_MEDIA_META_INFO_CSV_PATH))) {
+            String line;
+            // Skip header line
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 4) {
+                    int id = Integer.parseInt(parts[0]);
+                    int mediaId = Integer.parseInt(parts[1]);
+                    String title = parts[2];
+                    String artists = parts[3];
+                    String instruments = parts[4];
+                    double startTime = Double.parseDouble(parts[5]);
+                    double endTime = Double.parseDouble(parts[6]);
+                    metaInfos.add(new UniMediaMetaInfo(id, mediaId, title, artists, instruments, startTime, endTime));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading comments from CSV: " + e.getMessage());
+        }
     }
 
     private void loadAllComments()
@@ -194,33 +222,33 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
     }
 
     private void loadAllMedia() {
-            media = new ArrayList<>();
-            try (BufferedReader reader = new BufferedReader(
-                    new FileReader(AppConfig.UNI_MEDIA_CSV_PATH))) {
-                String line;
-                // Skip header line
-                reader.readLine();
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(",");
-                    if (parts.length >= 4) {
-                        int id = Integer.parseInt(parts[0]);
-                        String title       = getNullValue(parts[1]);
-                        String videoUrl    = getNullValue(parts[2]);
-                        String audioUrl    = getNullValue(parts[3]);
-                        String webUrl      = getNullValue(parts[4]);
-                        String artist      = getNullValue(parts[5]);
-                        String imageUrl    = getNullValue(parts[6]);
-                        String type        = getNullValue(parts[7]);
-                        String instruments = getNullValue(parts[8]);
-                        String date        = getNullValue(parts[9]);
-                        String place       = getNullValue(parts[10]);
-                        media.add(new UniMedia(id, title, videoUrl, audioUrl, webUrl, artist, imageUrl, type,
-                                instruments, date, place));
-                    }
+        media = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(AppConfig.UNI_MEDIA_CSV_PATH))) {
+            String line;
+            // Skip header line
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 4) {
+                    int id = Integer.parseInt(parts[0]);
+                    String title       = getNullValue(parts[1]);
+                    String videoUrl    = getNullValue(parts[2]);
+                    String audioUrl    = getNullValue(parts[3]);
+                    String webUrl      = getNullValue(parts[4]);
+                    String artist      = getNullValue(parts[5]);
+                    String imageUrl    = getNullValue(parts[6]);
+                    String type        = getNullValue(parts[7]);
+                    String instruments = getNullValue(parts[8]);
+                    String date        = getNullValue(parts[9]);
+                    String place       = getNullValue(parts[10]);
+                    media.add(new UniMedia(id, title, videoUrl, audioUrl, webUrl, artist, imageUrl, type,
+                            instruments, date, place));
                 }
-            } catch (IOException e) {
-                System.err.println("Error loading comments from CSV: " + e.getMessage());
             }
+        } catch (IOException e) {
+            System.err.println("Error loading comments from CSV: " + e.getMessage());
+        }
     }
     private String getNullValue(String str)
     {
@@ -381,5 +409,63 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
      */
     public Map<String, User> getAllUsers() {
         return new HashMap<>(users);
+    }
+
+    @Override
+    public void saveMetaInfo(UniMediaMetaInfo metaInfo) {
+        metaInfos.add(metaInfo);
+        saveAllMetaInfos();
+    }
+
+    @Override
+    public ArrayList<UniMediaMetaInfo> getMetaInfo(int mediaId)
+    {
+        if (mediaId < 0) return null;
+
+        ArrayList<UniMediaMetaInfo> metaInfosWithMediaId = new ArrayList<>();
+
+        for (UniMediaMetaInfo metaInfo : metaInfos)
+            if (metaInfo.getMediaId() == mediaId)
+            {
+                metaInfosWithMediaId.add(metaInfo);
+            }
+        return metaInfosWithMediaId;
+    }
+
+    @Override
+    public int getMetaInfoLength(int mediaId) {
+        int i = 0;
+        for (UniMediaMetaInfo metaInfo : metaInfos)
+            if (metaInfo.getMediaId() == mediaId) i++;
+
+        return i;
+    }
+
+    @Override
+    public int generateMetaInfoId() {
+        return metaInfos.size();
+    }
+
+    private void saveAllMetaInfos() {
+        try (FileWriter writer = new FileWriter(AppConfig.UNI_MEDIA_META_INFO_CSV_PATH)) {
+            // Write header
+            writer.write(AppConfig.UNI_MEDIA_META_INFO_CSV_HEADER);
+
+            // Write users
+            for (UniMediaMetaInfo metaInfo : metaInfos) {
+                writer.write(
+                        "%d,%d,%s,%s,%s,%s,%s\n".formatted(
+                                metaInfo.getId(),
+                                metaInfo.getMediaId(),
+                                validateStr(metaInfo.getTitle()),
+                                validateStr(metaInfo.getArtists()),
+                                validateStr(metaInfo.getInstruments()),
+                                validateStr(String.valueOf(metaInfo.getStartTime())),
+                                validateStr(String.valueOf(metaInfo.getEndTime()))
+                        ));
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving Meta Info to CSV: " + e.getMessage());
+        }
     }
 }

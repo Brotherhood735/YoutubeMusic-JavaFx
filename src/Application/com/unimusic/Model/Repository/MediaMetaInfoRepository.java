@@ -1,7 +1,13 @@
 package com.unimusic.Model.Repository;
 
-public interface MediaMetaInfoRepository {
-    void saveMetaInfo(String metaInfo);
+import com.unimusic.Model.Media.UniMediaMetaInfo;
 
+import java.util.ArrayList;
+
+public interface MediaMetaInfoRepository {
+    void saveMetaInfo(UniMediaMetaInfo metaInfo);
+    ArrayList<UniMediaMetaInfo> getMetaInfo(int mediaId);
+    int getMetaInfoLength(int mediaId);
+    int generateMetaInfoId();
 
 }

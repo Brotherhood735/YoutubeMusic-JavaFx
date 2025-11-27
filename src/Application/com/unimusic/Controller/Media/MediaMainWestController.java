@@ -1,20 +1,31 @@
 package com.unimusic.Controller.Media;
 
+import com.unimusic.Controller.MediaMetaInfoController;
 import com.unimusic.Controller.UniController;
+import com.unimusic.Main;
 import com.unimusic.Model.Media.UniMedia;
+import com.unimusic.Model.Media.UniMediaMetaInfo;
+import com.unimusic.Model.Repository.MediaMetaInfoRepository;
+import com.unimusic.Nav.NavigationHandler;
 import com.unimusic.View.Components.LocalPlayableAudio;
 import com.unimusic.View.Components.LocalPlayableVideo;
 import com.unimusic.View.Components.PlayableMedia;
 import com.unimusic.View.Components.OnlineVideoPlayable;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaView;
 import javafx.scene.web.WebView;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class MediaMainWestController extends UniController {
 
@@ -37,6 +48,9 @@ public class MediaMainWestController extends UniController {
     @FXML private Button videoRequestButton;
     @FXML private Button audioRequestButton;
     @FXML private Button webRequestButton;
+    @FXML private VBox additionalInfoArea;
+
+    @FXML private MediaMetaInfoRepository metaInfoRepo;
 
     public MediaMainWestController(UniMedia currentMedia, AnchorPane westArea, MediaControlController bottomController) {
         this.currentMedia = currentMedia;
@@ -50,12 +64,39 @@ public class MediaMainWestController extends UniController {
         AnchorPane.setLeftAnchor(mainArea, 0.0);
         AnchorPane.setRightAnchor(mainArea, 0.0);
         MediaMainController.setWestController(this);
-        setMediaInfo();
+        metaInfoRepo = Main.getDataRepository();
+
+        setDefaultInfo();
         // the default is to go for the video
         startDefaultRenderer();
+
+        ArrayList<UniMediaMetaInfo> metaInfos = metaInfoRepo.getMetaInfo(currentMedia.getId());
+        if (metaInfos == null) return;
+        for (UniMediaMetaInfo metaInfo : metaInfos) {
+
+            Separator separator = new Separator();
+            separator.setOrientation(Orientation.HORIZONTAL);
+
+            Node view = setMetaInfoView(metaInfo);
+
+            additionalInfoArea.getChildren().addAll(separator, view);
+        }
     }
 
-    private void setMediaInfo() {
+    private Node setMetaInfoView(UniMediaMetaInfo metaInfo) {
+        try {
+            FXMLLoader loader = NavigationHandler.getLoader("MediaMetaInfo.fxml");
+            loader.setControllerFactory(controller -> new MediaMetaInfoController(metaInfo));
+            Node view = loader.load();
+            return view;
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading view: MediaMetaInfo.fxml");
+        }
+        return null;
+    }
+
+    private void setDefaultInfo() {
         strumentiLabel.setText(notProvidedChecker(currentMedia.getInstruments()));
         dataLabel.setText(notProvidedChecker(currentMedia.getDate()));
         luogoLabel.setText(notProvidedChecker(currentMedia.getPlace()));

@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="128.0" prefWidth="387.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="128.0" prefWidth="387.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.MediaMetaInfoController">
    <children>
       <HBox alignment="CENTER_RIGHT">
          <children>
-            <Label fx:id="TitleLabel" maxWidth="1.7976931348623157E308" text="Canzone" HBox.hgrow="ALWAYS">
+            <Label fx:id="titleLabel" maxWidth="1.7976931348623157E308" text="Canzone" HBox.hgrow="ALWAYS">
                <font>
                   <Font size="20.0" />
                </font>

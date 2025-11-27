@@ -41,7 +41,7 @@ public class MediaMainEastController extends UniController {
 
     @FXML
     void onOther(ActionEvent event) {
-        loadView("AddMediaMetaInfo.fxml", 2, c -> new AddMediaMetaInfoController(currentMedia));
+        loadView("AddMediaMetaInfo.fxml", 2, c -> new AddMediaMetaInfoController(currentMedia, bottomController.getRenderer()));
 
     }
 
