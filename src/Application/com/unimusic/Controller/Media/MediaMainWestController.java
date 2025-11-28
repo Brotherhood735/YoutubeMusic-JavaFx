@@ -1,6 +1,5 @@
 package com.unimusic.Controller.Media;
 
-import com.unimusic.Controller.MediaMetaInfoController;
 import com.unimusic.Controller.UniController;
 import com.unimusic.Main;
 import com.unimusic.Model.Media.UniMedia;
@@ -86,7 +85,7 @@ public class MediaMainWestController extends UniController {
     private Node setMetaInfoView(UniMediaMetaInfo metaInfo) {
         try {
             FXMLLoader loader = NavigationHandler.getLoader("MediaMetaInfo.fxml");
-            loader.setControllerFactory(controller -> new MediaMetaInfoController(metaInfo));
+            loader.setControllerFactory(controller -> new MediaMetaInfoController(this, metaInfo));
             Node view = loader.load();
             return view;
         } catch (IOException e) {
@@ -133,9 +132,9 @@ public class MediaMainWestController extends UniController {
     @FXML
     private void onVideoRequest() {
         if (localVideoRenderer != null) return;
-        MediaView mediaViewNode = new MediaView();
-        mediaView = mediaViewNode;
-        switchRenderer(mediaViewNode, new LocalPlayableVideo(currentMedia.getVideoName(), mediaViewNode, currentMedia));
+        ImageView imageViewNode = new ImageView();
+        imageView = imageViewNode;
+        switchRenderer(imageViewNode, new LocalPlayableVideo(currentMedia.getVideoName(), imageViewNode, currentMedia));
     }
 
     @FXML
@@ -155,9 +154,9 @@ public class MediaMainWestController extends UniController {
     }
     private void switchRenderer(Node view, PlayableMedia newRenderer) {
         // Stop all existing renderers
-        if (localVideoRenderer != null) localVideoRenderer.stopRender();
-        if (localAudioRenderer != null) localAudioRenderer.stopRender();
-        if (onlineVideoRenderer != null) onlineVideoRenderer.stopRender();
+        if (localVideoRenderer != null) localVideoRenderer.dispose();
+        if (localAudioRenderer != null) localAudioRenderer.dispose();
+        if (onlineVideoRenderer != null) onlineVideoRenderer.dispose();
 
         // Nullify old references
         localVideoRenderer = null;
@@ -176,9 +175,8 @@ public class MediaMainWestController extends UniController {
         if (newRenderer instanceof LocalPlayableVideo) localVideoRenderer = (LocalPlayableVideo) newRenderer;
         else if (newRenderer instanceof LocalPlayableAudio) localAudioRenderer = (LocalPlayableAudio) newRenderer;
         else if (newRenderer instanceof OnlineVideoPlayable) onlineVideoRenderer = (OnlineVideoPlayable) newRenderer;
-
-        bottomController.setData(getRenderer(), currentMedia, true);
-        newRenderer.render();
+        newRenderer.init();
+        bottomController.init(getRenderer(), currentMedia);
     }
 
     private void bindViewDimensionsToParentArea(Node view) {
@@ -218,8 +216,7 @@ public class MediaMainWestController extends UniController {
     {
         if (currentRenderer != null)
         {
-            currentRenderer.pauseMedia();
-            currentRenderer.getLocalMediaPlayer().dispose();
+            currentRenderer.dispose();
         }
     }
 }

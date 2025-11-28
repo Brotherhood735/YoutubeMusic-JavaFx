@@ -7,21 +7,15 @@ import javafx.scene.image.ImageView;
 public class LocalPlayableAudio extends LocalPlayableMedia
 {
     private Image image;
-    private ImageView imageView;
+    private UniMedia uniMedia;
     public LocalPlayableAudio(String audioName, ImageView view, UniMedia uniMedia) {
-        super("data/" + audioName, uniMedia);
-        this.imageView = view;
+        super("data/" + audioName, view);
+        this.uniMedia = uniMedia;
         this.image = null;
     }
+    @Override
+    public void init(){
+        videoImageView.setPreserveRatio(true);
+    }
 
-    @Override
-    public void render() {
-        imageView.setPreserveRatio(true);
-        imageView.setImage(image);
-    }
-    @Override
-    public void stopRender() {
-        pauseMedia();
-        mediaPlayer.dispose();
-    }
 }

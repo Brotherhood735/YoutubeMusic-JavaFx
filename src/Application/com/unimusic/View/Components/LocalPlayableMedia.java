@@ -1,86 +1,177 @@
 package com.unimusic.View.Components;
 
-import com.unimusic.Main;
-import com.unimusic.Model.Media.UniMedia;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.application.Platform;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelBuffer;
+import javafx.scene.image.PixelFormat;
+import javafx.scene.image.WritableImage;
 import javafx.util.Duration;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
+import uk.co.caprica.vlcj.player.embedded.videosurface.CallbackVideoSurface;
+import uk.co.caprica.vlcj.player.embedded.videosurface.VideoSurfaceAdapters;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormat;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormatCallback;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.RenderCallback;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.RV32BufferFormat;
 
-import java.net.URL;
+import java.nio.ByteBuffer;
 
 public class LocalPlayableMedia implements PlayableMedia {
-    protected Media media;
-    protected MediaPlayer mediaPlayer;
-    private UniMedia uniMedia;
 
-    protected LocalPlayableMedia(String mediaName, UniMedia uniMedia)
-    {
-        URL fxmlUrl = Main.class.getResource(mediaName);
-        media = new Media(fxmlUrl.toString());
-        mediaPlayer = new MediaPlayer(media);
-        this.uniMedia = uniMedia;
+    protected MediaPlayerFactory mediaPlayerFactory;
+
+    protected EmbeddedMediaPlayer  embeddedMediaPlayer;
+
+    protected WritableImage videoImage;
+
+    protected PixelBuffer<ByteBuffer> videoPixelBuffer;
+
+    protected ImageView videoImageView;
+
+    protected String mediaUrl;
+
+    public LocalPlayableMedia(String mediaName, ImageView videoImageView) {
+        mediaUrl = mediaName ;
+        this.videoImageView = videoImageView;
     }
 
+    public void play(String path){
+        embeddedMediaPlayer.media().play(path);
+    }
 
-    public Media getMedia() { return media; }
+    @Override
+    public void init() {
+
+    }
 
     @Override
     public MediaPlayer getLocalMediaPlayer() {
-        return mediaPlayer;
-    }
-
-    @Override
-    public EmbeddedMediaPlayer getOnlineMediaPlayer() {
         return null;
     }
 
     @Override
-    public Media getLocalMedia() {
-        return media;
+    public EmbeddedMediaPlayer getEmbeddedMediaPlayer() {
+        return null;
     }
 
-    public void playMedia() {
-        mediaPlayer.play();
+    @Override
+    public void play() {
+        embeddedMediaPlayer.controls().play();
     }
 
-    public void pauseMedia() {
-        mediaPlayer.pause();
+    @Override
+    public void pause() {
+        embeddedMediaPlayer.controls().pause();
     }
 
-    public void resetMedia() {
-        if(mediaPlayer.getStatus() != MediaPlayer.Status.READY) {
-            mediaPlayer.seek(Duration.seconds(0.0));
-        }
+    @Override
+    public void restart() {
+        embeddedMediaPlayer.controls().stop();
+        embeddedMediaPlayer.controls().play();
     }
-    public void render(){};
-    public void stopRender(){}
+
+    @Override
+    public void stop() {
+        dispose();
+    }
+
+    @Override
+    public void dispose(){
+        if (embeddedMediaPlayer == null) return;
+        if (mediaPlayerFactory == null) return;
+        embeddedMediaPlayer.controls().stop();
+        embeddedMediaPlayer.release();
+        mediaPlayerFactory.release();
+    }
 
     @Override
     public void seek(Duration duration) {
-        mediaPlayer.seek(duration);
+        embeddedMediaPlayer.controls().setTime((long) duration.toMillis());
     }
 
     @Override
     public void setVolume(double volume) {
-        mediaPlayer.setVolume(volume);
+        embeddedMediaPlayer.audio().setVolume((int) volume);
     }
 
     @Override
     public void setOnReady(Runnable runnable) {
-        mediaPlayer.setOnReady(runnable);
-    }
-
-    @Override
-    public void addCurrentTimeListener(TimeChangedListener changeListener) {
-        mediaPlayer.currentTimeProperty().addListener(
-                (obs, oldTime, newTime) -> {
-            changeListener.timeChanged(newTime);
+        embeddedMediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+            @Override
+            public void mediaPlayerReady(MediaPlayer mediaPlayer) {
+                runnable.run();
+            }
         });
     }
 
     @Override
-    public Duration getMediaDuration() {
-        return media.getDuration();
+    public void addCurrentTimeListener(TimeChangedListener listener) {
+        embeddedMediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter()
+        {
+            @Override
+            public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
+                listener.timeChanged(Duration.millis(newTime));
+            }
+        });
+    }
+
+    @Override
+    public Duration getMaxDuration() {
+        return Duration.millis(embeddedMediaPlayer.status().length());
+    }
+
+    class FXCallbackVideoSurface extends CallbackVideoSurface {
+        FXCallbackVideoSurface() {
+            super(new FXBufferFormatCallback(), new FXRenderCallback(), true, VideoSurfaceAdapters.getVideoSurfaceAdapter());
+        }
+    }
+
+    private class FXBufferFormatCallback implements BufferFormatCallback {
+        private int sourceWidth;
+        private int sourceHeight;
+
+        @Override
+        public BufferFormat getBufferFormat(int sourceWidth, int sourceHeight) {
+            this.sourceWidth = sourceWidth;
+            this.sourceHeight = sourceHeight;
+            return new RV32BufferFormat(sourceWidth, sourceHeight);
+        }
+
+        @Override
+        public void newFormatSize(int i, int i1, int i2, int i3) {
+
+        }
+
+        @Override
+        public void allocatedBuffers(ByteBuffer[] buffers) {
+            assert buffers[0].capacity() == sourceWidth * sourceHeight * 4;
+            PixelFormat<ByteBuffer> pixelFormat = PixelFormat.getByteBgraPreInstance();
+            videoPixelBuffer = new PixelBuffer<>(sourceWidth, sourceHeight, buffers[0], pixelFormat);
+            videoImage = new WritableImage(videoPixelBuffer);
+            videoImageView.setImage(videoImage);
+        }
+    }
+
+    private class FXRenderCallback implements RenderCallback {
+        @Override
+        public void lock(MediaPlayer mediaPlayer) {
+
+        }
+
+        @Override
+        public void display(MediaPlayer mediaPlayer, ByteBuffer[] byteBuffers, BufferFormat bufferFormat, int i, int i1) {
+            Platform.runLater(() -> {
+                videoPixelBuffer.updateBuffer(pb -> null);
+            });
+        }
+
+        @Override
+        public void unlock(MediaPlayer mediaPlayer) {
+
+        }
     }
 }
+

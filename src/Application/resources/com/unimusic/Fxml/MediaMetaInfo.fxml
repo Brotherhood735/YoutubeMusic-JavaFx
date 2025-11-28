@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="128.0" prefWidth="387.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.MediaMetaInfoController">
+<VBox prefHeight="128.0" prefWidth="387.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.Media.MediaMetaInfoController">
    <children>
       <HBox alignment="CENTER_RIGHT">
          <children>
@@ -19,9 +19,9 @@
             </Label>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <Hyperlink fx:id="startSectionLabel" text="00:00" />
+                  <Hyperlink fx:id="startSectionLabel" onMouseClicked="#startSectionRequested" text="00:00" />
                   <Separator prefHeight="0.0" prefWidth="12.0" />
-                  <Hyperlink fx:id="endSectionLabel" text="01:27" />
+                  <Hyperlink fx:id="endSectionLabel" onMouseClicked="#endSectionRequested" text="01:27" />
                </children>
             </HBox>
          </children>

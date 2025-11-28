@@ -1,31 +1,30 @@
 package com.unimusic.View.Components;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 public interface PlayableMedia {
 
-    public MediaPlayer getLocalMediaPlayer();
-    public EmbeddedMediaPlayer getOnlineMediaPlayer();
-    public Media getLocalMedia();
+    void init();
+    MediaPlayer getLocalMediaPlayer();
+    EmbeddedMediaPlayer getEmbeddedMediaPlayer();
 
-    public void playMedia();
+    void play();
 
-    public void pauseMedia();
+    void pause();
 
-    public void resetMedia();
-    public void render();
-    public void stopRender();
-    public void seek(Duration duration);
-    public void setVolume(double volume);
-    public void setOnReady(Runnable runnable);
+    void restart();
+    void stop();
+    void dispose();
+    void seek(Duration duration);
+    void setVolume(double volume);
+    void setOnReady(Runnable runnable);
 
-    public interface TimeChangedListener{
+    interface TimeChangedListener{
         void timeChanged(Duration newTime);
     }
-    public void addCurrentTimeListener(TimeChangedListener listener);
+    void addCurrentTimeListener(TimeChangedListener listener);
 
-    public Duration getMediaDuration();
+    Duration getMaxDuration();
 }

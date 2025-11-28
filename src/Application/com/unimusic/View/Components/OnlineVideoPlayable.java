@@ -2,10 +2,10 @@ package com.unimusic.View.Components;
 
 import com.unimusic.Model.Media.UniMedia;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Duration;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 public class OnlineVideoPlayable implements PlayableMedia {
@@ -23,33 +23,48 @@ public class OnlineVideoPlayable implements PlayableMedia {
     }
 
     @Override
+    public void init() {
+
+    }
+
+    @Override
     public MediaPlayer getLocalMediaPlayer() {
         return null;
     }
 
     @Override
-    public EmbeddedMediaPlayer getOnlineMediaPlayer() {
+    public EmbeddedMediaPlayer getEmbeddedMediaPlayer() {
         return null;
     }
 
     @Override
-    public Media getLocalMedia() {
-        return null;
+    public void play() {
+
     }
 
     @Override
-    public void playMedia() {
-    }
-    @Override
-    public void render() {
+    public void pause() {
+
     }
 
     @Override
-    public void stopRender() {
+    public void restart() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 
     @Override
     public void seek(Duration duration) {
+
     }
 
     @Override
@@ -59,22 +74,16 @@ public class OnlineVideoPlayable implements PlayableMedia {
 
     @Override
     public void setOnReady(Runnable runnable) {
+
     }
 
     @Override
     public void addCurrentTimeListener(TimeChangedListener listener) {
+
     }
 
     @Override
-    public Duration getMediaDuration() {
+    public Duration getMaxDuration() {
         return null;
-    }
-
-    @Override
-    public void pauseMedia() {
-    }
-
-    @Override
-    public void resetMedia() {
     }
 }

@@ -1,26 +1,33 @@
 package com.unimusic.View.Components;
 
+import com.unimusic.Config.AppConfig;
 import com.unimusic.Model.Media.UniMedia;
-import javafx.scene.media.MediaView;
+import javafx.scene.image.ImageView;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
 
 public class LocalPlayableVideo extends LocalPlayableMedia {
 
-    private MediaView mediaView;
-
-    public LocalPlayableVideo(String videoName, MediaView view, UniMedia uniMedia) {
-        super("Videos/" + videoName, uniMedia);
-        this.mediaView = view;
-    }
-    @Override
-    public void render(){
-        mediaView.setPreserveRatio(true);
-        mediaView.setMediaPlayer(mediaPlayer);
+    public LocalPlayableVideo(String videoName, ImageView view, UniMedia uniMedia) {
+        super(AppConfig.RESOURCES_DIR + "/Videos/" + videoName, view);
     }
 
     @Override
-    public void stopRender() {
-        pauseMedia();
-        mediaPlayer.dispose();
+    public void init() {
+        videoImageView.setPreserveRatio(true);
+        mediaPlayerFactory = new MediaPlayerFactory();
+        embeddedMediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
+        embeddedMediaPlayer.videoSurface().set(new FXCallbackVideoSurface());
+
+        embeddedMediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter()
+        {
+            @Override
+            public void error(MediaPlayer mediaPlayer) {
+                System.out.println("Error playing media");
+            }
+        });
+        play(mediaUrl);
     }
 }

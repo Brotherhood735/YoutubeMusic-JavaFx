@@ -33,7 +33,7 @@ public class AddMediaMetaInfoController extends UniController
     }
 
     private void setupRangeSlider() {
-        double maxInMillis = renderer.getMediaDuration().toMillis();
+        double maxInMillis = renderer.getMaxDuration().toMillis();
         rangeSlider.setMax(maxInMillis);
         rangeSlider.setHighValue(maxInMillis);
         rangeSlider.setLowValue(0);

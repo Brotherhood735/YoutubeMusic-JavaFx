@@ -39,7 +39,7 @@ public class MediaMainController extends UniController {
                 c -> { return new MediaMainEastController(currentMedia, eastArea, bottomController);});
         loadView("MediaMainWest.fxml", westArea,
                 c -> { return new MediaMainWestController(currentMedia, westArea, bottomController);});
-        bottomController.setData(westController.getRenderer(), currentMedia, true);
+        //bottomController.setData(westController.getRenderer(), currentMedia, true);
     }
 
     public static void setEastController(MediaMainEastController controller)

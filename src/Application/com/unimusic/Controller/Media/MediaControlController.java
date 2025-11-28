@@ -4,6 +4,7 @@ import com.unimusic.Controller.UniController;
 import com.unimusic.Main;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.View.Components.PlayableMedia;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -34,7 +35,7 @@ public class MediaControlController extends UniController
     private boolean isPlaying = false;
     private boolean isMute = false;
 
-    public void setData(PlayableMedia renderer, UniMedia media, boolean isPlaying)
+    public void init(PlayableMedia renderer, UniMedia media)
     {
         this.renderer = renderer;
         this.currentMedia = media;
@@ -43,7 +44,6 @@ public class MediaControlController extends UniController
         URL imageUrl = Main.class.getResource("Images/"+ media.getImageName());
         coverImageView.setImage(new Image(imageUrl.toString()));
         setDuration();
-        onPlayPause();
     }
     public PlayableMedia getRenderer()
     {
@@ -52,38 +52,51 @@ public class MediaControlController extends UniController
     private void setDuration()
     {
         renderer.setOnReady( () -> {
-            Duration duration = renderer.getMediaDuration();
-            int minutes = ((int) duration.toMinutes());
-            double seconds = duration.toSeconds() - (minutes * 60);
-            timeEnd.setText(String.valueOf(minutes) + ":" + String.format("%02d", (int)seconds));
-            progressBar.setMax(duration.toSeconds());
-            progressBar.setValue(0);
-            volumeSlider.setMin(0);
-            volumeSlider.setMax(1);
-            volumeSlider.setValue(0.5);
-            renderer.setVolume(volumeSlider.getValue());
-        });
+            Platform.runLater(() ->
+            {
+                setOnReadyValues(renderer);
+                progressBar.setOnMouseReleased((obs) ->
+                {
+                    renderer.seek(Duration.millis(progressBar.getValue()));
+                    canModifyProgressBar = true;
+                });
 
+                volumeSlider.setOnMouseReleased(
+                        event -> {
+                            renderer.setVolume(volumeSlider.getValue());
+                        }
+                );
+            });
+        });
         renderer.addCurrentTimeListener((newTime) -> {
-            int minutes = ((int) newTime.toMinutes());
-            double seconds = newTime.toSeconds() - (minutes * 60);
-            timeStart.setText(String.valueOf(minutes) + ":" + String.format("%02d", (int)seconds));
-            if (!canModifyProgressBar) return;
-            progressBar.setValue(newTime.toSeconds());
+            Platform.runLater(() ->
+            {
+                int minutes = ((int) newTime.toMinutes());
+                double seconds = newTime.toSeconds() - (minutes * 60);
+                timeStart.setText(String.valueOf(minutes) + ":" + String.format("%02d", (int)seconds));
+                if (!canModifyProgressBar) return;
+                progressBar.setValue(newTime.toMillis());
+            });
         });
-
         progressBar.setOnMouseClicked(event -> {canModifyProgressBar = false;});
-        progressBar.setOnMouseReleased((obs) ->
+
+        progressBar.setOnMouseExited(event ->
         {
-            renderer.seek(Duration.seconds(progressBar.getValue()));
             canModifyProgressBar = true;
         });
+    }
 
-        volumeSlider.setOnMouseReleased(
-                event -> {
-                    renderer.setVolume(volumeSlider.getValue());
-                }
-        );
+    private void setOnReadyValues(PlayableMedia renderer) {
+        Duration duration = renderer.getMaxDuration();
+        int minutes = ((int) duration.toMinutes());
+        double seconds = duration.toSeconds() - (minutes * 60);
+        timeEnd.setText(String.valueOf(minutes) + ":" + String.format("%02d", (int)seconds));
+        progressBar.setMax(duration.toMillis());
+        progressBar.setValue(0);
+        volumeSlider.setMin(0);
+        volumeSlider.setMax(100);
+        volumeSlider.setValue(50);
+        renderer.setVolume(volumeSlider.getValue());
     }
 
 
@@ -109,18 +122,18 @@ public class MediaControlController extends UniController
     }
 
     private void setRendererMute(boolean isMute) {
-        renderer.getLocalMediaPlayer().setMute(isMute);
+        //renderer.getLocalMediaPlayer().setMute(isMute);
     }
 
     private void setRendererPlay(boolean isPlaying)
     {
         if (isPlaying)
         {
-            renderer.playMedia();
+            renderer.play();
         }
         else
         {
-            renderer.pauseMedia();
+            renderer.pause();
         }
     }
     @FXML

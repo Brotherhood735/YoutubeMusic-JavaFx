@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 public class MidiPlayableAudio implements PlayableMedia {
@@ -37,7 +36,7 @@ public class MidiPlayableAudio implements PlayableMedia {
                 if (meta.getType() == 47) { // End of track
                     running = false;
                 }
-                Duration current = getMediaDuration().multiply(sequencer.getMicrosecondPosition() / (double) sequence.getMicrosecondLength());
+                Duration current = getMaxDuration().multiply(sequencer.getMicrosecondPosition() / (double) sequence.getMicrosecondLength());
                 for (TimeChangedListener listener : timeListeners) {
                     listener.timeChanged(current);
                 }
@@ -59,39 +58,11 @@ public class MidiPlayableAudio implements PlayableMedia {
         }
     }
 
-    /** Play */
-    @Override
-    public void playMedia() {
-        if (sequencer != null && !sequencer.isRunning()) {
-            sequencer.start();
-            running = true;
-        }
-    }
-
-    /** Pause */
-    @Override
-    public void pauseMedia() {
-        if (sequencer != null && sequencer.isRunning()) {
-            sequencer.stop();
-            running = false;
-        }
-    }
-
-    /** Reset */
-    @Override
-    public void resetMedia() {
-        if (sequencer != null) {
-            sequencer.stop();
-            sequencer.setTickPosition(0);
-            running = false;
-        }
-    }
-
     /** Seek to position */
     @Override
     public void seek(Duration duration) {
         if (sequencer != null && sequence != null) {
-            long micro = (long)(sequence.getMicrosecondLength() * duration.toMillis() / getMediaDuration().toMillis());
+            long micro = (long)(sequence.getMicrosecondLength() * duration.toMillis() / getMaxDuration().toMillis());
             sequencer.setMicrosecondPosition(micro);
         }
     }
@@ -109,11 +80,6 @@ public class MidiPlayableAudio implements PlayableMedia {
     }
 
     /** Render/stopRender placeholders */
-    @Override
-    public void render() {}
-    @Override
-    public void stopRender() {}
-
     /** OnReady callback */
     @Override
     public void setOnReady(Runnable runnable) {
@@ -126,28 +92,62 @@ public class MidiPlayableAudio implements PlayableMedia {
         timeListeners.add(listener);
     }
 
-    /** Duration of MIDI */
     @Override
-    public Duration getMediaDuration() {
+    public Duration getMaxDuration() {
         if (sequence != null) {
             return Duration.millis(sequence.getMicrosecondLength() / 1000.0);
         }
         return Duration.ZERO;
     }
 
-    /** Not applicable for MIDI */
+    @Override
+    public void init() {
+
+    }
+
+    /**
+     * Not applicable for MIDI
+     */
     @Override
     public MediaPlayer getLocalMediaPlayer() {
         return null;
     }
+
     @Override
-    public EmbeddedMediaPlayer getOnlineMediaPlayer() {
+    public EmbeddedMediaPlayer getEmbeddedMediaPlayer() {
         return null;
     }
+
     @Override
-    public Media getLocalMedia() {
-        return null;
+    public void play() {
+        if (sequencer != null && !sequencer.isRunning()) {
+            sequencer.start();
+            running = true;
+        }
     }
+
+    @Override
+    public void pause() {
+        if (sequencer != null && sequencer.isRunning()) {
+            sequencer.stop();
+            running = false;
+        }
+    }
+
+    @Override
+    public void restart() {
+        if (sequencer != null) {
+            sequencer.stop();
+            sequencer.setTickPosition(0);
+            running = false;
+        }
+    }
+
+    @Override
+    public void stop() {
+        dispose();
+    }
+
 
     /** Change instrument for a channel */
     public void setInstrument(int channel, int instrument) {

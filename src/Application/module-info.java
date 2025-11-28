@@ -16,6 +16,7 @@ module com.unimusic {
     requires javafx.base;
     requires uk.co.caprica.vlcj;
     requires uk.co.caprica.vlcj.javafx;
+    requires annotations;
 
 
     opens com.unimusic to javafx.fxml;
