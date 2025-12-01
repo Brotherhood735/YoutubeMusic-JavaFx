@@ -45,7 +45,7 @@
 
     <!-- Main Content -->
     <center>
-        <ScrollPane fx:id="mainViewArea" prefHeight="500.0" prefWidth="600.0" styleClass="scroll-pane" />
+        <ScrollPane fx:id="mainViewArea" prefHeight="500.0" prefWidth="600.0" />
     </center>
 
 </BorderPane>

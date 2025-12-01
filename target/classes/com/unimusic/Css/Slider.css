@@ -1,0 +1,11 @@
+.slider .thumb {
+    -fx-background-color: white;
+
+    -fx-background-radius: 1.0em;
+    -fx-padding: 0.5em;
+}
+
+.slider .track {
+    -fx-background-color: #333333;
+    -fx-background-radius: 0.2em;
+}

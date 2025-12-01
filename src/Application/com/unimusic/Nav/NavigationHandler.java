@@ -157,7 +157,6 @@ public class NavigationHandler {
      */
     public static void logout(){
         AuthManager.logout();
-        mainController.updateNavBar(false);
         navigateToHome();
     }
 

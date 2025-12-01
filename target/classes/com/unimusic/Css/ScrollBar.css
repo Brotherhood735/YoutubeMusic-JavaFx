@@ -1,0 +1,22 @@
+.scroll-bar .track {
+    -fx-background-color: #333333;
+
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: black;
+}
+.scroll-bar .thumb {
+    -fx-background-color: #555555;
+
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 2em;
+}
+
+
+.scroll-bar:vertical .thumb:hover, .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #777777;
+}

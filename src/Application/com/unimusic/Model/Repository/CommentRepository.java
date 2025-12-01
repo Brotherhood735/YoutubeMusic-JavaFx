@@ -8,4 +8,6 @@ public interface CommentRepository {
     ArrayList<UniComment> loadComments(double id, int depthLevel);
     ArrayList<UniComment> loadComments(int depthLevel);
     void saveComment(UniComment comment, int depthLevel);
+
+    UniComment loadComment(int id);
 }

@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="mainArea" alignment="BASELINE_CENTER" maxHeight="1.7976931348623157E308" prefHeight="500.0" prefWidth="424.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.Media.Comment.MediaCommentsController">
+<VBox fx:id="mainArea" alignment="BASELINE_CENTER" maxHeight="1.7976931348623157E308" prefHeight="500.0" prefWidth="424.0" styleClass="v-box" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.Media.Comment.MediaInDepthCommentsController">
    <children>
-      <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+      <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="-Infinity" VBox.vgrow="ALWAYS">
          <VBox.margin>
             <Insets />
          </VBox.margin>
@@ -27,6 +27,9 @@
                </HBox.margin>
             </Label>
          </children>
+         <padding>
+            <Insets left="5.0" top="5.0" />
+         </padding>
       </HBox>
       <Label fx:id="parentCommentLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="0.0" prefWidth="424.0" text="esempio commento" wrapText="true" VBox.vgrow="NEVER">
          <font>
@@ -44,9 +47,9 @@
             <Insets top="10.0" />
          </VBox.margin>
       </Separator>
-      <ScrollPane fx:id="commentsAreaParent" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="549.0" prefWidth="424.0">
+      <ScrollPane fx:id="commentsAreaParent" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="549.0" prefWidth="424.0" VBox.vgrow="ALWAYS">
          <content>
-            <VBox fx:id="commentsArea" alignment="CENTER" prefHeight="460.0" prefWidth="338.0" />
+            <VBox fx:id="commentsArea" alignment="TOP_CENTER" prefHeight="431.0" prefWidth="428.0" />
          </content>
       </ScrollPane>
       <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="300.0">

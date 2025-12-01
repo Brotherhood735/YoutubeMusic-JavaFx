@@ -1,0 +1,29 @@
+/* Button Styles */
+.button {
+    -fx-background-color: #3f4042;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: gray;
+}
+
+.button-secondary {
+    -fx-background-color: #6c757d;
+}
+
+.button-secondary:hover {
+    -fx-background-color: #5a6268;
+}
+
+.button-success {
+    -fx-background-color: #28a745;
+}
+
+.button-success:hover {
+    -fx-background-color: #218838;
+}

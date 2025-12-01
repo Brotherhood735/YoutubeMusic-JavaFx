@@ -81,7 +81,7 @@ public class HomeController extends UniController {
             return;
         }
         homePage = new VBox(15);
-        homePage.setStyle("-fx-box-border: transparent;");
+        homePage.getStyleClass().add("v-box");
         // populate the VBOX
         setupFilters(homePage);
         loadMusicSections(homePage, 3);
@@ -104,6 +104,7 @@ public class HomeController extends UniController {
     private ScrollPane createSection(List<UniMedia> items) {
         // Cards container
         HBox cardsContainer = new HBox(15);
+        cardsContainer.getStyleClass().add("h-box");
         cardsContainer.setAlignment(Pos.CENTER_LEFT);
         for (UniMedia item : items) {
             VBox card = createMusicCard(item);

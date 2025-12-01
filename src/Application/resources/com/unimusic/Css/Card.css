@@ -1,0 +1,15 @@
+/* Card Styles */
+.card {
+    -fx-background-color: white;
+    -fx-padding: 15px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 3);
+}
+
+.card-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10px 0;
+    -fx-border-color: transparent transparent #dee2e6 transparent;
+    -fx-border-width: 0 0 1px 0;
+}

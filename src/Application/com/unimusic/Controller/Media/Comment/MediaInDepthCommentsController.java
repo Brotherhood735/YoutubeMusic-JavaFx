@@ -1,19 +1,22 @@
 package com.unimusic.Controller.Media.Comment;
 
+import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
+import com.unimusic.Model.Repository.CommentRepository;
 import com.unimusic.Model.Repository.UniComment;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Nav.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 public class MediaInDepthCommentsController extends MediaCommentsController {
     @FXML private Label parentCommentLabel;
     private MediaCommentsController parentCommentSection;
     private UniComment currentComment;
     private UniComment previousComment;
-
     public MediaInDepthCommentsController(UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
     {
         super(media);
@@ -27,6 +30,13 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
     {
         super.initialize();
         populate();
+        setVgrow();
+    }
+
+    @Override
+    protected void setVgrow() {
+        VBox.setVgrow(mainArea, Priority.ALWAYS);
+        VBox.setVgrow(commentsArea, Priority.ALWAYS);
     }
 
     private void populate(){
@@ -39,7 +49,7 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
     }
 
     @FXML
-    private void onReturnHandler()
+    public void onReturnHandler()
     {
         // go to the main commments section
         if (depthLevel == 1)
@@ -48,6 +58,10 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
             return;
         }
         // otherwise go to a lower depth in comment section
+        if (previousComment.getParent() == null)
+        {
+            previousComment = commentRepo.loadComment(previousComment.getId());
+        }
         NavigationHandler.navigateToInDepthCommentSection(currentMedia, previousComment, previousComment.getParent(), depthLevel - 1);
     }
 

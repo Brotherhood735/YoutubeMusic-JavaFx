@@ -37,6 +37,10 @@ public class MediaCommentsController extends UniController {
         loadComments();
         // once we have all the comments on that specific media we can populate the UI
         populateSection();
+        setVgrow();
+    }
+    protected void setVgrow()
+    {
         VBox.setVgrow(mainArea, Priority.ALWAYS);
     }
     protected void loadComments() {
@@ -51,10 +55,7 @@ public class MediaCommentsController extends UniController {
         for (UniComment comment : currentMediaComments)
         {
             VBox commentBox = createCommentBox(comment);
-            Separator seperator = new Separator();
-            seperator.setOrientation(Orientation.HORIZONTAL);
             commentsArea.getChildren().add(commentBox);
-            commentsArea.getChildren().add(seperator);
         }
     }
 
@@ -62,7 +63,7 @@ public class MediaCommentsController extends UniController {
         Label usernameLabel =  new Label(comment.getUsername());
         Label commentLabel = new Label(comment.getComment());
         commentLabel.setPrefHeight(3 * commentLabel.getFont().getSize() * 1.2);
-        Button respondButton = new  Button("See Responses");
+        Button respondButton = new  Button("Guarda commenti");
         respondButton.setOnMouseClicked( e -> onDepthCommentRequest(currentMedia, comment));
         VBox commentBox = new VBox();
         commentBox.setFillWidth(true);
@@ -72,7 +73,9 @@ public class MediaCommentsController extends UniController {
         Insets insets = new Insets(5,5,5,5);
         commentBox.setPadding(insets);
         commentBox.setPrefWidth(200);
-        commentBox.setPrefHeight(200);
+        commentBox.setMinHeight(100);
+        commentBox.setMaxHeight(4 * commentLabel.getFont().getSize() * 1.2);
+        commentBox.setPrefHeight(4 * commentLabel.getFont().getSize() * 1.2);
         commentBox.getChildren().addAll(usernameLabel, commentLabel,  respondButton);
         return commentBox;
     }

@@ -11,7 +11,7 @@
    <children>
       <ScrollPane fx:id="commentsAreaParent" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="460.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
          <content>
-            <VBox fx:id="commentsArea" alignment="CENTER" prefHeight="460.0" prefWidth="338.0" />
+            <VBox fx:id="commentsArea" alignment="TOP_CENTER" prefHeight="460.0" prefWidth="423.0" styleClass="v-box" />
          </content>
       </ScrollPane>
       <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="300.0">

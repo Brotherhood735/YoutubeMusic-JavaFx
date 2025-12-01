@@ -155,7 +155,7 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
                     int parent_id =  Integer.parseInt(parts[2]);
                     String username = parts[3];
                     String comment = parts[4];
-                    comments.add(new UniComment(getParentComment(parent_id), comment_id, media_id, username, comment, depthLevel));
+                    comments.add(new UniComment(getParentComment(parent_id, depthLevel - 1), comment_id, media_id, username, comment, depthLevel));
                 }
             }
         } catch (IOException e) {
@@ -188,7 +188,7 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
                     }
                     String username = parts[3];
                     String comment = parts[4];
-                    comments.add(new UniComment(getParentComment(parent_id), comment_id, media_id, username, comment, depthLevel));
+                    comments.add(new UniComment(getParentComment(parent_id, depthLevel-1), comment_id, media_id, username, comment, depthLevel));
                 }
             }
         } catch (IOException e) {
@@ -212,7 +212,7 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
                     String username = parts[3];
                     String comment = parts[4];
                     comments.add(new UniComment(
-                            getParentComment(parent_id), comment_id, media_id, username, comment, depthLevel));
+                            getParentComment(parent_id, depthLevel-1), comment_id, media_id, username, comment, depthLevel));
                 }
             }
         } catch (IOException e) {
@@ -307,9 +307,9 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         return media.size();
     }
 
-    private UniComment getParentComment(int parentId) {
+    private UniComment getParentComment(int parentId, int depthLevel) {
             for (UniComment comment : comments) {
-               if (comment.getId() == parentId) {
+               if (comment.getId() == parentId && comment.getDepth() == depthLevel) {
                    return comment;
                }
             }
@@ -364,6 +364,16 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
     public void saveComment(UniComment comment, int depthLevel) {
         comments.add(comment);
         saveAllComments(comments, depthLevel);
+    }
+
+    @Override
+    public UniComment loadComment(int id) {
+        for (UniComment comment : comments) {
+            if (comment.getId() == id) {
+                return comment;
+            }
+        }
+        return null;
     }
 
     public void deleteComment(List<UniComment> comments, double comment_id, int depthLevel) {

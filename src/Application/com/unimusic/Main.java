@@ -32,8 +32,27 @@ public class Main extends Application {
         mainController = loader.getController();
         // Set up the scene
         Scene scene = new Scene(root, AppConfig.APP_WIDTH, AppConfig.APP_HEIGHT);
-        URL cssUrl = getClass().getResource("Css/Styles.css");
-        scene.getStylesheets().add(cssUrl.toExternalForm());
+        URL paneCssUrl = getClass().getResource("Css/Pane.css");
+        URL datePickerCssUrl = getClass().getResource("Css/DatePicker.css");
+        URL formCssUrl = getClass().getResource("Css/Form.css");
+        URL labelCssUrl = getClass().getResource("Css/Label.css");
+        URL buttonCssUrl = getClass().getResource("Css/Button.css");
+        URL v_hBoxCssUrl = getClass().getResource("Css/V_HBox.css");
+        URL ScrollBarCssUrl = getClass().getResource("Css/ScrollBar.css");
+        URL SliderCssUrl = getClass().getResource("Css/Slider.css");
+        URL TextFieldCssUrl = getClass().getResource("Css/TextField.css");
+        URL CardCssUrl = getClass().getResource("Css/Card.css");
+
+        scene.getStylesheets().add(paneCssUrl.toExternalForm());
+        scene.getStylesheets().add(datePickerCssUrl.toExternalForm());
+        scene.getStylesheets().add(formCssUrl.toExternalForm());
+        scene.getStylesheets().add(labelCssUrl.toExternalForm());
+        scene.getStylesheets().add(buttonCssUrl.toExternalForm());
+        scene.getStylesheets().add(v_hBoxCssUrl.toExternalForm());
+        scene.getStylesheets().add(ScrollBarCssUrl.toExternalForm());
+        scene.getStylesheets().add(SliderCssUrl.toExternalForm());
+        scene.getStylesheets().add(TextFieldCssUrl.toExternalForm());
+        scene.getStylesheets().add(CardCssUrl.toExternalForm());
 
         // Configure and show the stage
         primaryStage.setTitle("Dash App - JavaFX Version");

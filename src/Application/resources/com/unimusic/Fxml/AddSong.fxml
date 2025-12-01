@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="15" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.SongFormController">
+<VBox spacing="15" styleClass="v-box" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.SongFormController">
 
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
@@ -20,35 +20,35 @@
     <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Aggiungi Media" />
 
     <Separator />
-   <HBox>
+   <HBox styleClass="h-box">
       <children>
       
           <!-- Basic Information Section -->
-          <VBox spacing="10">
+          <VBox spacing="10" styleClass="v-box">
               <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="Informazioni Base" />
       
               <!-- Song Title -->
-              <HBox alignment="CENTER_LEFT" spacing="10">
+              <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
                   <Label minWidth="120" style="-fx-font-weight: bold;" text="Titolo:" />
                   <TextField fx:id="titleField" promptText="Inserire il Titolo" HBox.hgrow="ALWAYS" />
               </HBox>
       
               <!-- Artist Name -->
-              <HBox alignment="CENTER_LEFT" spacing="10">
+              <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
                   <Label minWidth="120" style="-fx-font-weight: bold;" text="Artista/Artisti" />
                   <TextField fx:id="artistField" promptText="Inserire nome/nomi" HBox.hgrow="ALWAYS" />
               </HBox>
-            <HBox>
+            <HBox styleClass="h-box">
                <children>
                   <Label minWidth="120" prefHeight="17.0" prefWidth="131.0" style="-fx-font-weight: bold;" text="Registazione dal vivo" />
                   <CheckBox fx:id="isLiveContentCheckBox" mnemonicParsing="false" />
                </children>
             </HBox>
           </VBox>
-         <VBox layoutX="10.0" layoutY="10.0" spacing="10">
+         <VBox layoutX="10.0" layoutY="10.0" spacing="10" styleClass="v-box">
             <children>
                <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="Informazioni sul Concerto" />
-               <HBox alignment="CENTER_LEFT" spacing="10">
+               <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
                   <children>
                      <Label minWidth="120" style="-fx-font-weight: bold;" text="Data" />
                      <DatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="240.0" />
@@ -57,7 +57,7 @@
                      <Insets left="10.0" />
                   </padding>
                </HBox>
-               <HBox alignment="CENTER_LEFT" spacing="10">
+               <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
                   <children>
                      <Label minWidth="120" style="-fx-font-weight: bold;" text="Luogo" />
                      <TextField fx:id="placeField" promptText="Inserire un luogo" HBox.hgrow="ALWAYS" />
@@ -66,7 +66,7 @@
                      <Insets left="10.0" />
                   </padding>
                </HBox>
-               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="80.0" spacing="10">
+               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="80.0" spacing="10" styleClass="h-box">
                   <children>
                      <Label minWidth="120" style="-fx-font-weight: bold;" text="Strumenti" />
                      <TextField fx:id="instrumentsField" promptText="Inserire gli strumenti" HBox.hgrow="ALWAYS" />
@@ -83,12 +83,12 @@
     <Separator />
 
     <!-- File Selection Section -->
-    <VBox spacing="10">
+    <VBox spacing="10" styleClass="v-box">
         <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="File di esecuzione" />
 
         <!-- Audio File -->
-        <VBox spacing="5">
-            <HBox alignment="CENTER_LEFT" spacing="10">
+        <VBox spacing="5" styleClass="v-box">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
                 <Label minWidth="120" style="-fx-font-weight: bold;" text="File Audio:" />
                 <TextField fx:id="audioPathField" editable="false" promptText="Nessun Immagine selezionato" HBox.hgrow="ALWAYS" />
                 <Button fx:id="browseAudioBtn" onAction="#onBrowseAudio" text="Esplora..." />
@@ -102,8 +102,8 @@
         </VBox>
 
         <!-- Video File -->
-        <VBox spacing="5">
-            <HBox alignment="CENTER_LEFT" spacing="10">
+        <VBox spacing="5" styleClass="v-box">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
                 <Label minWidth="120" style="-fx-font-weight: bold;" text="File Video:" />
                 <TextField fx:id="videoPathField" editable="false" promptText="Nessun file selezionato" HBox.hgrow="ALWAYS" />
                 <Button fx:id="browseVideoBtn" onAction="#onBrowseVideo" text="Esplora..." />
@@ -117,14 +117,14 @@
         </VBox>
 
         <!-- YouTube URL -->
-        <HBox alignment="CENTER_LEFT" spacing="10">
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
             <Label minWidth="120" style="-fx-font-weight: bold;" text="URL:" />
             <TextField fx:id="webUrlField" promptText="https://www.youtube.com/watch?v=..." HBox.hgrow="ALWAYS" />
         </HBox>
 
         <!-- Cover Image -->
-        <VBox spacing="5">
-            <HBox alignment="CENTER_LEFT" spacing="10">
+        <VBox spacing="5" styleClass="v-box">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
                 <Label minWidth="120" style="-fx-font-weight: bold;" text="Immagine del Cover" />
                 <TextField fx:id="imagePathField" editable="false" promptText="Nessun immagine selezionato" HBox.hgrow="ALWAYS" />
                 <Button fx:id="browseImageBtn" onAction="#onBrowseImage" text="Esplora..." />
@@ -141,7 +141,7 @@
     <Separator />
 
     <!-- Action Buttons -->
-    <HBox alignment="CENTER_RIGHT" spacing="10">
+    <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="h-box">
         <Button onAction="#onSave" prefWidth="120" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" text="Salva" />
         <Button onAction="#onCancel" prefWidth="120" text="Ritorna" />
     </HBox>
