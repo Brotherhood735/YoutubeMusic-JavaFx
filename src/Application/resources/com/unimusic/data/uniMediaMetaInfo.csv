@@ -1,4 +1,6 @@
-id_meta_info,id_media,title,artists,instruments,start_time,end_time
-0,1,asa,asdsa,asads,0.0,0.0
-1,1,Kiaro Capo,adas,asdasdasd,67750.51875498804,116539.93012422363
-2,1,wqeqweqw,qweqweqwewqe,qweqwe,20017.198723064645,174210.71816770185
+id_meta_info,id_media,title,artists,instruments,extra_info,start_time,end_time
+0,1,asa,asdsa,asads,kiaro,0.0,0.0
+1,1,Kiaro Capo,adas,asdasdasd,non lo so,67750.51875498804,116539.93012422363
+2,1,wqeqweqw,qweqweqwewqe,qweqwe,lo sos,20017.198723064645,174210.71816770185
+3,1,ora kiaro,ora kiuaro,kiaro,kiaros,0.0,192935.0
+4,1,un'altra aggiunta,aggiunta,aggiunta,aggiunta,0.0,192935.0

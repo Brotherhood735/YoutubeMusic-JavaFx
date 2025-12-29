@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.RangeSlider?>
 
-
 <AnchorPane prefHeight="600.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.AddMediaMetaInfoController">
    <children>
       <VBox prefHeight="600.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -36,6 +35,15 @@
                <children>
                   <Label text="Strumenti:" />
                   <TextField fx:id="strumentiInput" HBox.hgrow="ALWAYS" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="80.0" spacing="5.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="80.0" text="Altro:" />
+                  <TextField fx:id="extraInfoInput" prefHeight="112.0" prefWidth="256.0" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -1,8 +1,9 @@
 package com.unimusic.Controller;
 
 import com.unimusic.Main;
+import com.unimusic.Model.Media.UniDataType;
 import com.unimusic.Model.Media.UniMedia;
-import com.unimusic.Model.Media.UniMediaMetaInfo;
+import com.unimusic.Model.Media.UniMediaSegmentInfo;
 import com.unimusic.Model.Repository.MediaMetaInfoRepository;
 import com.unimusic.View.Components.PlayableMedia;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ public class AddMediaMetaInfoController extends UniController
     @FXML private TextField titoloInput;
     @FXML private TextField esecutoriInput;
     @FXML private TextField strumentiInput;
+    @FXML private TextField extraInfoInput;
     @FXML private RangeSlider rangeSlider;
     @FXML private Label startSectionLabel;
     @FXML private Label endSectionLabel;
@@ -31,8 +33,12 @@ public class AddMediaMetaInfoController extends UniController
         metaInfoRepo = Main.getDataRepository();
         setupRangeSlider();
     }
-
-    private void setupRangeSlider() {
+    public AddMediaMetaInfoController(UniMedia media, PlayableMedia renderer)
+    {
+        this.media = media;
+        this.renderer = renderer;
+    }
+    protected void setupRangeSlider() {
         double maxInMillis = renderer.getMaxDuration().toMillis();
         rangeSlider.setMax(maxInMillis);
         rangeSlider.setHighValue(maxInMillis);
@@ -55,34 +61,31 @@ public class AddMediaMetaInfoController extends UniController
                 });
     }
 
-    public AddMediaMetaInfoController(UniMedia media, PlayableMedia renderer)
-    {
-        this.media = media;
-        this.renderer = renderer;
-    }
+
 
     @Override
     public void setContent(Node content, int Idx) {
 
     }
     @FXML
-    public void onAddMetaInfo()
+    protected void onAddMetaInfo()
     {
-        UniMediaMetaInfo metaInfo = generateMetaInfoClass();
+        UniMediaSegmentInfo metaInfo = new UniMediaSegmentInfo(metaInfoRepo.generateMetaInfoId(), generateMetaInfoClass(), UniDataType.MetaInfo);
         metaInfoRepo.saveMetaInfo(metaInfo);
     }
 
-    private UniMediaMetaInfo generateMetaInfoClass() {
+    protected UniMediaSegmentInfo generateMetaInfoClass() {
         String title = titoloInput.getText();
         String artists = esecutoriInput.getText();
         String instruments = strumentiInput.getText();
+        String extraInfo = extraInfoInput.getText();
         String startTime = startSectionLabel.getText();
         String endTime = endSectionLabel.getText();
-        int newId = metaInfoRepo.generateMetaInfoId();
-        UniMediaMetaInfo newMetaInfo = new UniMediaMetaInfo(newId, media.getId());
+        UniMediaSegmentInfo newMetaInfo = new UniMediaSegmentInfo(0, media.getId(), UniDataType.MetaInfo);
         newMetaInfo.setTitle(title);
         newMetaInfo.setArtists(artists);
         newMetaInfo.setInstruments(instruments);
+        newMetaInfo.setExtraInfo(extraInfo);
         newMetaInfo.setStartTime(startSectionTimeInMillis);
         newMetaInfo.setEndTime(endSectionTimeInMillis);
         return newMetaInfo;

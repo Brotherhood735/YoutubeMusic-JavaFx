@@ -5,5 +5,6 @@ public enum UniDataType
     Media,
     Comment,
     MetaInfo,
-    ExtraContent
+    ExtraContent,
+    Note
 }

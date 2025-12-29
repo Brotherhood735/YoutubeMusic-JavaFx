@@ -1,7 +1,7 @@
 package com.unimusic.Controller.Media;
 
 import com.unimusic.Controller.UniController;
-import com.unimusic.Model.Media.UniMediaMetaInfo;
+import com.unimusic.Model.Media.UniMediaSegmentInfo;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
@@ -10,15 +10,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
 public class MediaMetaInfoController extends UniController {
-    private UniMediaMetaInfo mediaMetaInfo;
+    private UniMediaSegmentInfo mediaMetaInfo;
     @FXML private Hyperlink startSectionLabel;
     @FXML private Hyperlink endSectionLabel;
     @FXML private Label esecutoriLabel;
     @FXML private Label strumentiLabel;
+    @FXML private Label extraInfoLabel;
     @FXML private Label titleLabel;
-    private MediaMainWestController parentController;
+    private MediaMain parentController;
 
-    public MediaMetaInfoController(MediaMainWestController parentController, UniMediaMetaInfo mediaMetaInfo)
+    public MediaMetaInfoController(MediaMain parentController, UniMediaSegmentInfo mediaMetaInfo)
     {
         this.parentController = parentController;
         this.mediaMetaInfo = mediaMetaInfo;
@@ -28,6 +29,7 @@ public class MediaMetaInfoController extends UniController {
         titleLabel.setText(mediaMetaInfo.getTitle());
         esecutoriLabel.setText(mediaMetaInfo.getArtists());
         strumentiLabel.setText(mediaMetaInfo.getInstruments());
+        extraInfoLabel.setText(mediaMetaInfo.getExtraInfo());
         startSectionLabel.setText(convertDurationToString(mediaMetaInfo.getStartTime()));
         endSectionLabel.setText(convertDurationToString(mediaMetaInfo.getEndTime()));
     }

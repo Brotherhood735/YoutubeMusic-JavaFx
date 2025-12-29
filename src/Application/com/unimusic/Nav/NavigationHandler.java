@@ -4,11 +4,13 @@ import com.unimusic.Controller.*;
 import com.unimusic.Controller.Media.Comment.MediaCommentsController;
 import com.unimusic.Controller.Media.Comment.MediaInDepthCommentsController;
 import com.unimusic.Controller.Media.MediaMainController;
+import com.unimusic.Controller.Media.MediaMainEastController;
 import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Repository.UniComment;
 import com.unimusic.Model.Repository.UniData;
+import com.unimusic.View.Components.PlayableMedia;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.util.Callback;
@@ -160,21 +162,21 @@ public class NavigationHandler {
         navigateToHome();
     }
 
-    public static void navigateToInDepthCommentSection(UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
+    public static void navigateToInDepthCommentSection(MediaMainEastController parentController, UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
     {
         if (AuthManager.isAuthenticated()) {
             loadMediaView("MediaCommentsInDepth.fxml", c -> {
-                return new MediaInDepthCommentsController(media, currentComment, previousComment, depthLevel);
+                return new MediaInDepthCommentsController(parentController, media, currentComment, previousComment, depthLevel);
             });
         } else {
             navigateToLogin();
         }
     }
 
-    public static void navigateToMainCommentsSection(UniMedia media) {
+    public static void navigateToMainCommentsSection(MediaMainEastController parentController, UniMedia media) {
         if (AuthManager.isAuthenticated()) {
             loadMediaView("MediaComments.fxml", c -> {
-                return new MediaCommentsController(media);
+                return new MediaCommentsController(parentController, media);
             });
         } else {
             navigateToLogin();

@@ -1,5 +1,7 @@
 package com.unimusic.Controller.Media.Comment;
 
+import com.unimusic.Controller.Media.MediaMainEastController;
+import com.unimusic.Controller.Media.MediaNotesController;
 import com.unimusic.Controller.UniController;
 import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
@@ -7,6 +9,7 @@ import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Repository.CommentRepository;
 import com.unimusic.Model.Repository.UniComment;
 import com.unimusic.Nav.NavigationHandler;
+import com.unimusic.View.Components.PlayableMedia;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -18,18 +21,26 @@ import java.util.ArrayList;
 
 public class MediaCommentsController extends UniController {
 
+    protected MediaMainEastController parentController;
     protected ArrayList<UniComment> currentMediaComments;
     protected UniMedia currentMedia;
     protected CommentRepository commentRepo;
+    protected PlayableMedia renderer;
     protected int depthLevel = 0;
+    @FXML protected Button onNotesButton;
     @FXML protected ScrollPane commentsAreaParent;
     @FXML protected VBox commentsArea;
     @FXML protected VBox mainArea;
     @FXML protected TextField commentField;
 
-    public MediaCommentsController(UniMedia media)
+    public MediaCommentsController(MediaMainEastController parentController, UniMedia media)
     {
         currentMedia = media;
+        this.parentController = parentController;
+        this.renderer = renderer;
+    }
+    public PlayableMedia getRenderer() {
+        return parentController.getRenderer();
     }
     @FXML
     public void initialize() {
@@ -82,7 +93,7 @@ public class MediaCommentsController extends UniController {
 
     protected void onDepthCommentRequest(UniMedia media,  UniComment comment)
     {
-        NavigationHandler.navigateToInDepthCommentSection(media, comment, null, depthLevel + 1);
+        NavigationHandler.navigateToInDepthCommentSection(parentController, media, comment, null, depthLevel + 1);
     }
 
     @FXML
@@ -94,6 +105,13 @@ public class MediaCommentsController extends UniController {
         loadComments();
         populateSection();
     }
+    @FXML
+    protected void onNotes()
+    {
+        parentController.loadView("MediaNotes.fxml", 1, e -> new MediaNotesController(parentController, currentMedia));
+    }
+
+
     // will create the comment instance by using the current values of the UI
     // elements and internal datas
     protected UniComment  createComment()

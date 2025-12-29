@@ -3,7 +3,7 @@ package com.unimusic.Controller.Media;
 import com.unimusic.Controller.UniController;
 import com.unimusic.Main;
 import com.unimusic.Model.Media.UniMedia;
-import com.unimusic.Model.Media.UniMediaMetaInfo;
+import com.unimusic.Model.Media.UniMediaSegmentInfo;
 import com.unimusic.Model.Repository.MediaMetaInfoRepository;
 import com.unimusic.Nav.NavigationHandler;
 import com.unimusic.View.Components.LocalPlayableAudio;
@@ -26,7 +26,7 @@ import javafx.scene.web.WebView;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MediaMainWestController extends UniController {
+public class MediaMainWestController extends UniController implements MediaMain {
 
     private MediaControlController bottomController;
     private UniMedia currentMedia;
@@ -69,9 +69,9 @@ public class MediaMainWestController extends UniController {
         // the default is to go for the video
         startDefaultRenderer();
 
-        ArrayList<UniMediaMetaInfo> metaInfos = metaInfoRepo.getMetaInfo(currentMedia.getId());
+        ArrayList<UniMediaSegmentInfo> metaInfos = metaInfoRepo.getMetaInfo(currentMedia.getId());
         if (metaInfos == null) return;
-        for (UniMediaMetaInfo metaInfo : metaInfos) {
+        for (UniMediaSegmentInfo metaInfo : metaInfos) {
 
             Separator separator = new Separator();
             separator.setOrientation(Orientation.HORIZONTAL);
@@ -82,7 +82,7 @@ public class MediaMainWestController extends UniController {
         }
     }
 
-    private Node setMetaInfoView(UniMediaMetaInfo metaInfo) {
+    private Node setMetaInfoView(UniMediaSegmentInfo metaInfo) {
         try {
             FXMLLoader loader = NavigationHandler.getLoader("MediaMetaInfo.fxml");
             loader.setControllerFactory(controller -> new MediaMetaInfoController(this, metaInfo));

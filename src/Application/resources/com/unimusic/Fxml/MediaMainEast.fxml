@@ -10,18 +10,20 @@
    <children>
       <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="424.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onComments" prefHeight="70.0" prefWidth="120.0" text="Commenti">
+            <Button mnemonicParsing="false" onAction="#onComments" prefHeight="70.0" prefWidth="120.0" text="Commenti/Note">
                <font>
                   <Font size="10.0" />
                </font></Button>
-            <Button layoutX="109.0" layoutY="10.0" mnemonicParsing="false" onAction="#onLyrics" prefHeight="70.0" prefWidth="120.0" text="Testo">
+            <Button layoutX="162.0" layoutY="15.0" mnemonicParsing="false" onAction="#onLyrics" prefHeight="70.0" prefWidth="120.0" text="Documenti Digitali">
                <font>
                   <Font size="10.0" />
-               </font></Button>
-            <Button layoutX="160.0" layoutY="10.0" mnemonicParsing="false" onAction="#onOther" prefHeight="70.0" prefWidth="120.0" text="Meta Info">
+               </font>
+            </Button>
+            <Button layoutX="160.0" layoutY="10.0" mnemonicParsing="false" onAction="#onOther" prefHeight="70.0" prefWidth="120.0" text="Add Meta Info">
                <font>
                   <Font size="10.0" />
-               </font></Button>
+               </font>
+            </Button>
          </children>
          <VBox.margin>
             <Insets bottom="10.0" />

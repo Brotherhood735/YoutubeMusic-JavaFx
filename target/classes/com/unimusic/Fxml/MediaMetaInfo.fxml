@@ -66,5 +66,25 @@
             <Insets left="10.0" />
          </VBox.margin>
       </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="65.0">
+         <children>
+            <Label text="Extra Info:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="extraInfoLabel" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="108.0" text="Example Text" wrapText="true" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+      </HBox>
    </children>
 </VBox>

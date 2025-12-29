@@ -1,11 +1,13 @@
 package com.unimusic.Controller.Media.Comment;
 
+import com.unimusic.Controller.Media.MediaMainEastController;
 import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Repository.CommentRepository;
 import com.unimusic.Model.Repository.UniComment;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Nav.NavigationHandler;
+import com.unimusic.View.Components.PlayableMedia;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -17,9 +19,9 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
     private MediaCommentsController parentCommentSection;
     private UniComment currentComment;
     private UniComment previousComment;
-    public MediaInDepthCommentsController(UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
+    public MediaInDepthCommentsController(MediaMainEastController parentController, UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
     {
-        super(media);
+        super(parentController, media);
         this.depthLevel =  depthLevel;
         this.previousComment = previousComment;
         this.currentComment = currentComment;
@@ -54,7 +56,7 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
         // go to the main commments section
         if (depthLevel == 1)
         {
-            NavigationHandler.navigateToMainCommentsSection(currentMedia);
+            NavigationHandler.navigateToMainCommentsSection(parentController, currentMedia);
             return;
         }
         // otherwise go to a lower depth in comment section
@@ -62,12 +64,12 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
         {
             previousComment = commentRepo.loadComment(previousComment.getId());
         }
-        NavigationHandler.navigateToInDepthCommentSection(currentMedia, previousComment, previousComment.getParent(), depthLevel - 1);
+        NavigationHandler.navigateToInDepthCommentSection(parentController, currentMedia, previousComment, previousComment.getParent(), depthLevel - 1);
     }
 
     @Override
     protected void onDepthCommentRequest(UniMedia media, UniComment comment) {
-        NavigationHandler.navigateToInDepthCommentSection(media, comment, currentComment, depthLevel + 1);
+        NavigationHandler.navigateToInDepthCommentSection(parentController, media, comment, currentComment, depthLevel + 1);
     }
     private void populateComments() {
 
