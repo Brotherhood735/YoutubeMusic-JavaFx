@@ -1,12 +1,12 @@
 package com.unimusic.Model.Repository;
 
-import com.unimusic.Model.Media.UniMediaSegmentInfo;
+import com.unimusic.Model.Media.UniMediaUserNote;
 
 import java.util.ArrayList;
 
 public interface MediaNoteRepository {
-    void saveNote(UniMediaSegmentInfo note);
-    ArrayList<UniMediaSegmentInfo> getNotes(int mediaId);
+    void saveNote(UniMediaUserNote note);
+    ArrayList<UniMediaUserNote> getNotes(int mediaId);
     int getNoteLength(int mediaId);
     int generateNoteId();
 }

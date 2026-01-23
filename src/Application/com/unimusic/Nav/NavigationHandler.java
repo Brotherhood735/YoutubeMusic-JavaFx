@@ -3,14 +3,14 @@ package com.unimusic.Nav;
 import com.unimusic.Controller.*;
 import com.unimusic.Controller.Media.Comment.MediaCommentsController;
 import com.unimusic.Controller.Media.Comment.MediaInDepthCommentsController;
+import com.unimusic.Controller.Media.IMediaMainRegionController;
 import com.unimusic.Controller.Media.MediaMainController;
-import com.unimusic.Controller.Media.MediaMainEastController;
+import com.unimusic.Controller.Media.MediaMainEastRegionController;
 import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Repository.UniComment;
 import com.unimusic.Model.Repository.UniData;
-import com.unimusic.View.Components.PlayableMedia;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.util.Callback;
@@ -100,7 +100,7 @@ public class NavigationHandler {
     {
         if (AuthManager.isAuthenticated()) {
             UniMedia currentMedia = (UniMedia) data;
-            loadHomeView("MediaMain.fxml", c -> {
+            loadHomeView("Media Main/MediaMain.fxml", c -> {
                 return new MediaMainController(currentMedia);
             });
         } else {
@@ -112,14 +112,14 @@ public class NavigationHandler {
      * Navigate to the login view
      */
     public static void navigateToLogin() {
-        loadMainView("Login.fxml");
+        loadMainView("Auth/Login.fxml");
     }
 
     /**
      * Navigate to the register view
      */
     public static void navigateToRegister() {
-        loadMainView("Register.fxml");
+        loadMainView("Auth/Register.fxml");
     }
 
     /**
@@ -128,7 +128,7 @@ public class NavigationHandler {
      */
     public static void navigateToHome() {
         if (AuthManager.isAuthenticated()) {
-            loadMainView("Home.fxml");
+            loadMainView("Main/Home.fxml");
         } else {
             navigateToLogin();
         }
@@ -162,10 +162,10 @@ public class NavigationHandler {
         navigateToHome();
     }
 
-    public static void navigateToInDepthCommentSection(MediaMainEastController parentController, UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
+    public static void navigateToInDepthCommentSection(IMediaMainRegionController parentController, UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
     {
         if (AuthManager.isAuthenticated()) {
-            loadMediaView("MediaCommentsInDepth.fxml", c -> {
+            loadMediaView("Media Main/Media Main East/MediaCommentsInDepth.fxml", c -> {
                 return new MediaInDepthCommentsController(parentController, media, currentComment, previousComment, depthLevel);
             });
         } else {
@@ -173,9 +173,9 @@ public class NavigationHandler {
         }
     }
 
-    public static void navigateToMainCommentsSection(MediaMainEastController parentController, UniMedia media) {
+    public static void navigateToMainCommentsSection(IMediaMainRegionController parentController, UniMedia media) {
         if (AuthManager.isAuthenticated()) {
-            loadMediaView("MediaComments.fxml", c -> {
+            loadMediaView("Media Main/Media Main East/MediaComments.fxml", c -> {
                 return new MediaCommentsController(parentController, media);
             });
         } else {
@@ -185,7 +185,7 @@ public class NavigationHandler {
 
     public static void navigateToAddSong() {
         if (AuthManager.isAuthenticated()) {
-            loadHomeView("AddSong.fxml", c -> {
+            loadHomeView("Add Information/AddSong.fxml", c -> {
                 return new SongFormController();
             });
         } else {

@@ -1,6 +1,7 @@
 package com.unimusic.Controller.Media.Comment;
 
-import com.unimusic.Controller.Media.MediaMainEastController;
+import com.unimusic.Controller.Media.IMediaMainRegionController;
+import com.unimusic.Controller.Media.MediaMainEastRegionController;
 import com.unimusic.Controller.Media.MediaNotesController;
 import com.unimusic.Controller.UniController;
 import com.unimusic.Main;
@@ -12,7 +13,6 @@ import com.unimusic.Nav.NavigationHandler;
 import com.unimusic.View.Components.PlayableMedia;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class MediaCommentsController extends UniController {
 
-    protected MediaMainEastController parentController;
+    protected IMediaMainRegionController parentController;
     protected ArrayList<UniComment> currentMediaComments;
     protected UniMedia currentMedia;
     protected CommentRepository commentRepo;
@@ -33,7 +33,7 @@ public class MediaCommentsController extends UniController {
     @FXML protected VBox mainArea;
     @FXML protected TextField commentField;
 
-    public MediaCommentsController(MediaMainEastController parentController, UniMedia media)
+    public MediaCommentsController(IMediaMainRegionController parentController, UniMedia media)
     {
         currentMedia = media;
         this.parentController = parentController;
@@ -108,7 +108,7 @@ public class MediaCommentsController extends UniController {
     @FXML
     protected void onNotes()
     {
-        parentController.loadView("MediaNotes.fxml", 1, e -> new MediaNotesController(parentController, currentMedia));
+        parentController.loadView("Media Main/Media Main East/MediaNotes.fxml", 1, e -> new MediaNotesController(parentController, currentMedia));
     }
 
 

@@ -10,22 +10,22 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
 public class MediaMetaInfoController extends UniController {
-    private UniMediaSegmentInfo mediaMetaInfo;
+    protected UniMediaSegmentInfo mediaMetaInfo;
     @FXML private Hyperlink startSectionLabel;
     @FXML private Hyperlink endSectionLabel;
     @FXML private Label esecutoriLabel;
     @FXML private Label strumentiLabel;
     @FXML private Label extraInfoLabel;
     @FXML private Label titleLabel;
-    private MediaMain parentController;
+    private IMediaMainRegionController parentController;
 
-    public MediaMetaInfoController(MediaMain parentController, UniMediaSegmentInfo mediaMetaInfo)
+    public MediaMetaInfoController(IMediaMainRegionController parentController, UniMediaSegmentInfo mediaMetaInfo)
     {
         this.parentController = parentController;
         this.mediaMetaInfo = mediaMetaInfo;
     }
 
-    private void setData() {
+    protected void setData() {
         titleLabel.setText(mediaMetaInfo.getTitle());
         esecutoriLabel.setText(mediaMetaInfo.getArtists());
         strumentiLabel.setText(mediaMetaInfo.getInstruments());
@@ -34,7 +34,7 @@ public class MediaMetaInfoController extends UniController {
         endSectionLabel.setText(convertDurationToString(mediaMetaInfo.getEndTime()));
     }
 
-    private String convertDurationToString(double millis) {
+    protected String convertDurationToString(double millis) {
         int totalSeconds = (int) (millis / 1000);
         int minutes = totalSeconds / 60;
         int seconds = totalSeconds % 60;

@@ -1,9 +1,11 @@
 package com.unimusic.Controller;
 
 import com.unimusic.Main;
+import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniDataType;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Media.UniMediaSegmentInfo;
+import com.unimusic.Model.Media.UniMediaUserNote;
 import com.unimusic.Model.Repository.MediaNoteRepository;
 import com.unimusic.View.Components.PlayableMedia;
 
@@ -23,12 +25,12 @@ public class AddMediaNoteController extends AddMediaMetaInfoController {
 
     @Override
     protected void onAddMetaInfo() {
-        UniMediaSegmentInfo metaInfo = generateMetaInfoClass();
+        UniMediaUserNote metaInfo = generateMetaInfoClass();
         notesRepo.saveNote(metaInfo);
     }
 
     @Override
-    protected UniMediaSegmentInfo generateMetaInfoClass() {
-        return new UniMediaSegmentInfo(notesRepo.generateNoteId(), super.generateMetaInfoClass(), UniDataType.Note);
+    protected UniMediaUserNote generateMetaInfoClass() {
+        return new UniMediaUserNote(notesRepo.generateNoteId(), AuthManager.getUser(), super.generateMetaInfoClass(), UniDataType.Note);
     }
 }

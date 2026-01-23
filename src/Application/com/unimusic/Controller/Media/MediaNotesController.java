@@ -4,7 +4,7 @@ import com.unimusic.Controller.AddMediaNoteController;
 import com.unimusic.Controller.Media.Comment.MediaCommentsController;
 import com.unimusic.Main;
 import com.unimusic.Model.Media.UniMedia;
-import com.unimusic.Model.Media.UniMediaSegmentInfo;
+import com.unimusic.Model.Media.UniMediaUserNote;
 import com.unimusic.Model.Repository.MediaNoteRepository;
 import com.unimusic.Nav.NavigationHandler;
 import javafx.fxml.FXML;
@@ -13,6 +13,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -20,39 +21,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class MediaNotesController {
-    private MediaMainEastController parentController;
+    private IMediaMainRegionController parentController;
     private UniMedia currentMedia;
     @FXML private ScrollPane notesAreaParent;
     @FXML private VBox notesArea;
+    @FXML private VBox mainArea;
     private MediaNoteRepository noteRepo;
     @FXML
     public void initialize() {
+        VBox.setVgrow(mainArea, Priority.ALWAYS);
         noteRepo = Main.getDataRepository();
-        ArrayList<UniMediaSegmentInfo> metaInfos = noteRepo.getNotes(currentMedia.getId());
-        if (metaInfos == null) return;
-        for (UniMediaSegmentInfo metaInfo : metaInfos) {
-
+        ArrayList<UniMediaUserNote> notes = noteRepo.getNotes(currentMedia.getId());
+        if (notes == null) return;
+        for (UniMediaUserNote note : notes) {
             Separator separator = new Separator();
             separator.setOrientation(Orientation.HORIZONTAL);
 
-            Node view = setMediaNoteView(metaInfo);
+            Node view = setMediaNoteView(note);
 
             notesArea.getChildren().addAll(separator, view);
         }
     }
-    private Node setMediaNoteView(UniMediaSegmentInfo metaInfo) {
+    private Node setMediaNoteView(UniMediaUserNote metaInfo) {
         try {
-            FXMLLoader loader = NavigationHandler.getLoader("MediaMetaInfo.fxml");
-            loader.setControllerFactory(controller -> new MediaMetaInfoController(parentController, metaInfo));
+            FXMLLoader loader = NavigationHandler.getLoader("Media Main/Media Main East/MediaNote.fxml");
+            loader.setControllerFactory(controller -> new MediaUserNoteController(parentController, metaInfo));
             Node view = loader.load();
             return view;
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Error loading view: MediaMetaInfo.fxml");
+            System.err.println("Error loading view: MediaNote.fxml");
         }
         return null;
     }
-    public MediaNotesController(MediaMainEastController parentController, UniMedia currentMedia){
+    public MediaNotesController(IMediaMainRegionController parentController, UniMedia currentMedia){
         this.parentController = parentController;
         this.currentMedia = currentMedia;
     }
@@ -60,13 +62,12 @@ public class MediaNotesController {
     @FXML
     private void onComments()
     {
-        parentController.loadView("MediaComments.fxml", 0, e -> new MediaCommentsController(parentController, currentMedia));
-
+        parentController.loadView("Media Main/Media Main East/MediaComments.fxml", 0, e -> new MediaCommentsController(parentController, currentMedia));
     }
     @FXML
     private void addNote()
     {
-        loadView("AddMediaNote.fxml", c -> new AddMediaNoteController(currentMedia, parentController.getRenderer()));
+        loadView("Add Information/AddMediaNote.fxml", c -> new AddMediaNoteController(currentMedia, parentController.getRenderer()));
     }
 
     public void loadView(String fxml, Callback<Class<?>, Object> controllerFactory)

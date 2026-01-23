@@ -5,6 +5,7 @@ import com.unimusic.Model.Media.UniDataType;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Authentication.User;
 import com.unimusic.Model.Media.UniMediaSegmentInfo;
+import com.unimusic.Model.Media.UniMediaUserNote;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
     private final String COMMENTS_CSV_HEADER = "id_comment,id_media,id_parent,username,comment";
     private Map<String, User> users = new HashMap<>();
     private ArrayList<UniMediaSegmentInfo> metaInfos = new ArrayList<>();
-    private ArrayList<UniMediaSegmentInfo> mediaNotes = new ArrayList<>();
+    private ArrayList<UniMediaUserNote> mediaNotes = new ArrayList<>();
 
     public DataRepository() {
         ensureUsersCsvExists();
@@ -72,13 +73,14 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
                 if (parts.length >= 4) {
                     int id = Integer.parseInt(parts[0]);
                     int mediaId = Integer.parseInt(parts[1]);
-                    String title = parts[2];
-                    String artists = parts[3];
-                    String instruments = parts[4];
-                    String extraInfo = parts[5];
-                    double startTime = Double.parseDouble(parts[6]);
-                    double endTime = Double.parseDouble(parts[7]);
-                    mediaNotes.add(new UniMediaSegmentInfo(id, mediaId, title, artists, instruments,
+                    String username = parts[2];
+                    String title = parts[3];
+                    String artists = parts[4];
+                    String instruments = parts[5];
+                    String extraInfo = parts[6];
+                    double startTime = Double.parseDouble(parts[7]);
+                    double endTime = Double.parseDouble(parts[8]);
+                    mediaNotes.add(new UniMediaUserNote(id, username, mediaId, title, artists, instruments,
                             extraInfo, startTime, endTime, UniDataType.Note));
                 }
             }
@@ -526,11 +528,12 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
             writer.write(AppConfig.UNI_MEDIA_META_INFO_CSV_HEADER);
 
             // Write users
-            for (UniMediaSegmentInfo note : mediaNotes) {
+            for (UniMediaUserNote note : mediaNotes) {
                 writer.write(
-                        "%d,%d,%s,%s,%s,%s,%s,%s\n".formatted(
+                        "%d,%d,%s,%s,%s,%s,%s,%s,%s\n".formatted(
                                 note.getId(),
                                 note.getMediaId(),
+                                validateStr(note.getUsername()),
                                 validateStr(note.getTitle()),
                                 validateStr(note.getArtists()),
                                 validateStr(note.getInstruments()),
@@ -544,18 +547,18 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         }
     }
     @Override
-    public void saveNote(UniMediaSegmentInfo note) {
+    public void saveNote(UniMediaUserNote note) {
         mediaNotes.add(note);
         saveallMediaNotes();
     }
 
     @Override
-    public ArrayList<UniMediaSegmentInfo> getNotes(int mediaId) {
+    public ArrayList<UniMediaUserNote> getNotes(int mediaId) {
         if (mediaId < 0) return null;
 
-        ArrayList<UniMediaSegmentInfo> notesWithMediaId = new ArrayList<>();
+        ArrayList<UniMediaUserNote> notesWithMediaId = new ArrayList<>();
 
-        for (UniMediaSegmentInfo note : mediaNotes)
+        for (UniMediaUserNote note : mediaNotes)
             if (note.getMediaId() == mediaId)
             {
                 notesWithMediaId.add(note);

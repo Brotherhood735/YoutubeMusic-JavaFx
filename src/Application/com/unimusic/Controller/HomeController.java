@@ -190,14 +190,14 @@ public class HomeController extends UniController {
             // if it is, we don't play it again
             if(item.getId() == mediaMainController.getCurrentMedia().getId())
             {
-                loadMediaControlView("MediaControl.fxml", false);
+                loadMediaControlView("Main/MediaControl.fxml", false);
                 setContent(mediaMainController.getView(), 0);
                 return;
             }
             // we stop whatever is playing before playing a new media
             mediaMainController.stopPlayer();
         }
-        loadMediaControlView("MediaControl.fxml", true);
+        loadMediaControlView("Main/MediaControl.fxml", true);
         mainViewArea.setContent(null);
         NavigationHandler.navigateToMediaPlay(item);
         System.out.println("Playing: " + item.getTitle());

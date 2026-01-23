@@ -1,13 +1,10 @@
 package com.unimusic.Controller.Media.Comment;
 
-import com.unimusic.Controller.Media.MediaMainEastController;
-import com.unimusic.Main;
+import com.unimusic.Controller.Media.IMediaMainRegionController;
 import com.unimusic.Model.Authentication.AuthManager;
-import com.unimusic.Model.Repository.CommentRepository;
 import com.unimusic.Model.Repository.UniComment;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Nav.NavigationHandler;
-import com.unimusic.View.Components.PlayableMedia;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -19,7 +16,7 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
     private MediaCommentsController parentCommentSection;
     private UniComment currentComment;
     private UniComment previousComment;
-    public MediaInDepthCommentsController(MediaMainEastController parentController, UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
+    public MediaInDepthCommentsController(IMediaMainRegionController parentController, UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
     {
         super(parentController, media);
         this.depthLevel =  depthLevel;

@@ -38,7 +38,7 @@
             <Insets bottom="5.0" top="5.0" />
          </padding>
       </HBox>
-      <ScrollPane fx:id="notesAreaParent" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="460.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
+      <ScrollPane fx:id="notesAreaParent" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="460.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
          <content>
             <VBox fx:id="notesArea" alignment="TOP_CENTER" prefHeight="460.0" prefWidth="423.0" styleClass="v-box" />
          </content>

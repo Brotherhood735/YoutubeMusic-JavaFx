@@ -25,7 +25,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         // Load the main application view
 
-        URL mainViewUrl = getClass().getResource("Fxml/Main.fxml");
+        URL mainViewUrl = getClass().getResource("Fxml/Root.fxml");
         FXMLLoader loader = new FXMLLoader(mainViewUrl);
 
         Parent root = loader.load();

@@ -19,8 +19,8 @@ public class MediaMainController extends UniController {
     //TODO: to implement the left side business logic
     private Pane leftSideArea;
     private static MediaControlController bottomController;
-    private static MediaMainEastController eastController;
-    private static MediaMainWestController westController;
+    private static MediaMainEastRegionController eastController;
+    private static MediaMainWestRegionController westController;
     private UniMedia currentMedia;
 
     @FXML private BorderPane root;
@@ -35,18 +35,18 @@ public class MediaMainController extends UniController {
     public void initialize() {
         NavigationHandler.setMediaController(this);
         HomeController.setMediaMainController(this);
-        loadView("MediaMainEast.fxml", eastArea,
-                c -> { return new MediaMainEastController(currentMedia, eastArea, bottomController);});
-        loadView("MediaMainWest.fxml", westArea,
-                c -> { return new MediaMainWestController(currentMedia, westArea, bottomController);});
+        loadView("Media Main/Media Main East/MediaMainEast.fxml", eastArea,
+                c -> { return new MediaMainEastRegionController(currentMedia, eastArea, bottomController);});
+        loadView("Media Main/Media Main West/MediaMainWest.fxml", westArea,
+                c -> { return new MediaMainWestRegionController(currentMedia, westArea, bottomController);});
         //bottomController.setData(westController.getRenderer(), currentMedia, true);
     }
 
-    public static void setEastController(MediaMainEastController controller)
+    public static void setEastController(MediaMainEastRegionController controller)
     {
         eastController = controller;
     }
-    public static void setWestController(MediaMainWestController controller) {
+    public static void setWestController(MediaMainWestRegionController controller) {
         westController = controller;
     }
     public static void setBottomController(MediaControlController controller) {

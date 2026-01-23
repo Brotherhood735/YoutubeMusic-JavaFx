@@ -16,7 +16,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 
-public class MediaMainEastController extends UniController implements MediaMain {
+public class MediaMainEastRegionController extends UniController implements IMediaMainRegionController {
     private UniMedia currentMedia;
     private int areaIdx;
     private AnchorPane parentArea;
@@ -30,13 +30,13 @@ public class MediaMainEastController extends UniController implements MediaMain 
         AnchorPane.setLeftAnchor(mainArea, 0.0);
         AnchorPane.setRightAnchor(mainArea, 0.0);
         MediaMainController.setEastController(this);
-        loadView("MediaComments.fxml", 0, c -> new MediaCommentsController(this, currentMedia));
+        loadView("Media Main/Media Main East/MediaComments.fxml", 0, c -> new MediaCommentsController(this, currentMedia));
     }
 
     public PlayableMedia getRenderer() {
         return bottomController.getRenderer();
     }
-    public MediaMainEastController(UniMedia currentMedia, AnchorPane parentArea, MediaControlController bottomController) {
+    public MediaMainEastRegionController(UniMedia currentMedia, AnchorPane parentArea, MediaControlController bottomController) {
         this.currentMedia = currentMedia;
         this.parentArea = parentArea;
         this.bottomController = bottomController;
@@ -45,13 +45,13 @@ public class MediaMainEastController extends UniController implements MediaMain 
 
     @FXML
     void onOther(ActionEvent event) {
-        loadView("AddMediaMetaInfo.fxml", 2, c -> new AddMediaMetaInfoController(currentMedia, bottomController.getRenderer()));
+        loadView("Add Information/AddMediaMetaInfo.fxml", 2, c -> new AddMediaMetaInfoController(currentMedia, bottomController.getRenderer()));
 
     }
 
     @FXML
     void onComments(ActionEvent event) {
-        loadView("MediaComments.fxml", 0, c -> new MediaCommentsController(this, currentMedia));
+        loadView("Media Main/Media Main East/MediaComments.fxml", 0, c -> new MediaCommentsController(this, currentMedia));
     }
 
     @FXML

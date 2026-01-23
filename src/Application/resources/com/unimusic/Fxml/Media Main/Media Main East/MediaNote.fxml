@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="128.0" prefWidth="387.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unimusic.Controller.Media.MediaUserNoteController">
+   <children>
+      <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="40.0">
+         <children>
+            <Label fx:id="userLabel" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="108.0" text="Utente" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_RIGHT">
+         <children>
+            <Label fx:id="titleLabel" maxWidth="1.7976931348623157E308" text="Canzone" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER_LEFT">
+               <children>
+                  <Hyperlink fx:id="startSectionLabel" onMouseClicked="#startSectionRequested" text="00:00" />
+                  <Separator prefHeight="0.0" prefWidth="12.0" />
+                  <Hyperlink fx:id="endSectionLabel" onMouseClicked="#endSectionRequested" text="01:27" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT">
+         <children>
+            <Label text="Esecutori:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="esecutoriLabel" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="108.0" text="Example Text" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER_LEFT">
+         <children>
+            <Label text="Strumenti:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="strumentiLabel" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="108.0" text="Example Text" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="65.0">
+         <children>
+            <Label text="Extra Info:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="extraInfoLabel" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="108.0" text="Example Text" wrapText="true" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

@@ -22,11 +22,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaView;
 import javafx.scene.web.WebView;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MediaMainWestController extends UniController implements MediaMain {
+public class MediaMainWestRegionController extends UniController implements IMediaMainRegionController {
 
     private MediaControlController bottomController;
     private UniMedia currentMedia;
@@ -40,18 +41,15 @@ public class MediaMainWestController extends UniController implements MediaMain 
     @FXML private Label dataLabel;
     @FXML private Label luogoLabel;
 
-    private MediaView mediaView;
-    private ImageView imageView;
-    private WebView webView;
     @FXML private VBox mainArea;
     @FXML private Button videoRequestButton;
     @FXML private Button audioRequestButton;
     @FXML private Button webRequestButton;
     @FXML private VBox additionalInfoArea;
 
-    @FXML private MediaMetaInfoRepository metaInfoRepo;
+    private MediaMetaInfoRepository metaInfoRepo;
 
-    public MediaMainWestController(UniMedia currentMedia, AnchorPane westArea, MediaControlController bottomController) {
+    public MediaMainWestRegionController(UniMedia currentMedia, AnchorPane westArea, MediaControlController bottomController) {
         this.currentMedia = currentMedia;
         this.parentArea = westArea;
         this.bottomController = bottomController;
@@ -84,7 +82,7 @@ public class MediaMainWestController extends UniController implements MediaMain 
 
     private Node setMetaInfoView(UniMediaSegmentInfo metaInfo) {
         try {
-            FXMLLoader loader = NavigationHandler.getLoader("MediaMetaInfo.fxml");
+            FXMLLoader loader = NavigationHandler.getLoader("Media Main/Media Main West/MediaMetaInfo.fxml");
             loader.setControllerFactory(controller -> new MediaMetaInfoController(this, metaInfo));
             Node view = loader.load();
             return view;
@@ -133,7 +131,6 @@ public class MediaMainWestController extends UniController implements MediaMain 
     private void onVideoRequest() {
         if (localVideoRenderer != null) return;
         ImageView imageViewNode = new ImageView();
-        imageView = imageViewNode;
         switchRenderer(imageViewNode, new LocalPlayableVideo(currentMedia.getVideoName(), imageViewNode, currentMedia));
     }
 
@@ -141,7 +138,6 @@ public class MediaMainWestController extends UniController implements MediaMain 
     private void onAudioRequest() {
         if (localAudioRenderer != null) return;
         ImageView imageViewNode = new ImageView();
-        imageView = imageViewNode;
         switchRenderer(imageViewNode, new LocalPlayableAudio(currentMedia.getAudioName(), imageViewNode, currentMedia));
     }
 
@@ -149,7 +145,6 @@ public class MediaMainWestController extends UniController implements MediaMain 
     private void onWebRequest() {
         if (onlineVideoRenderer != null) return;
         WebView webViewNode = new WebView();
-        webView = webViewNode;
         switchRenderer(webViewNode, new OnlineVideoPlayable(currentMedia.getWebUrl(), webViewNode, currentMedia));
     }
     private void switchRenderer(Node view, PlayableMedia newRenderer) {
@@ -162,10 +157,6 @@ public class MediaMainWestController extends UniController implements MediaMain 
         localVideoRenderer = null;
         localAudioRenderer = null;
         onlineVideoRenderer = null;
-        mediaView = null;
-        imageView = null;
-        webView = null;
-
         // Add and bind view
         replaceOrAddViewToMainArea(view);
         bindViewDimensionsToParentArea(view);
@@ -210,6 +201,10 @@ public class MediaMainWestController extends UniController implements MediaMain 
 
     public PlayableMedia getRenderer() {
         return currentRenderer;
+    }
+
+    @Override
+    public void loadView(String fxml, int idx, Callback<Class<?>, Object> controllerFactory) {
     }
 
     public void stopRenderer()

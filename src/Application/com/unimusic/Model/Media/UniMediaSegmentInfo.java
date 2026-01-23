@@ -3,6 +3,7 @@ package com.unimusic.Model.Media;
 import com.unimusic.Model.Repository.UniData;
 
 public class UniMediaSegmentInfo extends UniData {
+    private String username;
     private int mediaId;
     private String title;
     private String artists;
