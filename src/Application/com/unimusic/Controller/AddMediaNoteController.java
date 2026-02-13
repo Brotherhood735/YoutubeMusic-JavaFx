@@ -31,6 +31,6 @@ public class AddMediaNoteController extends AddMediaMetaInfoController {
 
     @Override
     protected UniMediaUserNote generateMetaInfoClass() {
-        return new UniMediaUserNote(notesRepo.generateNoteId(), AuthManager.getUser(), super.generateMetaInfoClass(), UniDataType.Note);
+        return new UniMediaUserNote(notesRepo.generateNoteId(), AuthManager.getUser().getUsername(), super.generateMetaInfoClass(), UniDataType.Note);
     }
 }

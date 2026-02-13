@@ -1,13 +1,13 @@
 package com.unimusic.Model.Authentication;
 
 public class AuthManager {
-    private static String authenticatedUser = null;
+    private static User authenticatedUser = null;
 
-    public static String getUser()
+    public static User getUser()
     {
         return authenticatedUser;
     }
-    public static void setUser(String user)
+    public static void setUser(User user)
     {
         authenticatedUser = user;
     }
@@ -18,7 +18,7 @@ public class AuthManager {
     public static void logout(){
         authenticatedUser = null;
     }
-    public static String getAuthenticatedUser()
+    public static User getAuthenticatedUser()
     {
         return authenticatedUser;
     }

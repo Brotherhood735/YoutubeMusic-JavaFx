@@ -1,6 +1,7 @@
 package com.unimusic.Model.Repository;
 
 import com.unimusic.Config.AppConfig;
+import com.unimusic.Model.Authentication.UniUserRequest;
 import com.unimusic.Model.Media.UniDataType;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Authentication.User;
@@ -8,18 +9,16 @@ import com.unimusic.Model.Media.UniMediaSegmentInfo;
 import com.unimusic.Model.Media.UniMediaUserNote;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataRepository implements MediaRepository, UserRepository, CommentRepository, MediaMetaInfoRepository, MediaNoteRepository {
     private ArrayList<UniComment> comments = new ArrayList<>();
     private ArrayList<UniMedia> media = new ArrayList<>();
-    private final String COMMENTS_CSV_HEADER = "id_comment,id_media,id_parent,username,comment";
     private Map<String, User> users = new HashMap<>();
     private ArrayList<UniMediaSegmentInfo> metaInfos = new ArrayList<>();
     private ArrayList<UniMediaUserNote> mediaNotes = new ArrayList<>();
+    private ArrayList<UniUserRequest> registrationRequests = new ArrayList<>();
 
     public DataRepository() {
         ensureUsersCsvExists();
@@ -28,6 +27,28 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         loadAllMedia();
         loadAllMediaMetaInfo();
         loadAllMediaNotes();
+        loadAllRequests();
+    }
+
+    private void loadAllRequests() {
+        ensureUsersRegistrationRequestCsvExists();
+        registrationRequests = new ArrayList<UniUserRequest>();
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(AppConfig.UNI_USER_REGISTRATION_REQ_CSV_PATH))) {
+            String line;
+            // Skip header line
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    String username = parts[0];
+                    String password = parts[1];
+                    registrationRequests.add(new UniUserRequest(username, password));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading comments from CSV: " + e.getMessage());
+        }
     }
 
     private void loadAllMediaMetaInfo() {
@@ -90,25 +111,24 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
     }
     private void loadAllComments()
     {
-        int i = 0;
-        while (checkCsvExists(AppConfig.COMMENTS_CSV_PATH + i + ".csv"))
-        {
-            comments.addAll(loadComments(i));
-            i++;
-        }
+        checkCsvExists(AppConfig.COMMENTS_CSV_PATH);
+        comments.addAll(loadComments());
     }
 
     private void ensureUsersCsvExists() {
         ensureCsvExists(AppConfig.USERS_CSV_PATH, AppConfig.USERS_CSV_HEADER, AppConfig.USERS_DEFAULT_ROW);
     }
-    private void ensureCommentsCsvExists(int depthLevel) {
-        ensureCsvExists(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv", AppConfig.COMMENTS_CSV_HEADER, "");
+    private void ensureCommentsCsvExists() {
+        ensureCsvExists(AppConfig.COMMENTS_CSV_PATH, AppConfig.COMMENTS_CSV_HEADER, "");
     }
     private void ensureMediaNotesCsvExists(){
         ensureCsvExists(AppConfig.UNI_MEDIA_NOTES_CSV_PATH, AppConfig.UNI_MEDIA_META_INFO_CSV_HEADER, "");
     }
     private void ensureMediaMetaInfoCsvExists() {
         ensureCsvExists(AppConfig.UNI_MEDIA_META_INFO_CSV_PATH, AppConfig.UNI_MEDIA_META_INFO_CSV_HEADER, "");
+    }
+    private void ensureUsersRegistrationRequestCsvExists() {
+        ensureCsvExists(AppConfig.UNI_USER_REGISTRATION_REQ_CSV_PATH, AppConfig.UNI_USER_REGISTRATION_REQ_CSV_PATH, "");
     }
     private void ensureCsvExists(String csvPath, String csvHeader, String defaultRow) {
         File csvFile = new File(csvPath);
@@ -171,7 +191,8 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
                     String username = parts[0];
                     String password = parts[1];
                     boolean isAdmin = parts[2].equals("1");
-                    users.put(username, new User(username, password, isAdmin));
+                    boolean isGuest = parts[3].equals("1");
+                    users.put(username, new User(username, password, isAdmin, isGuest));
                 }
             }
         } catch (IOException e) {
@@ -180,17 +201,18 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
     }
     // with id we mean the media id
     public ArrayList<UniComment> loadComments(double id, int depthLevel) {
-        ensureCommentsCsvExists(depthLevel);
+        ensureCommentsCsvExists();
         ArrayList<UniComment> comments = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(
-                new FileReader(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv"))) {
+                new FileReader(AppConfig.COMMENTS_CSV_PATH))) {
             String line;
             // Skip header line
             reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 4) {
+                    if (depthLevel != Integer.parseInt(parts[5])) continue;
                     int media_id =  Integer.parseInt(parts[1]);
                     if (media_id != id){ continue; }
 
@@ -207,17 +229,18 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         return comments;
     }
     public ArrayList<UniComment> loadComments(double id, int depthLevel, boolean getOnlyParentComments) {
-        ensureCommentsCsvExists(depthLevel);
+        ensureCommentsCsvExists();
         ArrayList<UniComment> comments = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(
-                new FileReader(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv"))) {
+                new FileReader(AppConfig.COMMENTS_CSV_PATH))) {
             String line;
             // Skip header line
             reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 4) {
+                    if (depthLevel != Integer.parseInt(parts[5])) continue;
                     int media_id =  Integer.parseInt(parts[1]);
                     int comment_id = Integer.parseInt(parts[0]);
                     int parent_id =  Integer.parseInt(parts[2]);
@@ -239,10 +262,38 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         }
         return comments;
     }
-    public ArrayList<UniComment> loadComments(int depthLevel) {
+    public ArrayList<UniComment> loadComments(int depthLevelToCheck) {
+        ensureCommentsCsvExists();
         ArrayList<UniComment> comments = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(
-                new FileReader(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv"))) {
+                new FileReader(AppConfig.COMMENTS_CSV_PATH))) {
+            String line;
+            // Skip header line
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 4) {
+                    if (depthLevelToCheck != Integer.parseInt(parts[5])) continue;
+                    int comment_id =  Integer.parseInt(parts[0]);
+                    int media_id =  Integer.parseInt(parts[1]);
+                    int parent_id =  Integer.parseInt(parts[2]);
+                    String username = parts[3];
+                    String comment = parts[4];
+                    int depthLevel =  Integer.parseInt(parts[5]);
+                    comments.add(new UniComment(
+                            getParentComment(parent_id, depthLevel-1), comment_id, media_id, username, comment, depthLevel));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading comments from CSV: " + e.getMessage());
+        }
+        return comments;
+    }
+    public ArrayList<UniComment> loadComments() {
+        ensureCommentsCsvExists();
+        comments = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(AppConfig.COMMENTS_CSV_PATH))) {
             String line;
             // Skip header line
             reader.readLine();
@@ -254,6 +305,7 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
                     int parent_id =  Integer.parseInt(parts[2]);
                     String username = parts[3];
                     String comment = parts[4];
+                    int depthLevel =  Integer.parseInt(parts[5]);
                     comments.add(new UniComment(
                             getParentComment(parent_id, depthLevel-1), comment_id, media_id, username, comment, depthLevel));
                 }
@@ -263,7 +315,6 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         }
         return comments;
     }
-
     private void loadAllMedia() {
         media = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(
@@ -285,13 +336,48 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
                     String instruments = getNullValue(parts[8]);
                     String date        = getNullValue(parts[9]);
                     String place       = getNullValue(parts[10]);
+                    String username    = getNullValue(parts[11]);
+                    User user = users.get(username);
                     media.add(new UniMedia(id, title, videoUrl, audioUrl, webUrl, artist, imageUrl, type,
-                            instruments, date, place));
+                            instruments, date, place, user));
                 }
             }
         } catch (IOException e) {
             System.err.println("Error loading comments from CSV: " + e.getMessage());
         }
+    }
+    private ArrayList<UniMedia> loadAllMedia(String type) {
+        ArrayList<UniMedia> medium = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(AppConfig.UNI_MEDIA_CSV_PATH))) {
+            String line;
+            // Skip header line
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 4) {
+                    if (!parts[7].equals(type)) continue;
+                    int id = Integer.parseInt(parts[0]);
+                    String title       = getNullValue(parts[1]);
+                    String videoUrl    = getNullValue(parts[2]);
+                    String audioUrl    = getNullValue(parts[3]);
+                    String webUrl      = getNullValue(parts[4]);
+                    String artist      = getNullValue(parts[5]);
+                    String imageUrl    = getNullValue(parts[6]);
+                    String loadedType  = getNullValue(parts[7]);
+                    String instruments = getNullValue(parts[8]);
+                    String date        = getNullValue(parts[9]);
+                    String place       = getNullValue(parts[10]);
+                    String username    = getNullValue(parts[11]);
+                    User user = users.get(username);
+                    medium.add(new UniMedia(id, title, videoUrl, audioUrl, webUrl, artist, imageUrl, type,
+                            instruments, date, place, user));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading comments from CSV: " + e.getMessage());
+        }
+        return medium;
     }
     private String getNullValue(String str)
     {
@@ -317,12 +403,13 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
             // Write users
             for (UniMedia medium : media) {
                 writer.write(
-                        "%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n".formatted(
+                        "%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n".formatted(
                         medium.getId(), validateStr(medium.getTitle()), validateStr(medium.getVideoName()),
                         validateStr(medium.getAudioName()), validateStr(medium.getWebUrl()),
                         validateStr(medium.getArtist()), validateStr(medium.getImageName()),
                         validateStr(medium.getType()), validateStr(medium.getInstruments()),
-                        validateStr(medium.getDate()), validateStr(medium.getPlace())));
+                        validateStr(medium.getDate()), validateStr(medium.getPlace()), validateStr(medium.getUser().getUsername())
+                        ));
             }
         } catch (IOException e) {
             System.err.println("Error saving media to CSV: " + e.getMessage());
@@ -341,14 +428,31 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
     }
 
     @Override
+    public ArrayList<UniMedia> loadMediaWithInterval(ArrayList<UniMedia> medium, int start, int end) {
+        ArrayList<UniMedia> subMedia = new ArrayList<>();
+        if (start >= medium.size() || end > medium.size()) {return medium;}
+        if (medium.isEmpty()) {return null;}
+        for (int i = start; i < end; i++) {
+            subMedia.add(medium.get(i));
+        }
+        return subMedia;
+    }
+
+    @Override
     public int generateMediaId() {
         return media.size();
     }
 
     @Override
-    public int getMediaLength() {
-        return media.size();
+    public ArrayList<UniMedia> getSongs() {
+        return loadAllMedia("Song");
     }
+
+    @Override
+    public ArrayList<UniMedia> getConcerts() {
+        return loadAllMedia("Concert");
+    }
+
 
     private UniComment getParentComment(int parentId, int depthLevel) {
             for (UniComment comment : comments) {
@@ -360,16 +464,15 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
             return null;
     }
 
-    private void saveAllComments(List<UniComment> comments, int depthLevel) {
-        try (FileWriter writer = new FileWriter(AppConfig.COMMENTS_CSV_PATH + depthLevel + ".csv")) {
+    private void saveAllComments() {
+        try (FileWriter writer = new FileWriter(AppConfig.COMMENTS_CSV_PATH)) {
             // Write header
             writer.write(AppConfig.COMMENTS_CSV_HEADER);
 
             // Write users
             for (UniComment comment : comments) {
-                if (comment.getDepth() != depthLevel) continue;
                 String parent = comment.getParent() != null ? String.valueOf(comment.getParent().getId()) : "-1";
-                writer.write(comment.getId() + "," + comment.getMediaId() + "," + parent + ',' + comment.getUsername() + "," + comment.getComment() +  "\n");
+                writer.write(comment.getId() + "," + comment.getMediaId() + "," + parent + ',' + comment.getUsername() + "," + comment.getComment() + "," +comment.getDepth() +"\n");
             }
         } catch (IOException e) {
             System.err.println("Error saving comments to CSV: " + e.getMessage());
@@ -380,6 +483,7 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
      */
     private void saveAllUsers() {
         String isAdmin;
+        String isGuest;
         try (FileWriter writer = new FileWriter(AppConfig.USERS_CSV_PATH)) {
             // Write header
             writer.write(AppConfig.USERS_CSV_HEADER);
@@ -390,7 +494,11 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
                 if (user.isAdmin()) {
                     isAdmin = "1";
                 }
-                writer.write(user.getUsername() + "," + user.getPassword() + "," + isAdmin +  "\n");
+                isGuest = "0";
+                if (user.isGuest()) {
+                    isGuest = "1";
+                }
+                writer.write(user.getUsername() + "," + user.getPassword() + "," + isAdmin + "," + isGuest + "\n");
             }
         } catch (IOException e) {
             System.err.println("Error saving users to CSV: " + e.getMessage());
@@ -403,10 +511,43 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         users.put(user.getUsername(), user);
         saveAllUsers();
     }
+    private void saveAllRegistrationReq()
+    {
+        try (FileWriter writer = new FileWriter(AppConfig.UNI_USER_REGISTRATION_REQ_CSV_PATH)) {
+            // Write header
+            writer.write(AppConfig.UNI_USER_REGISTRATION_REQ_HEADER);
+
+            // Write users
+            for (UniUserRequest user : registrationRequests) {
+                writer.write(user.getUsername() + "," + user.getPassword() +  "\n");
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving users to CSV: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void addToRegistrationReqList(UniUserRequest user) {
+        registrationRequests.add(user);
+        saveAllRegistrationReq();
+    }
+
+    @Override
+    public void removeFromRegistrationReqList(UniUserRequest user) {
+        registrationRequests.remove(user);
+        saveAllRegistrationReq();
+    }
+
+    @Override
+    public ArrayList<UniUserRequest> getRegistrationReqList() {
+        return registrationRequests;
+    }
+
+
     @Override
     public void saveComment(UniComment comment, int depthLevel) {
         comments.add(comment);
-        saveAllComments(comments, depthLevel);
+        saveAllComments();
     }
 
     @Override
@@ -419,17 +560,37 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
         return null;
     }
 
-    public void deleteComment(List<UniComment> comments, double comment_id, int depthLevel) {
-        for (UniComment comment : comments)
-        {
-            if (comment.getId() == comment_id)
-            {
-                comments.remove(comment);
+    @Override
+    public void deleteComment(UniComment comment) {
+        deleteCommentCascade(comments, comment.getId());
+        saveAllComments();
+    }
+    public void deleteCommentCascade(List<UniComment> allComments, int idToRemove) {
+        Map<Integer, List<UniComment>> mapByParent = allComments.stream()
+                .collect(Collectors.groupingBy(c -> {
+                    if (c.getParent() == null) return -1;
+                    return c.getParent().getId();
+                }));
 
+        Set<Integer> idsToDelete = new HashSet<>();
+        collectDescendants(idToRemove, mapByParent, idsToDelete);
+        allComments.removeIf(c -> idsToDelete.contains(c.getId()));
+    }
+
+    private void collectDescendants(int currentId, Map<Integer, List<UniComment>> mapByParent, Set<Integer> idsToDelete) {
+        idsToDelete.add(currentId);
+
+        if (mapByParent.containsKey(currentId)) {
+            for (UniComment child : mapByParent.get(currentId)) {
+                collectDescendants(child.getId(), mapByParent, idsToDelete);
             }
         }
-        saveAllComments(comments, depthLevel);
     }
+    @Override
+    public int getCommentsSize() {
+        return comments.size();
+    }
+
     /**
      * Delete a user from the repository
      */
@@ -439,15 +600,30 @@ public class DataRepository implements MediaRepository, UserRepository, CommentR
             // Never delete admin users as a safety measure
             if (!user.isAdmin()) {
                 users.remove(username);
-                saveAllUsers();
             }
         }
+        saveAllUsers();
     }
     /**
      * Get a user by username
      */
-    public User getUser(String username) {
+    public User getRegistredUser(String username) {
         return users.get(username);
+    }
+
+    @Override
+    public void removeUser(User user) {
+        deleteUser(user.getUsername());
+    }
+
+    @Override
+    public void updatePermissions(User user, boolean isAdmin, boolean isGuest) {
+        if (users.containsKey(user.getUsername())) {
+            User use = users.get(user.getUsername());
+            use.setAdmin(isAdmin);
+            use.setGuest(isGuest);
+        }
+        saveAllUsers();
     }
 
     /**

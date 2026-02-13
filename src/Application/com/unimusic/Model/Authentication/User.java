@@ -5,18 +5,19 @@ public class User {
     private String username;
     private String password;
     private boolean isAdmin;
-
+    private boolean isGuest;
     /**
      * Constructor for creating a user with username and password
      *
      * @param username The user's username
      * @param password The user's password (stored in plain text for educational purposes)
      */
-    public User(String username, String password, boolean isAdmin) {
+    public User(String username, String password, boolean isAdmin, boolean isGuest) {
         this.id = username; // Using username as ID for simplicity
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.isGuest = isGuest;
     }
 
     /**
@@ -26,12 +27,12 @@ public class User {
      * @param password The user's password
      * @return A new User object
      */
-    public static User create(String username, String password, boolean isAdmin) {
-        return new User(username, password, isAdmin);
+    public static User create(String username, String password, boolean isAdmin, boolean isGuest) {
+        return new User(username, password, isAdmin, isGuest);
     }
 
-    public static User create(String username, String password) {
-        return new User(username, password, false);
+    public static UniUserRequest createRequest(String username, String password) {
+        return new UniUserRequest(username, password);
     }
 
     /**
@@ -73,5 +74,15 @@ public class User {
 
     public boolean isAdmin() {
         return isAdmin;
+    }
+    public boolean isGuest() {
+        return isGuest;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+    public void setGuest(boolean isGuest) {
+        this.isGuest = isGuest;
     }
 }

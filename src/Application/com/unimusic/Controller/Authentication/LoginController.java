@@ -42,10 +42,10 @@ public class LoginController  extends UniController {
             return;
         }
 
-        User user = userRepo.getUser(username);
+        User user = userRepo.getRegistredUser(username);
         if (user != null && user.checkPassword(password)) {
             // Login successful
-            AuthManager.setUser(username);
+            AuthManager.setUser(user);
             NavigationHandler.navigateToHome();
         } else {
             showError("Invalid username or password");

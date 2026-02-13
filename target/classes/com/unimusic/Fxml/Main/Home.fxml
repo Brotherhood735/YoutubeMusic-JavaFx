@@ -29,16 +29,24 @@
             <VBox fx:id="menuContainer" spacing="5">
                 <HBox onMouseClicked="#onHomeClick" styleClass="menu-item, menu-item-active">
                     <padding><Insets bottom="12" left="15" right="15" top="12" /></padding>
-                    <Label styleClass="menu-label" text="🏠 Home" />
+                    <Label styleClass="menu-label" text="Home" />
                 </HBox>
-                <HBox onMouseClicked="#onExploreClick" styleClass="menu-item">
+                <HBox onMouseClicked="#onConcertClick" styleClass="menu-item">
                     <padding><Insets bottom="12" left="15" right="15" top="12" /></padding>
-                    <Label styleClass="menu-label" text="🔍 Explore" />
+                    <Label styleClass="menu-label" text="Concerts" />
                 </HBox>
-                <HBox onMouseClicked="#onLibraryClick" styleClass="menu-item">
+                <HBox onMouseClicked="#onAddNewMedia" styleClass="menu-item">
                     <padding><Insets bottom="12" left="15" right="15" top="12" /></padding>
-                    <Label styleClass="menu-label" text="📚 Library" />
+                    <Label styleClass="menu-label" text="Add Media" />
                 </HBox>
+            <HBox fx:id="adminButton" layoutX="10.0" layoutY="102.0" onMouseClicked="#onAdminClick" styleClass="menu-item">
+               <padding>
+                  <Insets bottom="12" left="15" right="15" top="12" />
+               </padding>
+               <children>
+                  <Label styleClass="menu-label" text="Admin" />
+               </children>
+            </HBox>
             </VBox>
         </VBox>
     </left>

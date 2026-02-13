@@ -1,3 +1,10 @@
-username,password,is_admin
-Brother,kia,0
-admin,admin,1
+username,password,is_admin,is_guest
+loltemp1,loltemp1,0,0
+yoyo,yoyo,0,1
+ui,ui,1,0
+rrt,rrt,0,1
+Brother,kia,0,0
+qwer,qwer,0,0
+admin,admin,1,0
+qwe,qwe,0,0
+temp1,temp1,0,0

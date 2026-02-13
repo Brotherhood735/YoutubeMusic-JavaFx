@@ -1,7 +1,6 @@
 package com.unimusic.Model.Repository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public interface CommentRepository {
     ArrayList<UniComment> loadComments(double id, int depthLevel, boolean getOnlyParentComments);
@@ -10,4 +9,8 @@ public interface CommentRepository {
     void saveComment(UniComment comment, int depthLevel);
 
     UniComment loadComment(int id);
+
+    void deleteComment(UniComment comment);
+
+    int getCommentsSize();
 }

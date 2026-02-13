@@ -1,3 +1,4 @@
 id_media,title,video_name,audio_name,web_url,artist,image_name,type,instruments,date,place
-0,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Song,null,null,null
-1,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null
+0,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Concert,null,null,null,admin
+1,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null,admin
+2,Test,Bohemian Rhapsody.mp4,Convo.mp3,null,Test,simpsons.jpeg,Song,null,null,null,admin

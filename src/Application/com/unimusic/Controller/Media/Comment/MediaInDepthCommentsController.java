@@ -75,9 +75,9 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
     @Override
     protected UniComment createComment() {
         int mediaId = currentMedia.getId();
-        int commentId = Integer.parseInt(String.valueOf(currentComment.getId()) + (currentMediaComments.size() + 1));
+        int commentId = commentRepo.getCommentsSize() + 1;
         String commentText = commentField.getText();
-        String username = AuthManager.getUser();
+        String username = AuthManager.getUser().getUsername();
         UniComment parentComment = currentComment;
         return new UniComment(parentComment, commentId, mediaId, username, commentText, depthLevel);
     }

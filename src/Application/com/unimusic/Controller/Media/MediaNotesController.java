@@ -3,6 +3,7 @@ package com.unimusic.Controller.Media;
 import com.unimusic.Controller.AddMediaNoteController;
 import com.unimusic.Controller.Media.Comment.MediaCommentsController;
 import com.unimusic.Main;
+import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Media.UniMediaUserNote;
 import com.unimusic.Model.Repository.MediaNoteRepository;
@@ -67,6 +68,7 @@ public class MediaNotesController {
     @FXML
     private void addNote()
     {
+        if (AuthManager.getUser().isGuest()) return;
         loadView("Add Information/AddMediaNote.fxml", c -> new AddMediaNoteController(currentMedia, parentController.getRenderer()));
     }
 

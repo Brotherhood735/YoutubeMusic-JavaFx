@@ -2,6 +2,7 @@ package com.unimusic.Controller;
 import com.unimusic.Controller.Media.MediaControlController;
 import com.unimusic.Controller.Media.MediaMainController;
 import com.unimusic.Main;
+import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Repository.MediaRepository;
 import com.unimusic.Nav.NavigationHandler;
@@ -17,6 +18,7 @@ import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeController extends UniController {
@@ -28,13 +30,18 @@ public class HomeController extends UniController {
     private UniController parentController;
     private static MediaControlController mediaControl;
     @FXML private ScrollPane mainViewArea;
-
+    private int currentIdx;
+    private int lastIdx;
+    @FXML private HBox adminButton;
     @FXML
     public void initialize() {
         mediaRepo = Main.getDataRepository();
         parentController = Main.mainController;
         NavigationHandler.setHomeController(this);
-        loadDefaultHomeView();
+        if (!AuthManager.getUser().isAdmin()) adminButton.setVisible(false);
+        currentIdx = 0;
+        lastIdx = -1;
+        loadDefaultHomeView(new String[]{"Songs", "Concerts"}, mediaRepo.getSongs());
 
     }
 
@@ -58,10 +65,9 @@ public class HomeController extends UniController {
         mediaMainController = controller;
     }
     public static void setAddSongController(SongFormController controller) {addSongController = controller;}
-    private void setupFilters(VBox vBox) {
+    private void setupFilters(VBox vBox, String[] filterNames) {
         HBox hBox = new HBox();
         hBox.setPrefHeight(0);
-        String[] filterNames = {"Songs", "Concerts"};
 
         for (String name : filterNames) {
             Button btn = new Button(name);
@@ -71,29 +77,30 @@ public class HomeController extends UniController {
         }
         vBox.getChildren().add(hBox);
     }
-    private void loadDefaultHomeView()
+    private void loadDefaultHomeView(String[] filterNames, ArrayList<UniMedia> media)
     {
         mainViewArea.setFitToHeight(false);
         mainViewArea.setFitToWidth(false);
-        if (homePage != null)
+        if (homePage != null && currentIdx == lastIdx)
         {
             mainViewArea.setContent(homePage);
             return;
         }
+        lastIdx = currentIdx;
         homePage = new VBox(15);
         homePage.getStyleClass().add("v-box");
         // populate the VBOX
-        setupFilters(homePage);
-        loadMusicSections(homePage, 3);
+        setupFilters(homePage, filterNames);
+        loadMusicSections(homePage, 3, media);
         mainViewArea.setContent(homePage);
     }
-    private void loadMusicSections(VBox vBox, int sectionLength) {
-        int songsToLoad = mediaRepo.getMediaLength();
+    private void loadMusicSections(VBox vBox, int sectionLength, ArrayList<UniMedia> media) {
+        int songsToLoad = media.size();
         int startLength = 0;
         int endLength = sectionLength;
         while (songsToLoad > 0)
         {
-            ScrollPane section = createSection(mediaRepo.loadMediaWithInterval(startLength, endLength));
+            ScrollPane section = createSection(mediaRepo.loadMediaWithInterval(media, startLength, endLength));
             startLength = endLength;
             endLength += sectionLength;
             vBox.getChildren().add(section);
@@ -162,26 +169,35 @@ public class HomeController extends UniController {
     private void onHomeClick()
     {
         mainViewArea.setContent(null);
-        loadDefaultHomeView();
+        currentIdx = 0;
+        loadDefaultHomeView(new String[]{"Songs", "Concerts"}, mediaRepo.getSongs());
         System.out.println("Home clicked");
     }
 
-    @FXML
-    private void onExploreClick() {
-        System.out.println("Explore clicked");
-    }
-
-    @FXML
-    private void onLibraryClick() {
-        System.out.println("Library clicked");
-    }
 
     private void onFilterClick(String filter) {
 
-        NavigationHandler.navigateToAddSong();
         System.out.println("Filter clicked: " + filter);
     }
-
+    @FXML
+    private void onConcertClick()
+    {
+        currentIdx = 1;
+        mainViewArea.setContent(null);
+        loadDefaultHomeView(new String[]{"Kiaro", "Capo"}, mediaRepo.getConcerts());
+        System.out.println("Concert clicked");
+    }
+    @FXML
+    private void onAdminClick(){
+        NavigationHandler.navigateToAdminPanel();
+    }
+    @FXML
+    private void onAddNewMedia()
+    {
+        boolean guest = AuthManager.getUser().isGuest();
+        if (guest) return;
+        NavigationHandler.navigateToAddSong();
+    }
     private void onCardClick(UniMedia item) {
         mainViewArea.setFitToHeight(true);
         mainViewArea.setFitToWidth(true);

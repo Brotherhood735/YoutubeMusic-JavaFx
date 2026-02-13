@@ -1,6 +1,7 @@
 package com.unimusic.Nav;
 
 import com.unimusic.Controller.*;
+import com.unimusic.Controller.Admin.RegistrationRequestController;
 import com.unimusic.Controller.Media.Comment.MediaCommentsController;
 import com.unimusic.Controller.Media.Comment.MediaInDepthCommentsController;
 import com.unimusic.Controller.Media.IMediaMainRegionController;
@@ -187,6 +188,16 @@ public class NavigationHandler {
         if (AuthManager.isAuthenticated()) {
             loadHomeView("Add Information/AddSong.fxml", c -> {
                 return new SongFormController();
+            });
+        } else {
+            navigateToLogin();
+        }
+    }
+
+    public static void navigateToAdminPanel() {
+        if (AuthManager.isAuthenticated()) {
+            loadHomeView("Admin/RegistrationRequest.fxml", c -> {
+                return new RegistrationRequestController();
             });
         } else {
             navigateToLogin();

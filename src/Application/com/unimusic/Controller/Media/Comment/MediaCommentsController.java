@@ -1,11 +1,11 @@
 package com.unimusic.Controller.Media.Comment;
 
 import com.unimusic.Controller.Media.IMediaMainRegionController;
-import com.unimusic.Controller.Media.MediaMainEastRegionController;
 import com.unimusic.Controller.Media.MediaNotesController;
 import com.unimusic.Controller.UniController;
 import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
+import com.unimusic.Model.Authentication.User;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Repository.CommentRepository;
 import com.unimusic.Model.Repository.UniComment;
@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import java.util.ArrayList;
@@ -44,6 +45,9 @@ public class MediaCommentsController extends UniController {
     }
     @FXML
     public void initialize() {
+        if (AuthManager.getUser().isGuest()){
+            commentField.setDisable(true);
+        }
         commentRepo = Main.getDataRepository();
         loadComments();
         // once we have all the comments on that specific media we can populate the UI
@@ -74,7 +78,19 @@ public class MediaCommentsController extends UniController {
         Label usernameLabel =  new Label(comment.getUsername());
         Label commentLabel = new Label(comment.getComment());
         commentLabel.setPrefHeight(3 * commentLabel.getFont().getSize() * 1.2);
+        HBox buttons = new HBox();
         Button respondButton = new  Button("Guarda commenti");
+        Button deleteCommentButton = new  Button("Cancella");
+        if (AuthManager.getUser().isAdmin()
+                || comment.getUsername().equals(AuthManager.getUser().getUsername())
+                || currentMedia.getUser().getUsername().equals(AuthManager.getUser().getUsername())) {
+            buttons.getChildren().addAll(respondButton, deleteCommentButton);
+            buttons.setSpacing(10);
+        }
+        else {
+            buttons.getChildren().addAll(respondButton);
+        }
+        deleteCommentButton.setOnMouseClicked(e -> onDeleteCommentRequest(comment, currentMedia.getUser()));
         respondButton.setOnMouseClicked( e -> onDepthCommentRequest(currentMedia, comment));
         VBox commentBox = new VBox();
         commentBox.setFillWidth(true);
@@ -87,8 +103,15 @@ public class MediaCommentsController extends UniController {
         commentBox.setMinHeight(100);
         commentBox.setMaxHeight(4 * commentLabel.getFont().getSize() * 1.2);
         commentBox.setPrefHeight(4 * commentLabel.getFont().getSize() * 1.2);
-        commentBox.getChildren().addAll(usernameLabel, commentLabel,  respondButton);
+        commentBox.getChildren().addAll(usernameLabel, commentLabel,  buttons);
         return commentBox;
+    }
+
+    private void onDeleteCommentRequest(UniComment comment, User user) {
+        commentRepo.deleteComment(comment);
+        System.out.println("Cancellazione commento");
+        loadComments();
+        populateSection();
     }
 
     protected void onDepthCommentRequest(UniMedia media,  UniComment comment)
@@ -99,7 +122,6 @@ public class MediaCommentsController extends UniController {
     @FXML
     protected void sendComment()
     {
-
         commentRepo.saveComment(createComment(), depthLevel);
         currentMediaComments = commentRepo.loadComments(currentMedia.getId(), depthLevel);
         loadComments();
@@ -117,9 +139,9 @@ public class MediaCommentsController extends UniController {
     protected UniComment  createComment()
     {
         int mediaId = currentMedia.getId();
-        int commentId = currentMediaComments.size() + 1;
+        int commentId = commentRepo.getCommentsSize() + 1;
         String commentText = commentField.getText();
-        String username = AuthManager.getUser();
+        String username = AuthManager.getUser().getUsername();
         return new UniComment(null, commentId, mediaId, username, commentText, depthLevel);
     }
     @Override

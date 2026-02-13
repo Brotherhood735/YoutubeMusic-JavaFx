@@ -2,6 +2,7 @@ package com.unimusic.Controller.Authentication;
 
 import com.unimusic.Controller.UniController;
 import com.unimusic.Main;
+import com.unimusic.Model.Authentication.UniUserRequest;
 import com.unimusic.Model.Authentication.User;
 import com.unimusic.Model.Repository.UserRepository;
 import com.unimusic.Nav.NavigationHandler;
@@ -55,11 +56,12 @@ public class RegisterController extends UniController {
         }
 
         // Create and save new user
-        User newUser = User.create(username, password);
-        userRepo.saveUser(newUser);
+        UniUserRequest newRequest = User.createRequest(username, password);
+        userRepo.saveUser(newRequest.getUser());
+        userRepo.addToRegistrationReqList(newRequest);
 
         // Show success message
-        showSuccess("Registration successful! Please log in.");
+        showSuccess("Fino alla conferma dell'amministratore puoi navigare l'app in modalità guest.");
 
         // Clear fields
         usernameField.clear();

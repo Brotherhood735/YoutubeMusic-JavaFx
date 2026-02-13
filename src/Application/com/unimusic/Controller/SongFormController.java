@@ -1,6 +1,7 @@
 package com.unimusic.Controller;
 
 import com.unimusic.Main;
+import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Repository.MediaRepository;
 import com.unimusic.Nav.NavigationHandler;
@@ -170,6 +171,7 @@ public class SongFormController extends UniController {
             song.setDate(datePicker.getValue().toString());
         }
         song.setPlace(placeField.getText());
+        song.setUser(AuthManager.getUser());
         if (isLiveContentCheckBox.isSelected())
         {
             song.setType("Live Concert");

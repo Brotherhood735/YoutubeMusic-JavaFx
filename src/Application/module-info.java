@@ -37,4 +37,6 @@ module com.unimusic {
     opens com.unimusic.Controller.Authentication to javafx.fxml;
     exports com.unimusic.Controller.Media.Comment;
     opens com.unimusic.Controller.Media.Comment to javafx.fxml;
+    exports com.unimusic.Controller.Admin;
+    opens com.unimusic.Controller.Admin to javafx.fxml;
 }

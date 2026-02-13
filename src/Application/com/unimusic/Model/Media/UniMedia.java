@@ -1,6 +1,7 @@
 package com.unimusic.Model.Media;
 
 
+import com.unimusic.Model.Authentication.User;
 import com.unimusic.Model.Repository.UniData;
 
 import java.util.ArrayList;
@@ -17,13 +18,14 @@ public class UniMedia extends UniData
     String instruments;
     String date;
     String place;
+    User user;
     public UniMedia(int id)
     {
         super(id, UniDataType.Media);
 
     }
     public UniMedia(int id, String title, String videoName, String audioName, String webUrl,
-                    String artist, String imageName, String type, String instruments, String date, String place) {
+                    String artist, String imageName, String type, String instruments, String date, String place, User user) {
         super(id, UniDataType.Media);
         this.title = title;
         this.videoName = videoName;
@@ -35,6 +37,7 @@ public class UniMedia extends UniData
         this.instruments = instruments;
         this.date = date;
         this.place = place;
+        this.user = user;
     }
     public String getTitle() { return title; }
     public String getVideoName() { return videoName; }
@@ -45,6 +48,7 @@ public class UniMedia extends UniData
     public String getType() { return type; }
     public String getDate() { return date; }
     public String getPlace() { return place; }
+    public User getUser() { return user; }
 
     public String getInstruments() { return instruments; }
     public void setTitle(String title) { this.title = title; }
@@ -57,5 +61,5 @@ public class UniMedia extends UniData
     public void setInstruments(String instruments) { this.instruments = instruments; }
     public void setDate(String date) { this.date = date; }
     public void setPlace(String place) { this.place = place; }
-
+    public void setUser(User user) { this.user = user; }
 }

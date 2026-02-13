@@ -7,7 +7,8 @@ import java.util.ArrayList;
 public interface MediaRepository {
     void saveMedia(UniMedia uniMedia);
     ArrayList<UniMedia> loadMediaWithInterval(int start, int end);
+    ArrayList<UniMedia> loadMediaWithInterval(ArrayList<UniMedia> medium, int start, int end);
     int generateMediaId();
-
-    int getMediaLength();
+    ArrayList<UniMedia> getSongs();
+    ArrayList<UniMedia> getConcerts();
 }
