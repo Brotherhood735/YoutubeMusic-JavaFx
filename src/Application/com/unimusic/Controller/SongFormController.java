@@ -3,7 +3,8 @@ package com.unimusic.Controller;
 import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
-import com.unimusic.Model.Repository.MediaRepository;
+import com.unimusic.Model.Repository.Interface.MediaRepository;
+import com.unimusic.Model.Repository.RepositoryFactory;
 import com.unimusic.Nav.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -21,14 +22,14 @@ public class SongFormController extends UniController {
     @FXML private TextField videoPathField;
     @FXML private TextField webUrlField;
     @FXML private TextField imagePathField;
-
+    @FXML private TextField genreField;
     @FXML private CheckBox isLiveContentCheckBox;
     @FXML private DatePicker datePicker;
     @FXML private TextField placeField;
     private MediaRepository mediaRepo;
     @FXML
     public void initialize() {
-        mediaRepo = Main.getDataRepository();
+        mediaRepo = RepositoryFactory.getInstance().getMediaRepository();
     }
 
     @FXML
@@ -166,6 +167,7 @@ public class SongFormController extends UniController {
         song.setTitle(titleField.getText());
         song.setArtist(artistField.getText());
         song.setInstruments(instrumentsField.getText());
+        song.setGenre(genreField.getText());
         if (datePicker.getValue() != null)
         {
             song.setDate(datePicker.getValue().toString());
@@ -174,7 +176,7 @@ public class SongFormController extends UniController {
         song.setUser(AuthManager.getUser());
         if (isLiveContentCheckBox.isSelected())
         {
-            song.setType("Live Concert");
+            song.setType("Concert");
         }
         else
         {

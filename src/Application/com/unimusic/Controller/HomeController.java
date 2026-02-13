@@ -4,8 +4,11 @@ import com.unimusic.Controller.Media.MediaMainController;
 import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
-import com.unimusic.Model.Repository.MediaRepository;
+import com.unimusic.Model.Repository.Interface.MediaRepository;
+import com.unimusic.Model.Repository.RepositoryFactory;
 import com.unimusic.Nav.NavigationHandler;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -20,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HomeController extends UniController {
     @FXML private BorderPane homeContainer;
@@ -33,16 +37,55 @@ public class HomeController extends UniController {
     private int currentIdx;
     private int lastIdx;
     @FXML private HBox adminButton;
+
+    private TextField searchField;
+    private ObservableList<UniMedia> currentRawList;
+    private VBox contentContainer;
+    private String[] genres = {"All", "Pop", "Rock", "Classical", "Jazz"};
     @FXML
     public void initialize() {
-        mediaRepo = Main.getDataRepository();
+        mediaRepo = RepositoryFactory.getInstance().getMediaRepository();
         parentController = Main.mainController;
         NavigationHandler.setHomeController(this);
         if (!AuthManager.getUser().isAdmin()) adminButton.setVisible(false);
         currentIdx = 0;
         lastIdx = -1;
-        loadDefaultHomeView(new String[]{"Songs", "Concerts"}, mediaRepo.getSongs());
+        initSearchControls();
+        loadDefaultHomeView(genres, mediaRepo.getSongs());
 
+    }
+    private void initSearchControls() {
+        searchField = new TextField();
+        searchField.setPromptText("Cerca titolo o autore...");
+        // e anche quando scrivo rifiltra
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilters(null));
+    }
+
+    private void applyFilters(String filterText) {
+        if (contentContainer == null || currentRawList == null) return;
+
+        contentContainer.getChildren().clear();
+
+        List<UniMedia> filteredList = currentRawList.stream().filter(media -> {
+            boolean matchesGenre = true;
+            boolean matchesText = true;
+            if (filterText != null && filterText.equals("All")) return true;
+            // il genere è lo stesso
+            if (filterText != null && !filterText.isEmpty()) {
+                matchesGenre = media.getGenre().equalsIgnoreCase(filterText);
+            }
+            // il nome è lo stesso
+            String text = searchField.getText().toLowerCase();
+            System.out.println(text);
+            if (!text.isEmpty()) {
+                matchesText = media.getTitle().toLowerCase().contains(text) ||
+                        media.getArtist().toLowerCase().contains(text);
+            }
+
+            return matchesGenre && matchesText;
+        }).collect(Collectors.toList());
+
+        loadMusicSections(contentContainer, 6, new ArrayList<>(filteredList));
     }
 
     private void loadMediaControlView(String fxml, boolean restartPanel)
@@ -65,51 +108,70 @@ public class HomeController extends UniController {
         mediaMainController = controller;
     }
     public static void setAddSongController(SongFormController controller) {addSongController = controller;}
-    private void setupFilters(VBox vBox, String[] filterNames) {
+    private HBox setupFilters(VBox vBox, String[] filterNames) {
         HBox hBox = new HBox();
         hBox.setPrefHeight(0);
-
+        hBox.setPadding(new Insets(0, 0, 10, 0));
         for (String name : filterNames) {
             Button btn = new Button(name);
             btn.getStyleClass().add("filter-btn");
             btn.setOnAction(e -> onFilterClick(name));
             hBox.getChildren().add(btn);
         }
-        vBox.getChildren().add(hBox);
+        return hBox;
     }
-    private void loadDefaultHomeView(String[] filterNames, ArrayList<UniMedia> media)
-    {
+    private void loadDefaultHomeView(String[] filterNames, ArrayList<UniMedia> media) {
         mainViewArea.setFitToHeight(false);
         mainViewArea.setFitToWidth(false);
-        if (homePage != null && currentIdx == lastIdx)
-        {
-            mainViewArea.setContent(homePage);
-            return;
-        }
-        lastIdx = currentIdx;
+
+        this.currentRawList = FXCollections.observableArrayList(media);
+
+        if(searchField != null) searchField.setText("");
+
         homePage = new VBox(15);
         homePage.getStyleClass().add("v-box");
-        // populate the VBOX
-        setupFilters(homePage, filterNames);
-        loadMusicSections(homePage, 3, media);
+        homePage.setPadding(new Insets(10));
+
+        HBox fitlerButtons = setupFilters(homePage, filterNames);
+
+        HBox searchBar = new HBox(10, searchField, fitlerButtons);
+        searchBar.setAlignment(Pos.CENTER_LEFT);
+        searchBar.setPadding(new Insets(0, 0, 10, 0));
+        homePage.getChildren().add(searchBar);
+
+        contentContainer = new VBox(15);
+        homePage.getChildren().add(contentContainer);
+
+        applyFilters(null);
+
         mainViewArea.setContent(homePage);
     }
     private void loadMusicSections(VBox vBox, int sectionLength, ArrayList<UniMedia> media) {
+        if (media.isEmpty()) {
+            Label noResults = new Label("Nessun risultato trovato.");
+            noResults.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+            vBox.getChildren().add(noResults);
+            return;
+        }
+
         int songsToLoad = media.size();
         int startLength = 0;
         int endLength = sectionLength;
-        while (songsToLoad > 0)
-        {
-            ScrollPane section = createSection(mediaRepo.loadMediaWithInterval(media, startLength, endLength));
+
+        while (songsToLoad > 0) {
+            List<UniMedia> songs;
+            if (endLength > media.size()) endLength = media.size();
+            songs = media.subList(startLength, endLength);
+
+            ScrollPane section = createSection(songs);
             startLength = endLength;
             endLength += sectionLength;
             vBox.getChildren().add(section);
-            songsToLoad -= sectionLength;
+            songsToLoad -= songs.size();
         }
     }
 
     private ScrollPane createSection(List<UniMedia> items) {
-        // Cards container
         HBox cardsContainer = new HBox(15);
         cardsContainer.getStyleClass().add("h-box");
         cardsContainer.setAlignment(Pos.CENTER_LEFT);
@@ -119,7 +181,7 @@ public class HomeController extends UniController {
         }
         cardsContainer.setPadding(new Insets(0, 0, 0, 10));
         ScrollPane cardsScroll = new ScrollPane(cardsContainer);
-        cardsScroll.setFitToHeight(false); // match height of content
+        cardsScroll.setFitToHeight(false);
         cardsScroll.setFitToWidth(false);
         return cardsScroll;
     }
@@ -132,8 +194,6 @@ public class HomeController extends UniController {
         card.setMaxWidth(180);
         card.setStyle("-fx-cursor: hand;");
 
-        // Image container
-        // Placeholder image
         URL imageUrl = Main.class.getResource("Images/"+ item.getImageName());
         ImageView imagePlaceHolder;
         imagePlaceHolder = new ImageView(imageUrl.toString());
@@ -149,7 +209,6 @@ public class HomeController extends UniController {
 
         imagePlaceHolder.setOnMouseClicked(e -> onCardClick(item));
 
-        // Title and artist
         Label titleLabel = new Label(item.getTitle());
         titleLabel.setFont(Font.font("Roboto", 16));
         titleLabel.getStyleClass().add("label-title");
@@ -170,13 +229,13 @@ public class HomeController extends UniController {
     {
         mainViewArea.setContent(null);
         currentIdx = 0;
-        loadDefaultHomeView(new String[]{"Songs", "Concerts"}, mediaRepo.getSongs());
+        loadDefaultHomeView(genres, mediaRepo.getSongs());
         System.out.println("Home clicked");
     }
 
 
     private void onFilterClick(String filter) {
-
+        applyFilters(filter);
         System.out.println("Filter clicked: " + filter);
     }
     @FXML
@@ -184,7 +243,7 @@ public class HomeController extends UniController {
     {
         currentIdx = 1;
         mainViewArea.setContent(null);
-        loadDefaultHomeView(new String[]{"Kiaro", "Capo"}, mediaRepo.getConcerts());
+        loadDefaultHomeView(genres, mediaRepo.getConcerts());
         System.out.println("Concert clicked");
     }
     @FXML

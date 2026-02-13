@@ -6,7 +6,8 @@ import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Media.UniMediaUserNote;
-import com.unimusic.Model.Repository.MediaNoteRepository;
+import com.unimusic.Model.Repository.Interface.MediaNoteRepository;
+import com.unimusic.Model.Repository.RepositoryFactory;
 import com.unimusic.Nav.NavigationHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +32,7 @@ public class MediaNotesController {
     @FXML
     public void initialize() {
         VBox.setVgrow(mainArea, Priority.ALWAYS);
-        noteRepo = Main.getDataRepository();
+        noteRepo = RepositoryFactory.getInstance().getMediaNoteRepository();
         ArrayList<UniMediaUserNote> notes = noteRepo.getNotes(currentMedia.getId());
         if (notes == null) return;
         for (UniMediaUserNote note : notes) {

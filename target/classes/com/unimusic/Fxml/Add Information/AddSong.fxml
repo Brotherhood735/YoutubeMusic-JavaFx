@@ -38,9 +38,15 @@
                   <Label minWidth="120" style="-fx-font-weight: bold;" text="Artista/Artisti" />
                   <TextField fx:id="artistField" promptText="Inserire nome/nomi" HBox.hgrow="ALWAYS" />
               </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="80.0" spacing="10" styleClass="h-box">
+               <children>
+                  <Label minWidth="120" style="-fx-font-weight: bold;" text="Genere" />
+                  <TextField fx:id="genreField" promptText="Inserire il Genere" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
             <HBox styleClass="h-box">
                <children>
-                  <Label minWidth="120" prefHeight="17.0" prefWidth="131.0" style="-fx-font-weight: bold;" text="Registazione dal vivo" />
+                  <Label minWidth="120" prefHeight="17.0" prefWidth="131.0" style="-fx-font-weight: bold;" text="Dal vivo" />
                   <CheckBox fx:id="isLiveContentCheckBox" mnemonicParsing="false" />
                </children>
             </HBox>

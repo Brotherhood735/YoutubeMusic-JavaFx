@@ -19,13 +19,14 @@ public class UniMedia extends UniData
     String date;
     String place;
     User user;
+    String genre;
     public UniMedia(int id)
     {
         super(id, UniDataType.Media);
 
     }
     public UniMedia(int id, String title, String videoName, String audioName, String webUrl,
-                    String artist, String imageName, String type, String instruments, String date, String place, User user) {
+                    String artist, String imageName, String type, String instruments, String date, String place, User user, String genre) {
         super(id, UniDataType.Media);
         this.title = title;
         this.videoName = videoName;
@@ -38,6 +39,7 @@ public class UniMedia extends UniData
         this.date = date;
         this.place = place;
         this.user = user;
+        this.genre = genre;
     }
     public String getTitle() { return title; }
     public String getVideoName() { return videoName; }
@@ -49,6 +51,7 @@ public class UniMedia extends UniData
     public String getDate() { return date; }
     public String getPlace() { return place; }
     public User getUser() { return user; }
+    public String getGenre() { return genre; }
 
     public String getInstruments() { return instruments; }
     public void setTitle(String title) { this.title = title; }
@@ -62,4 +65,5 @@ public class UniMedia extends UniData
     public void setDate(String date) { this.date = date; }
     public void setPlace(String place) { this.place = place; }
     public void setUser(User user) { this.user = user; }
+    public void setGenre(String genre) { this.genre = genre; }
 }

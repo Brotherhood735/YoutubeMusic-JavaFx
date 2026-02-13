@@ -3,6 +3,7 @@ package com.unimusic.Controller.Media;
 import com.unimusic.Controller.AddMediaMetaInfoController;
 import com.unimusic.Controller.Media.Comment.MediaCommentsController;
 import com.unimusic.Controller.UniController;
+import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Nav.NavigationHandler;
 import com.unimusic.View.Components.PlayableMedia;
@@ -45,6 +46,7 @@ public class MediaMainEastRegionController extends UniController implements IMed
 
     @FXML
     void onOther(ActionEvent event) {
+        if (AuthManager.getUser().isGuest()) return;
         loadView("Add Information/AddMediaMetaInfo.fxml", 2, c -> new AddMediaMetaInfoController(currentMedia, bottomController.getRenderer()));
 
     }

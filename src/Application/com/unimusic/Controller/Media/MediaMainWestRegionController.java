@@ -4,7 +4,8 @@ import com.unimusic.Controller.UniController;
 import com.unimusic.Main;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Media.UniMediaSegmentInfo;
-import com.unimusic.Model.Repository.MediaMetaInfoRepository;
+import com.unimusic.Model.Repository.Interface.MediaMetaInfoRepository;
+import com.unimusic.Model.Repository.RepositoryFactory;
 import com.unimusic.Nav.NavigationHandler;
 import com.unimusic.View.Components.LocalPlayableAudio;
 import com.unimusic.View.Components.LocalPlayableVideo;
@@ -61,7 +62,7 @@ public class MediaMainWestRegionController extends UniController implements IMed
         AnchorPane.setLeftAnchor(mainArea, 0.0);
         AnchorPane.setRightAnchor(mainArea, 0.0);
         MediaMainController.setWestController(this);
-        metaInfoRepo = Main.getDataRepository();
+        metaInfoRepo = RepositoryFactory.getInstance().getMediaMetaInfoRepository();
 
         setDefaultInfo();
         // the default is to go for the video

@@ -3,14 +3,13 @@ package com.unimusic.Controller.Media.Comment;
 import com.unimusic.Controller.Media.IMediaMainRegionController;
 import com.unimusic.Controller.Media.MediaNotesController;
 import com.unimusic.Controller.UniController;
-import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Authentication.User;
 import com.unimusic.Model.Media.UniMedia;
-import com.unimusic.Model.Repository.CommentRepository;
+import com.unimusic.Model.Repository.Interface.CommentRepository;
+import com.unimusic.Model.Repository.RepositoryFactory;
 import com.unimusic.Model.Repository.UniComment;
 import com.unimusic.Nav.NavigationHandler;
-import com.unimusic.View.Components.PlayableMedia;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -26,7 +25,6 @@ public class MediaCommentsController extends UniController {
     protected ArrayList<UniComment> currentMediaComments;
     protected UniMedia currentMedia;
     protected CommentRepository commentRepo;
-    protected PlayableMedia renderer;
     protected int depthLevel = 0;
     @FXML protected Button onNotesButton;
     @FXML protected ScrollPane commentsAreaParent;
@@ -38,17 +36,14 @@ public class MediaCommentsController extends UniController {
     {
         currentMedia = media;
         this.parentController = parentController;
-        this.renderer = renderer;
     }
-    public PlayableMedia getRenderer() {
-        return parentController.getRenderer();
-    }
+
     @FXML
     public void initialize() {
         if (AuthManager.getUser().isGuest()){
             commentField.setDisable(true);
         }
-        commentRepo = Main.getDataRepository();
+        commentRepo = RepositoryFactory.getInstance().getCommentRepository();
         loadComments();
         // once we have all the comments on that specific media we can populate the UI
         populateSection();
@@ -139,7 +134,7 @@ public class MediaCommentsController extends UniController {
     protected UniComment  createComment()
     {
         int mediaId = currentMedia.getId();
-        int commentId = commentRepo.getCommentsSize() + 1;
+        int commentId = commentRepo.getNewCommentId() + 1;
         String commentText = commentField.getText();
         String username = AuthManager.getUser().getUsername();
         return new UniComment(null, commentId, mediaId, username, commentText, depthLevel);

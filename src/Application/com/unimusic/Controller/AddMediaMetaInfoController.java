@@ -4,7 +4,8 @@ import com.unimusic.Main;
 import com.unimusic.Model.Media.UniDataType;
 import com.unimusic.Model.Media.UniMedia;
 import com.unimusic.Model.Media.UniMediaSegmentInfo;
-import com.unimusic.Model.Repository.MediaMetaInfoRepository;
+import com.unimusic.Model.Repository.Interface.MediaMetaInfoRepository;
+import com.unimusic.Model.Repository.RepositoryFactory;
 import com.unimusic.View.Components.PlayableMedia;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -30,7 +31,7 @@ public class AddMediaMetaInfoController extends UniController
     @FXML
     public void initialize()
     {
-        metaInfoRepo = Main.getDataRepository();
+        metaInfoRepo = RepositoryFactory.getInstance().getMediaMetaInfoRepository();
         setupRangeSlider();
     }
     public AddMediaMetaInfoController(UniMedia media, PlayableMedia renderer)

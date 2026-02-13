@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 
 public class MediaInDepthCommentsController extends MediaCommentsController {
     @FXML private Label parentCommentLabel;
-    private MediaCommentsController parentCommentSection;
     private UniComment currentComment;
     private UniComment previousComment;
     public MediaInDepthCommentsController(IMediaMainRegionController parentController, UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
@@ -75,7 +74,7 @@ public class MediaInDepthCommentsController extends MediaCommentsController {
     @Override
     protected UniComment createComment() {
         int mediaId = currentMedia.getId();
-        int commentId = commentRepo.getCommentsSize() + 1;
+        int commentId = commentRepo.getNewCommentId() + 1;
         String commentText = commentField.getText();
         String username = AuthManager.getUser().getUsername();
         UniComment parentComment = currentComment;

@@ -1,12 +1,11 @@
 package com.unimusic.Nav;
 
 import com.unimusic.Controller.*;
-import com.unimusic.Controller.Admin.RegistrationRequestController;
+import com.unimusic.Controller.Admin.AdminTabController;
 import com.unimusic.Controller.Media.Comment.MediaCommentsController;
 import com.unimusic.Controller.Media.Comment.MediaInDepthCommentsController;
 import com.unimusic.Controller.Media.IMediaMainRegionController;
 import com.unimusic.Controller.Media.MediaMainController;
-import com.unimusic.Controller.Media.MediaMainEastRegionController;
 import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniMedia;
@@ -196,8 +195,8 @@ public class NavigationHandler {
 
     public static void navigateToAdminPanel() {
         if (AuthManager.isAuthenticated()) {
-            loadHomeView("Admin/RegistrationRequest.fxml", c -> {
-                return new RegistrationRequestController();
+            loadHomeView("Admin/AdminTab.fxml", c -> {
+                return new AdminTabController();
             });
         } else {
             navigateToLogin();

@@ -39,4 +39,8 @@ module com.unimusic {
     opens com.unimusic.Controller.Media.Comment to javafx.fxml;
     exports com.unimusic.Controller.Admin;
     opens com.unimusic.Controller.Admin to javafx.fxml;
+    exports com.unimusic.Model.Repository.Implementation;
+    opens com.unimusic.Model.Repository.Implementation to javafx.fxml;
+    exports com.unimusic.Model.Repository.Interface;
+    opens com.unimusic.Model.Repository.Interface to javafx.fxml;
 }

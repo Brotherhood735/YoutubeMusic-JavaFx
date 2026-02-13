@@ -31,8 +31,8 @@ public class User {
         return new User(username, password, isAdmin, isGuest);
     }
 
-    public static UniUserRequest createRequest(String username, String password) {
-        return new UniUserRequest(username, password);
+    public static UserProperty createRequest(String username, String password) {
+        return new UserProperty(username, password);
     }
 
     /**

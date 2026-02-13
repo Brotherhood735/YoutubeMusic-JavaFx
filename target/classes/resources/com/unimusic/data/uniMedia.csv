@@ -1,4 +1,25 @@
-id_media,title,video_name,audio_name,web_url,artist,image_name,type,instruments,date,place
-0,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Concert,null,null,null,admin
-1,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null,admin
-2,Test,Bohemian Rhapsody.mp4,Convo.mp3,null,Test,simpsons.jpeg,Song,null,null,null,admin
+id_media,title,video_name,audio_name,web_url,artist,image_name,type,instruments,date,place,username,genre
+0,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Concert,null,null,null,admin,rock
+1,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null,admin,pop
+2,Test,Bohemian Rhapsody.mp4,Convo.mp3,null,Test,simpsons.jpeg,Song,null,null,null,admin,jazz
+3,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Concert,null,null,null,admin,rock
+4,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null,admin,pop
+5,Test,Bohemian Rhapsody.mp4,Convo.mp3,null,Test,simpsons.jpeg,Song,null,null,null,admin,jazz
+6,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Concert,null,null,null,admin,rock
+7,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null,admin,pop
+8,Test,Bohemian Rhapsody.mp4,Convo.mp3,null,Test,simpsons.jpeg,Song,null,null,null,admin,jazz
+9,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Concert,null,null,null,admin,rock
+10,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null,admin,pop
+11,Test,Bohemian Rhapsody.mp4,Convo.mp3,null,Test,simpsons.jpeg,Song,null,null,null,admin,jazz
+12,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Concert,null,null,null,admin,rock
+13,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null,admin,pop
+14,Test,Bohemian Rhapsody.mp4,Convo.mp3,null,Test,simpsons.jpeg,Song,null,null,null,admin,jazz
+15,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Concert,null,null,null,admin,rock
+16,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null,admin,pop
+17,Test,Bohemian Rhapsody.mp4,Convo.mp3,null,Test,simpsons.jpeg,Song,null,null,null,admin,jazz
+18,Hanji Mastan,Haji Mastan.mp4,null,https://music.youtube.com/watch?v=yTwWpnnOD9U&si=Q0ruNQ6qDApvGMTM,Cheema Y - Gur Sidhu,simpsons.jpeg,Concert,null,null,null,admin,rock
+19,Convo,CONVO.mp4,null,null,Cheema Y,convo.jpg,Song,null,null,null,admin,pop
+20,Test,Bohemian Rhapsody.mp4,Convo.mp3,null,Test,simpsons.jpeg,Song,null,null,null,admin,jazz
+21,TestConcert,Don't Stop Me Now.mp4,Convo.mp3,null,Non Lo so,default_music_icon.png,Concert,Chittara - Violino,2026-02-12,San Bonifacio,admin,Rock
+22,dfadsdfs,null,null,sdfsdfsdf,dsffds,convo.jpg,Song,null,null,null,admin,dsfdfs
+23,qwqwe,null,null,qweqweqw,qweqweqwe,convo.jpg,Song,null,null,null,admin,qweeqwdeqw

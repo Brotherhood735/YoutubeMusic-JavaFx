@@ -4,9 +4,9 @@ import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
 import com.unimusic.Model.Media.UniDataType;
 import com.unimusic.Model.Media.UniMedia;
-import com.unimusic.Model.Media.UniMediaSegmentInfo;
 import com.unimusic.Model.Media.UniMediaUserNote;
-import com.unimusic.Model.Repository.MediaNoteRepository;
+import com.unimusic.Model.Repository.Interface.MediaNoteRepository;
+import com.unimusic.Model.Repository.RepositoryFactory;
 import com.unimusic.View.Components.PlayableMedia;
 
 public class AddMediaNoteController extends AddMediaMetaInfoController {
@@ -19,7 +19,7 @@ public class AddMediaNoteController extends AddMediaMetaInfoController {
 
     @Override
     public void initialize() {
-        notesRepo = Main.getDataRepository();
+        notesRepo = RepositoryFactory.getInstance().getMediaNoteRepository();
         setupRangeSlider();
     }
 

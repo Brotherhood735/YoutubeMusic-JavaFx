@@ -2,7 +2,6 @@ package com.unimusic;
 
 import com.unimusic.Config.AppConfig;
 import com.unimusic.Controller.UniController;
-import com.unimusic.Model.Repository.DataRepository;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,15 +11,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 
 public class Main extends Application {
-    private static final DataRepository dataRepo = new DataRepository();
     public static UniController mainController;
-    /**
-     * Get the application-wide user repository
-     */
-    public static DataRepository getDataRepository() {
-        return dataRepo;
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Load the main application view
