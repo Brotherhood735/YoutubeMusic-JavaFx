@@ -30,26 +30,19 @@ public class HomeController extends UniController {
     private VBox homePage;
     private MediaRepository mediaRepo;
     private static MediaMainController mediaMainController;
-    private static SongFormController addSongController;
-    private UniController parentController;
-    private static MediaControlController mediaControl;
     @FXML private ScrollPane mainViewArea;
-    private int currentIdx;
-    private int lastIdx;
     @FXML private HBox adminButton;
 
     private TextField searchField;
     private ObservableList<UniMedia> currentRawList;
     private VBox contentContainer;
     private String[] genres = {"All", "Pop", "Rock", "Classical", "Jazz"};
+
     @FXML
     public void initialize() {
         mediaRepo = RepositoryFactory.getInstance().getMediaRepository();
-        parentController = Main.mainController;
         NavigationHandler.setHomeController(this);
         if (!AuthManager.getUser().isAdmin()) adminButton.setVisible(false);
-        currentIdx = 0;
-        lastIdx = -1;
         initSearchControls();
         loadDefaultHomeView(genres, mediaRepo.getSongs());
 
@@ -85,7 +78,7 @@ public class HomeController extends UniController {
             return matchesGenre && matchesText;
         }).collect(Collectors.toList());
 
-        loadMusicSections(contentContainer, 6, new ArrayList<>(filteredList));
+        loadMusicSections(contentContainer, 7, new ArrayList<>(filteredList));
     }
 
     private void loadMediaControlView(String fxml, boolean restartPanel)
@@ -96,7 +89,6 @@ public class HomeController extends UniController {
         try {
             FXMLLoader loader = NavigationHandler.getLoader(fxml);
             Node view = loader.load();
-            mediaControl = loader.getController();
             homeContainer.setBottom(view);
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,7 +99,6 @@ public class HomeController extends UniController {
     public static void setMediaMainController(MediaMainController controller) {
         mediaMainController = controller;
     }
-    public static void setAddSongController(SongFormController controller) {addSongController = controller;}
     private HBox setupFilters(VBox vBox, String[] filterNames) {
         HBox hBox = new HBox();
         hBox.setPrefHeight(0);
@@ -228,7 +219,6 @@ public class HomeController extends UniController {
     private void onHomeClick()
     {
         mainViewArea.setContent(null);
-        currentIdx = 0;
         loadDefaultHomeView(genres, mediaRepo.getSongs());
         System.out.println("Home clicked");
     }
@@ -241,7 +231,6 @@ public class HomeController extends UniController {
     @FXML
     private void onConcertClick()
     {
-        currentIdx = 1;
         mainViewArea.setContent(null);
         loadDefaultHomeView(genres, mediaRepo.getConcerts());
         System.out.println("Concert clicked");

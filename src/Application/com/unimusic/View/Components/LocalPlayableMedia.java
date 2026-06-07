@@ -98,6 +98,11 @@ public class LocalPlayableMedia implements PlayableMedia {
     }
 
     @Override
+    public void setMute(boolean isMute) {
+        embeddedMediaPlayer.audio().setMute(isMute);
+    }
+
+    @Override
     public void setOnReady(Runnable runnable) {
         embeddedMediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
             @Override

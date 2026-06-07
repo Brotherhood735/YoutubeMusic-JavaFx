@@ -13,9 +13,12 @@ import java.util.stream.Collectors;
 
 public class CommentRepositoryImpl extends CsvBaseRepository<UniComment> implements CommentRepository {
 
-    private int commentIdCounter = 0;
     public CommentRepositoryImpl() {
         super(AppConfig.COMMENTS_CSV_PATH, AppConfig.COMMENTS_CSV_HEADER);
+        loadAll();
+    }
+    public CommentRepositoryImpl(String customCsvPath, String header) {
+        super(customCsvPath, header);
         loadAll();
     }
 

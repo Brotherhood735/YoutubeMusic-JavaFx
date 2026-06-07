@@ -58,8 +58,7 @@ public class MediaMainEastRegionController extends UniController implements IMed
 
     @FXML
     void onLyrics(ActionEvent event) {
-        //loadView("onLyrics.fxml", 1);
-
+        loadView("Media Main/Media Main East/MediaDocuments.fxml", 1, c -> new MediaDocumentsController(currentMedia));
     }
 
 
@@ -83,10 +82,8 @@ public class MediaMainEastRegionController extends UniController implements IMed
     }
     public void setContent(Node content)
     {
-
         int size = mainArea.getChildren().size();
-        // the section is already initialized we nedd to remove before
-        // putting something else on it
+        // the section is already initialized
         if (size > 1)
         {
             mainArea.getChildren().remove(1);

@@ -20,7 +20,6 @@ public class MediaControlController extends UniController
 {
 
     private PlayableMedia renderer;
-    private UniMedia currentMedia;
     private boolean canModifyProgressBar;
 
     @FXML private Button playPauseBtn;
@@ -38,7 +37,6 @@ public class MediaControlController extends UniController
     public void init(PlayableMedia renderer, UniMedia media)
     {
         this.renderer = renderer;
-        this.currentMedia = media;
         canModifyProgressBar = true;
         setNowPlaying(media.getTitle(), media.getArtist());
         URL imageUrl = Main.class.getResource("Images/"+ media.getImageName());
@@ -103,6 +101,7 @@ public class MediaControlController extends UniController
     @FXML
     private void initialize()
     {
+        isPlaying = true;
         MediaMainController.setBottomController(this);
     }
 
@@ -110,7 +109,7 @@ public class MediaControlController extends UniController
     @FXML
     private void onPlayPause() {
         isPlaying = !isPlaying;
-        playPauseBtn.setText(isPlaying ? "⏸" : "▶");
+        playPauseBtn.setText(isPlaying ? "⏸" : "▶" );
         setRendererPlay(isPlaying);
     }
     @FXML
@@ -122,7 +121,7 @@ public class MediaControlController extends UniController
     }
 
     private void setRendererMute(boolean isMute) {
-        //renderer.getLocalMediaPlayer().setMute(isMute);
+        renderer.setMute(isMute);
     }
 
     private void setRendererPlay(boolean isPlaying)
@@ -135,16 +134,6 @@ public class MediaControlController extends UniController
         {
             renderer.pause();
         }
-    }
-    @FXML
-    private void onPrevious() {
-
-        System.out.println("Previous track");
-    }
-
-    @FXML
-    private void onNext() {
-        System.out.println("Next track");
     }
     @Override
     public void setContent(Node content, int Idx)

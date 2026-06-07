@@ -2,7 +2,10 @@ package com.unimusic.Controller;
 
 import com.unimusic.Main;
 import com.unimusic.Model.Authentication.AuthManager;
+import com.unimusic.Model.Media.DocumentType;
+import com.unimusic.Model.Media.UniDocument;
 import com.unimusic.Model.Media.UniMedia;
+import com.unimusic.Model.Repository.Interface.DocumentRepository;
 import com.unimusic.Model.Repository.Interface.MediaRepository;
 import com.unimusic.Model.Repository.RepositoryFactory;
 import com.unimusic.Nav.NavigationHandler;
@@ -15,18 +18,23 @@ import java.io.File;
 
 public class SongFormController extends UniController {
 
+    private MediaRepository mediaRepo;
     @FXML private TextField titleField;
     @FXML private TextField artistField;
     @FXML private TextField instrumentsField;
-    @FXML private TextField audioPathField;
-    @FXML private TextField videoPathField;
-    @FXML private TextField webUrlField;
-    @FXML private TextField imagePathField;
     @FXML private TextField genreField;
     @FXML private CheckBox isLiveContentCheckBox;
     @FXML private DatePicker datePicker;
     @FXML private TextField placeField;
-    private MediaRepository mediaRepo;
+
+    @FXML private TextField audioPathField;
+    @FXML private TextField videoPathField;
+    @FXML private TextField webUrlField;
+    @FXML private TextField imagePathField;
+
+    @FXML private TextField spartitoPathField;
+    @FXML private TextField testoPathField;
+    @FXML private TextField accordiPathField;
     @FXML
     public void initialize() {
         mediaRepo = RepositoryFactory.getInstance().getMediaRepository();
@@ -34,19 +42,11 @@ public class SongFormController extends UniController {
 
     @FXML
     private void onBrowseAudio() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleziona Audio");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Audio Files",
-                        "*.mp3", "*.wav", "*.flac", "*.ogg", "*.mid", "*.midi")
-        );
-
-        File file = fileChooser.showOpenDialog(getStage());
+        File file = browseFile("Audio Files", "*.mp3", "*.wav", "*.flac", "*.ogg", "*.mid", "*.midi");
         if (file != null) {
             String fileName = file.getName();
             audioPathField.setText(fileName);
 
-            // If MIDI file, enable instruments field
             if (fileName.toLowerCase().endsWith(".mid") ||
                     fileName.toLowerCase().endsWith(".midi")) {
                 instrumentsField.setPromptText("Inserire strumenti");
@@ -56,14 +56,7 @@ public class SongFormController extends UniController {
 
     @FXML
     private void onBrowseVideo() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleziona Video");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Video File",
-                        "*.mp4", "*.avi", "*.mkv", "*.mov", "*.wmv", "*.flv")
-        );
-
-        File file = fileChooser.showOpenDialog(getStage());
+        File file = browseFile("Video Files", "*.mp4", "*.avi", "*.mkv", "*.mov", "*.wmv", "*.flv");
         if (file != null) {
             videoPathField.setText(file.getName());
         }
@@ -71,19 +64,36 @@ public class SongFormController extends UniController {
 
     @FXML
     private void onBrowseImage() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleziona Immagine");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Immagine",
-                        "*.jpg", "*.jpeg", "*.png", "*.gif", "*.bmp")
-        );
-
-        File file = fileChooser.showOpenDialog(getStage());
+        File file = browseFile("Immagine", "*.jpg", "*.jpeg", "*.png", "*.gif", "*.bmp");
         if (file != null) {
             imagePathField.setText(file.getName());
         }
     }
 
+    @FXML
+    private void onBrowseSpartito() {
+        File file = browseFile("Seleziona Spartito", "*.pdf");
+        if (file != null) spartitoPathField.setText(file.getName());
+    }
+
+    @FXML
+    private void onBrowseTesto() {
+        File file = browseFile("Seleziona Testo", "*.txt", "*.pdf", "*.doc");
+        if (file != null) testoPathField.setText(file.getName());
+    }
+
+    @FXML
+    private void onBrowseAccordi() {
+        File file = browseFile("Seleziona Accordi", "*.txt", "*.pdf");
+        if (file != null) accordiPathField.setText(file.getName());
+    }
+
+    private File browseFile(String title, String... extensions) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("File Documenti", extensions));
+        return fileChooser.showOpenDialog(getStage());
+    }
     @FXML
     private void onClearAudio() {
         audioPathField.clear();
@@ -101,9 +111,21 @@ public class SongFormController extends UniController {
         imagePathField.clear();
         imagePathField.setPromptText("Nessuna immagine selezionata");
     }
-
+    @FXML private void onClearSpartito() {
+        spartitoPathField.clear();
+        spartitoPathField.setPromptText("Nessun file selezionato");
+    }
+    @FXML private void onClearTesto() {
+        testoPathField.clear();
+        testoPathField.setPromptText("Nessun file selezionato");
+    }
+    @FXML private void onClearAccordi() {
+        accordiPathField.clear();
+        accordiPathField.setPromptText("Nessun file selezionato");
+    }
     @FXML
     private void onSave() {
+
         // Validate required fields
         if (titleField.getText().trim().isEmpty()) {
             showAlert("Errore", "inserire un titolo");
@@ -145,15 +167,39 @@ public class SongFormController extends UniController {
             return;
         }
 
-        // Create song object
         UniMedia uniMedia = createMedia(hasAudio, hasVideo, hasWeb, hasImage);
 
-        // Display the created song (for demonstration)
-        showAlert("Success", "Song Created Successfully!");
+        DocumentRepository docRepo = RepositoryFactory.getInstance().getDocumentRepository();
+        if (!spartitoPathField.getText().trim().isEmpty()) {
+            UniDocument doc = new UniDocument(
+                    docRepo.generateId(),
+                    uniMedia.getId(),
+                    DocumentType.SPARTITO,
+                    spartitoPathField.getText()
+            );
+            docRepo.saveDocument(doc);
+        }
+        if (!testoPathField.getText().trim().isEmpty()) {
+            UniDocument doc = new UniDocument(
+                    docRepo.generateId(),
+                    uniMedia.getId(),
+                    DocumentType.TESTO,
+                    testoPathField.getText()
+            );
+            docRepo.saveDocument(doc);
+        }
+        if (!accordiPathField.getText().trim().isEmpty()) {
+            UniDocument doc = new UniDocument(
+                    docRepo.generateId(),
+                    uniMedia.getId(),
+                    DocumentType.ACCORDI,
+                    accordiPathField.getText()
+            );
+            docRepo.saveDocument(doc);
+        }
+        showAlert("Successo", "Canzone creata.");
 
-        // Here you would typically save to database or file
         mediaRepo.saveMedia(uniMedia);
-        // Clear form after successful save
         NavigationHandler.navigateToHome();
     }
 

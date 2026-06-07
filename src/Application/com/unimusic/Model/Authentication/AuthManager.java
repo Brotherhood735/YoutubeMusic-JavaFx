@@ -18,8 +18,4 @@ public class AuthManager {
     public static void logout(){
         authenticatedUser = null;
     }
-    public static User getAuthenticatedUser()
-    {
-        return authenticatedUser;
-    }
 }

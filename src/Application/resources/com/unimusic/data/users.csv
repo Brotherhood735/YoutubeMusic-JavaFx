@@ -1,7 +1,4 @@
 username,password,is_admin,is_guest
 admin,admin,1,0
-gh,gh,0,1
-ad,ad,0,1
-qwe,qwe,0,1
-ewq,ewq,0,0
-rty,rty,0,0
+Brotherhood735,Noor,0,0
+Guest,Guest,0,1

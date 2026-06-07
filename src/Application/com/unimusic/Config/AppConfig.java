@@ -6,7 +6,7 @@ public class AppConfig {
 
     // Application settings
     public static final String APP_TITLE = "Uni Music - JavaFX Version";
-    public static final double APP_WIDTH = 1400;
+    public static final double APP_WIDTH = 1600;
     public static final double APP_HEIGHT = 800;
     // Data storage settings
     public static final String RESOURCES_DIR = "src/Application/resources/com/unimusic";
@@ -18,11 +18,12 @@ public class AppConfig {
     public static final String UNI_USER_REGISTRATION_REQ_CSV_PATH = DATA_DIR + "/uniUsersRegistrationReq.csv";
     public static final String UNI_MEDIA_NOTES_CSV_PATH = DATA_DIR + "/uniMediaNotes.csv";
     public static final String COMMENTS_CSV_PATH = DATA_DIR + "/comments depth level.csv";
-    public static final String USERS_DEFAULT_ROW = "admin,admin,1\n";
+    public static final String DOCUMENTS_CSV_PATH = DATA_DIR + "/documents.csv";
     // Navigation Settings
     public static final double HOME_MEDIA_PLAY_AREA_IDX = 0;
-
     //data storage headers
+    public static final String USERS_DEFAULT_ROW = "admin,admin,1\n";
+    public static final String DOCUMENTS_CSV_HEADER = "id,mediaId,type,path";
     public static final String COMMENTS_CSV_HEADER = "id_comment,id_media,id_parent,username,comment,depthLevel";
     public static final String UNI_USER_REGISTRATION_REQ_HEADER = "username, password";
     public static final String UNI_MEDIA_CSV_HEADER = "id_media,title,video_name,audio_name,web_url,artist,image_name,type,instruments,date,place,username,genre";

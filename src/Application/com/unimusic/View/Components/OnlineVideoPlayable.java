@@ -73,6 +73,11 @@ public class OnlineVideoPlayable implements PlayableMedia {
     }
 
     @Override
+    public void setMute(boolean isMute) {
+
+    }
+
+    @Override
     public void setOnReady(Runnable runnable) {
 
     }

@@ -67,6 +67,11 @@ public class MediaNotesController {
         parentController.loadView("Media Main/Media Main East/MediaComments.fxml", 0, e -> new MediaCommentsController(parentController, currentMedia));
     }
     @FXML
+    private void onDocuments()
+    {
+        parentController.loadView("Media Main/Media Main East/MediaDocuments.fxml", 1, c -> new MediaDocumentsController(currentMedia));
+    }
+    @FXML
     private void addNote()
     {
         if (AuthManager.getUser().isGuest()) return;

@@ -13,8 +13,5 @@ public abstract class UniController {
     {
         this.view = view;
     }
-    /**
-     * @param Idx indicates which pane to set it on.
-     */
     public abstract void setContent(Node content, int Idx);
 }

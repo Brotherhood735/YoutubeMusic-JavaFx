@@ -39,7 +39,6 @@ public class MediaMainController extends UniController {
                 c -> { return new MediaMainEastRegionController(currentMedia, eastArea, bottomController);});
         loadView("Media Main/Media Main West/MediaMainWest.fxml", westArea,
                 c -> { return new MediaMainWestRegionController(currentMedia, westArea, bottomController);});
-        //bottomController.setData(westController.getRenderer(), currentMedia, true);
     }
 
     public static void setEastController(MediaMainEastRegionController controller)
@@ -73,8 +72,6 @@ public class MediaMainController extends UniController {
 
     @FXML
     private ScrollPane mainView;
-
-
 
     @Override
     public void setContent(Node content, int Idx)

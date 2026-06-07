@@ -19,6 +19,7 @@ public interface PlayableMedia {
     void dispose();
     void seek(Duration duration);
     void setVolume(double volume);
+    void setMute(boolean isMute);
     void setOnReady(Runnable runnable);
 
     interface TimeChangedListener{

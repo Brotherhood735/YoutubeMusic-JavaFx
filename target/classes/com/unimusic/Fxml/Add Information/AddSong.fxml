@@ -143,13 +143,63 @@
             </Label>
         </VBox>
     </VBox>
-
     <Separator />
+
+    <VBox spacing="10" styleClass="v-box">
+        <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="Documenti Digitali" />
+      <VBox>
+         <children>
+      
+              <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
+                  <Label minWidth="120" style="-fx-font-weight: bold;" text="Spartito:" />
+                  <TextField fx:id="spartitoPathField" editable="false" promptText="Nessun file selezionato" HBox.hgrow="ALWAYS" />
+                  <Button onAction="#onBrowseSpartito" text="Esplora..." />
+                  <Button onAction="#onClearSpartito" text="Cancella" />
+              </HBox>
+            <Label style="-fx-font-size: 10; -fx-text-fill: gray;" text="PDF">
+               <padding>
+                  <Insets left="130" />
+               </padding>
+            </Label>
+         </children>
+      </VBox>
+      <VBox>
+         <children>
+      
+              <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
+                  <Label minWidth="120" style="-fx-font-weight: bold;" text="Testo:" />
+                  <TextField fx:id="testoPathField" editable="false" promptText="Nessun file selezionato" HBox.hgrow="ALWAYS" />
+                  <Button onAction="#onBrowseTesto" text="Esplora..." />
+                  <Button onAction="#onClearTesto" text="Cancella" />
+              </HBox>
+            <Label style="-fx-font-size: 10; -fx-text-fill: gray;" text="PDF, TXT, DOC">
+               <padding>
+                  <Insets left="130" />
+               </padding>
+            </Label>
+         </children>
+      </VBox>
+      <VBox>
+         <children>
+      
+              <HBox alignment="CENTER_LEFT" spacing="10" styleClass="h-box">
+                  <Label minWidth="120" style="-fx-font-weight: bold;" text="Accordi:" />
+                  <TextField fx:id="accordiPathField" editable="false" promptText="Nessun file selezionato" HBox.hgrow="ALWAYS" />
+                  <Button onAction="#onBrowseAccordi" text="Esplora..." />
+                  <Button onAction="#onClearAccordi" text="Cancella" />
+              </HBox>
+            <Label style="-fx-font-size: 10; -fx-text-fill: gray;" text="PDF, TXT">
+               <padding>
+                  <Insets left="130" />
+               </padding>
+            </Label>
+         </children>
+      </VBox>
+    </VBox>
 
     <!-- Action Buttons -->
     <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="h-box">
         <Button onAction="#onSave" prefWidth="120" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" text="Salva" />
         <Button onAction="#onCancel" prefWidth="120" text="Ritorna" />
     </HBox>
-
 </VBox>

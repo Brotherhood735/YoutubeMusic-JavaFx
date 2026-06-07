@@ -1,12 +1,20 @@
 id_meta_info,id_media,username,title,artists,instruments,extra_info,start_time,end_time
-0,1,asa,asdsa,asads,kiaro,0.0,0.0
-1,1,Kiaro Capo,adas,asdasdasd,non lo so,67750.51875498804,116539.93012422363
-2,1,wqeqweqw,qweqweqwewqe,qweqwe,lo sos,20017.198723064645,174210.71816770185
-3,1,ora kiaro,ora kiuaro,kiaro,kiaros,0.0,192935.0
-4,1,un'altra aggiunta,aggiunta,aggiunta,aggiunta,0.0,192935.0
-5,21,Dont stop me now,Fredy Mercurry,tante cose,molto bravo il cantante,23496.832937450516,65813.50154083206
-6,21,Dont stop me now,Fredy Mercurry,tante cose,molto bravo il cantante,23496.832937450516,65813.50154083206
-7,21,Dont stop me now,Fredy Mercurry,tante cose,molto bravo il cantante,23496.832937450516,65813.50154083206
-8,21,Dont stop me now,Fredy Mercurry,tante cose,molto bravo il cantante,23496.832937450516,65813.50154083206
-9,1,ultima aggiunta ,null,null,null,150128.99042298485,180202.48835403725
-10,1,qweqw,qwe,qweweqqwe,qweqwe,21556.983240223464,38646.917701863356
+0,1,parte 1,null,null,null,0.0,92037.86989795919
+1,2,Square Dance,Eminem,null,null,33409.66995285041,235348.4096283787
+2,2,Business,Eminem,null,null,232324.17287630402,386298.4931640625
+3,2,White America,Eminem,null,null,387206.95479384006,567078.576171875
+4,2,Kill You,Eminem,null,null,571130.2583209141,681255.470703125
+5,2,When The Music Stops,Eminem,null,null,677612.1708892202,1023786.154296875
+6,2,Pimp Like Me,Eminem,null,null,1026098.4302036763,1128448.3076171875
+7,2,Fight Music,Eminem,null,null,1122900.1689021364,1252139.943359375
+8,2,Purple Pills,Eminem,null,null,1258422.6030799805,1528067.4384765625
+9,2,The Way I Am,Eminem,null,null,1529467.4714356684,1727877.00390625
+10,2,Soldier,Eminem,null,null,1723070.9488325885,1899142.345703125
+11,2,Cleaning Out My Closet,Eminem,null,null,1897314.0784898163,2060892.9462890625
+12,2,Forgot About Dre,Eminem,null,null,2061877.0342771984,2165555.099609375
+13,2,Drips,Eminem,null,null,2168358.9468455045,2555659.4892578125
+14,2,Superman,Eminem,null,null,2555565.9016393446,2745954.3134765625
+15,2,Drug Ballad,Eminem,null,null,2739489.2051664186,2917219.6552734375
+16,2,Just Don't Give A Fuck,Eminem,null,null,2923412.5086934925,3117029.220703125
+17,2,Without Me,Eminem,null,null,3117015.9860904124,3488104.1279296875
+18,2,My Dad's Gone Crazy,Eminem,null,null,3484862.59314456,3897238.0

@@ -19,7 +19,7 @@ public class LocalPlayableAudio extends LocalPlayableMedia
     private Image image;
     private UniMedia uniMedia;
     public LocalPlayableAudio(String audioName, ImageView view, UniMedia uniMedia) {
-        super(AppConfig.RESOURCES_DIR + "/data/" + audioName, view);
+        super(AppConfig.RESOURCES_DIR + "/Audios/" + audioName, view);
         URL imageUrl = Main.class.getResource("Images/"+ uniMedia.getImageName());
         this.image = new Image(imageUrl.toString());
         view.setImage(this.image);

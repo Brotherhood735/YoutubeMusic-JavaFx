@@ -31,9 +31,8 @@ public class MidiPlayableAudio implements PlayableMedia {
             Receiver synthReceiver = synthesizer.getReceiver();
             seqTransmitter.setReceiver(synthReceiver);
 
-            // Listen to ticks and notify listeners
             sequencer.addMetaEventListener(meta -> {
-                if (meta.getType() == 47) { // End of track
+                if (meta.getType() == 47) {
                     running = false;
                 }
                 Duration current = getMaxDuration().multiply(sequencer.getMicrosecondPosition() / (double) sequence.getMicrosecondLength());
@@ -47,7 +46,6 @@ public class MidiPlayableAudio implements PlayableMedia {
         }
     }
 
-    /** Load a MIDI file */
     public void load(String filePath) {
         try {
             sequence = MidiSystem.getSequence(new File(filePath));
@@ -58,7 +56,6 @@ public class MidiPlayableAudio implements PlayableMedia {
         }
     }
 
-    /** Seek to position */
     @Override
     public void seek(Duration duration) {
         if (sequencer != null && sequence != null) {
@@ -67,7 +64,6 @@ public class MidiPlayableAudio implements PlayableMedia {
         }
     }
 
-    /** Volume control (0.0 - 1.0) for all channels */
     @Override
     public void setVolume(double volume) {
         if (synthesizer != null) {
@@ -79,14 +75,16 @@ public class MidiPlayableAudio implements PlayableMedia {
         }
     }
 
-    /** Render/stopRender placeholders */
-    /** OnReady callback */
+    @Override
+    public void setMute(boolean isMute) {
+
+    }
+
     @Override
     public void setOnReady(Runnable runnable) {
         this.onReady = runnable;
     }
 
-    /** Add listener for time changes */
     @Override
     public void addCurrentTimeListener(TimeChangedListener listener) {
         timeListeners.add(listener);
@@ -105,9 +103,6 @@ public class MidiPlayableAudio implements PlayableMedia {
 
     }
 
-    /**
-     * Not applicable for MIDI
-     */
     @Override
     public MediaPlayer getLocalMediaPlayer() {
         return null;
@@ -149,7 +144,6 @@ public class MidiPlayableAudio implements PlayableMedia {
     }
 
 
-    /** Change instrument for a channel */
     public void setInstrument(int channel, int instrument) {
         if (synthesizer != null && channel >= 0 && channel < 16) {
             MidiChannel[] channels = synthesizer.getChannels();
@@ -157,7 +151,6 @@ public class MidiPlayableAudio implements PlayableMedia {
         }
     }
 
-    /** Dispose resources */
     public void dispose() {
         if (sequencer != null && sequencer.isOpen()) sequencer.close();
         if (synthesizer != null && synthesizer.isOpen()) synthesizer.close();

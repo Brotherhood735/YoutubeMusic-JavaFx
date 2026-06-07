@@ -6,5 +6,6 @@ public enum UniDataType
     Comment,
     MetaInfo,
     ExtraContent,
-    Note
+    Note,
+    Document
 }

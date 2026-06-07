@@ -17,16 +17,9 @@ public  class MainController extends UniController {
     @FXML
     public void initialize() throws IOException {
         System.out.println(mainContainer.getStyleClass());
-        // Set up the navigation bar
-        //setNavBar();
-        // Register this controller with the ViewNavigator
         NavigationHandler.setMainController(this);
-        // Load the Login view by default
         NavigationHandler.navigateToLogin();
     }
-    /**
-     * Set the content of the main area
-     */
     @Override
     public void setContent(Node content, int Idx) {
         mainContainer.setCenter(content);

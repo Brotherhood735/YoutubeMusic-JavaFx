@@ -34,7 +34,7 @@ public class LoginController extends UniController {
         if (success) {
             NavigationHandler.navigateToHome();
         } else {
-            showError("Invalid username or password");
+            showError("username o password invalidi");
         }
     }
 

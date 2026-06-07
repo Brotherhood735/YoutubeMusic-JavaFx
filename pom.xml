@@ -12,7 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.12.1</junit.version>
-        <javafx.version>25</javafx.version>
+        <javafx.version>21</javafx.version>
     </properties>
 
     <dependencies>
@@ -125,6 +125,14 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>src/Application</sourceDirectory>
+
+        <resources>
+            <resource>
+                <directory>src/Application/resources</directory>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -141,10 +149,9 @@
                 <version>0.0.8</version>
                 <executions>
                     <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.unimusic.unimusic/com.unimusic.unimusic.HelloApplication</mainClass>
+                            <mainClass>com.unimusic/com.unimusic.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

@@ -14,8 +14,6 @@ public class Main extends Application {
     public static UniController mainController;
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Load the main application view
-
         URL mainViewUrl = getClass().getResource("Fxml/Root.fxml");
         FXMLLoader loader = new FXMLLoader(mainViewUrl);
 
@@ -45,8 +43,7 @@ public class Main extends Application {
         scene.getStylesheets().add(TextFieldCssUrl.toExternalForm());
         scene.getStylesheets().add(CardCssUrl.toExternalForm());
 
-        // Configure and show the stage
-        primaryStage.setTitle("Dash App - JavaFX Version");
+        primaryStage.setTitle("UniMusicApp");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

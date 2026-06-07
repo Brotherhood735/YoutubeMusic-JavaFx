@@ -26,12 +26,7 @@ public class NavigationHandler {
     private static MainController mainController;
     private static HomeController homeController;
     private static MediaMainController mediaMainController;
-    // Current authenticated username
 
-    /**
-     * Set the main controller reference
-     * @param controller The MainController instance
-     */
     public static void setMainController(MainController controller) {
         mainController = controller;
     }
@@ -41,10 +36,7 @@ public class NavigationHandler {
     public static void setMediaController(MediaMainController controller) {
         mediaMainController = controller;
     }
-    /**
-     * Load and switch to a view
-     * @param fxml The name of the FXML file to load
-     */
+
     public static void loadHomeView(String fxml, Callback<Class<?>, Object> controllerFactory)
     {
         loadView(fxml, homeController, controllerFactory);
@@ -108,58 +100,20 @@ public class NavigationHandler {
         }
     }
 
-    /**
-     * Navigate to the login view
-     */
     public static void navigateToLogin() {
         loadMainView("Auth/Login.fxml");
     }
 
-    /**
-     * Navigate to the register view
-     */
     public static void navigateToRegister() {
         loadMainView("Auth/Register.fxml");
     }
 
-    /**
-     * Navigate to the dashboard view (protected)
-     * Will redirect to login if not authenticated
-     */
     public static void navigateToHome() {
         if (AuthManager.isAuthenticated()) {
             loadMainView("Main/Home.fxml");
         } else {
             navigateToLogin();
         }
-    }
-
-    /**
-     * Navigate to the profile view (protected)
-     * Will redirect to login if not authenticated
-     */
-    public static void navigateToProfile() {
-        if (AuthManager.isAuthenticated()) {
-            loadMainView("ProfileView.fxml");
-        } else {
-            navigateToLogin();
-        }
-    }
-
-    public static void navigateToStats() {
-        if (AuthManager.isAuthenticated()) {
-            loadMainView("StatsView.fxml");
-        } else {
-            navigateToLogin();
-        }
-    }
-
-    /**
-     * Logout the current user
-     */
-    public static void logout(){
-        AuthManager.logout();
-        navigateToHome();
     }
 
     public static void navigateToInDepthCommentSection(IMediaMainRegionController parentController, UniMedia media, UniComment currentComment, UniComment previousComment, int depthLevel)
